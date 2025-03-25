@@ -51,7 +51,7 @@ defmodule SludgeWeb.StreamViewerLive do
         </div>
       </div>
       <div class="flex justify-stretch *:w-full lg:max-w-[440px] p-4 sm:p-0">
-        <ChatLive.live_render socket={@socket} id="livechat" />
+        <ChatLive.live_render socket={@socket} id="livechat" role="user" />
       </div>
     </div>
     """
