@@ -3,12 +3,24 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
-#stream-viewer-description a {
+#stream-viewer-description a, #chat-messages-box a {
     @apply underline;
 }
 
-#chat-messages-box a {
-    @apply underline;
+#stream-viewer-description ul {
+    @apply list-disc list-inside;
+}
+
+#stream-viewer-description ol {
+    @apply list-disc list-inside;
+}
+
+#stream-viewer-description blockquote {
+    @apply border-l-4 border-zinc-300 pl-2 dark:border-zinc-700;
+}
+
+#chat-messages-box blockquote {
+    @apply border-l-4 border-zinc-300 pl-2 dark:border-zinc-700;
 }
 
 /* Please add those fonts to /priv/static/fonts */
