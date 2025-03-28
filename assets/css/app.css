@@ -23,6 +23,31 @@
     @apply border-l-4 border-zinc-300 pl-2 dark:border-zinc-700;
 }
 
+/* not sure about that dark background color in code blocks */
+#stream-viewer-description code {
+    @apply text-sm border-[1px] rounded-md px-[2px] bg-zinc-50 border-zinc-300 dark:border-zinc-700 bg-zinc-900;
+}
+
+#chat-messages-box code {
+    @apply text-sm border-[1px] rounded-md px-[2px] bg-zinc-50 border-zinc-300 dark:border-zinc-700 bg-zinc-900;
+}
+
+#stream-viewer-description pre {
+    @apply text-sm border-[1px] rounded-md px-[2px] bg-zinc-50 border-zinc-300 dark:border-zinc-700 bg-zinc-900;
+}
+
+#chat-messages-box pre {
+    @apply text-sm border-[1px] rounded-md px-[2px] bg-zinc-50 border-zinc-300 dark:border-zinc-700 bg-zinc-900;
+}
+
+#stream-viewer-description pre code {
+    @apply border-0 bg-transparent;
+}
+
+#chat-messages-box pre code {
+    @apply border-0 bg-transparent;
+}
+
 /* Please add those fonts to /priv/static/fonts */
 @font-face {
     font-family: 'Aeonik';
