@@ -3,6 +3,9 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+#stream-viewer-description a {
+  @apply underline;
+}
 
 /* Please add those fonts to /priv/static/fonts */
 @font-face {

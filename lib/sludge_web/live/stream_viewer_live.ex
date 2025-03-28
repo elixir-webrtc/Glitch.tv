@@ -45,7 +45,10 @@ defmodule SludgeWeb.StreamViewerLive do
             </.dropping>
             <.share_button />
           </div>
-          <div class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all min-h-8 h-32">
+          <div
+            id="stream-viewer-description"
+            class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all min-h-8 h-32"
+          >
             {raw(@stream_metadata.description)}
           </div>
         </div>
@@ -145,7 +148,7 @@ defmodule SludgeWeb.StreamViewerLive do
   defp to_html(markdown) do
     markdown
     |> String.trim()
-    |> Earmark.as_html!()
+    |> Earmark.as_html!(breaks: true)
   end
 
   defp metadata_to_html(metadata) do
