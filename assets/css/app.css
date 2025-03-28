@@ -4,7 +4,11 @@
 
 /* This file is for your main application CSS */
 #stream-viewer-description a {
-  @apply underline;
+    @apply underline;
+}
+
+#chat-messages-box a {
+    @apply underline;
 }
 
 /* Please add those fonts to /priv/static/fonts */

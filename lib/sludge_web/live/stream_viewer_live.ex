@@ -146,7 +146,7 @@ defmodule SludgeWeb.StreamViewerLive do
   end
 
   defp to_html(markdown) do
-    markdown
+    (markdown || "")
     |> String.trim()
     |> Earmark.as_html!(breaks: true)
   end
