@@ -40,6 +40,10 @@
     @apply text-lg font-bold;
 }
 
+#stream-viewer-description p, #chat-messages-box p {
+    @apply mb-4;
+}
+
 /* Please add those fonts to /priv/static/fonts */
 @font-face {
     font-family: 'Aeonik';
