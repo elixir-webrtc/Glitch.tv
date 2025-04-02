@@ -14,7 +14,7 @@
     <div class="flex flex-col gap-4 flex-shrink">
       <div class="flex gap-3 items-center justify-start">
         <h1 class="text-2xl line-clamp-2 dark:text-neutral-200 break-all">
-          {@recording.title}
+          {raw(to_html(@recording.title))}
         </h1>
       </div>
       <div class="flex gap-4 text-sm">
@@ -32,9 +32,12 @@
         </.dropping>
         <.share_button />
       </div>
-      <p class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all min-h-8 h-32">
-        {@recording.description}
-      </p>
+      <div
+        id="recording-description"
+        class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all min-h-8 h-32"
+      >
+        {raw(to_html(@recording.description))}
+      </div>
     </div>
   </div>
   <div class="flex flex-col justify-start flex-none">
