@@ -232,21 +232,25 @@ defmodule SludgeWeb.ChatLive do
 
   @impl true
   def handle_info({:msg_flagged, flagged_message_id}, socket) do
-    messages =
-      socket.assigns.messages
-      |> Enum.map(fn message ->
-        if message.id == flagged_message_id do
-          Map.put(message, :flagged, !message.flagged)
-        else
-          message
-        end
-      end)
+    if socket.assigns.role == "admin" do
+      messages =
+        socket.assigns.messages
+        |> Enum.map(fn message ->
+          if message.id == flagged_message_id do
+            Map.put(message, :flagged, !message.flagged)
+          else
+            message
+          end
+        end)
 
-    socket =
-      socket
-      |> assign(:messages, messages)
+      socket =
+        socket
+        |> assign(:messages, messages)
 
-    {:noreply, socket}
+      {:noreply, socket}
+    else
+      {:noreply, socket}
+    end
   end
 
   @impl true
@@ -329,6 +333,20 @@ defmodule SludgeWeb.ChatLive do
   end
 
   def handle_event("flag-message", %{"message-id" => flagged_message_id}, socket) do
+    messages =
+      socket.assigns.messages
+      |> Enum.map(fn message ->
+        if message.id == flagged_message_id do
+          Map.put(message, :flagged, true)
+        else
+          message
+        end
+      end)
+
+    socket =
+      socket
+      |> assign(:messages, messages)
+
     Phoenix.PubSub.broadcast(Sludge.PubSub, "chatroom", {:msg_flagged, flagged_message_id})
 
     {:noreply, socket}
