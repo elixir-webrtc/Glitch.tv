@@ -30,7 +30,7 @@ defmodule SludgeWeb.ChatLive do
             </p>
           </div>
           <div class="dark:text-neutral-400">
-            {raw(to_html(msg.body))}
+            {raw(SludgeWeb.Utils.to_html(msg.body))}
           </div>
         </li>
       </ul>
@@ -125,11 +125,5 @@ defmodule SludgeWeb.ChatLive do
     {:ok, timestamp} = DateTime.now("Etc/UTC")
     msg = %{author: author, body: body, id: "#{author}:#{id}", timestamp: timestamp}
     Phoenix.PubSub.broadcast(Sludge.PubSub, "chatroom", {:new_msg, msg})
-  end
-
-  defp to_html(markdown) do
-    markdown
-    |> String.trim()
-    |> Earmark.as_html!(breaks: true)
   end
 end

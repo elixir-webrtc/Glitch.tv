@@ -6,6 +6,7 @@ defmodule SludgeWeb.StreamViewerLive do
   alias Phoenix.Socket.Broadcast
   alias SludgeWeb.ChatLive
   alias SludgeWeb.Presence
+  alias SludgeWeb.Utils
 
   @impl true
   def render(assigns) do
@@ -103,8 +104,8 @@ defmodule SludgeWeb.StreamViewerLive do
   def handle_info({:changed, {title, description}}, socket) do
     metadata = %{
       socket.assigns.stream_metadata
-      | title: to_html(title),
-        description: to_html(description)
+      | title: Utils.to_html(title),
+        description: Utils.to_html(description)
     }
 
     {:noreply, assign(socket, :stream_metadata, metadata)}
@@ -145,13 +146,11 @@ defmodule SludgeWeb.StreamViewerLive do
     end
   end
 
-  defp to_html(markdown) do
-    (markdown || "")
-    |> String.trim()
-    |> Earmark.as_html!(breaks: true)
-  end
-
   defp metadata_to_html(metadata) do
-    %{metadata | title: to_html(metadata.title), description: to_html(metadata.description)}
+    %{
+      metadata
+      | title: Utils.to_html(metadata.title),
+        description: Utils.to_html(metadata.description)
+    }
   end
 end

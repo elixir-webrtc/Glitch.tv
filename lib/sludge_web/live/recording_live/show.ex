@@ -2,6 +2,7 @@ defmodule SludgeWeb.RecordingLive.Show do
   use SludgeWeb, :live_view
 
   alias Sludge.Recordings
+  alias SludgeWeb.Utils
 
   @impl true
   def mount(_params, _session, socket) do
@@ -27,11 +28,5 @@ defmodule SludgeWeb.RecordingLive.Show do
       |> assign(:recording, recording)
 
     {:noreply, socket}
-  end
-
-  defp to_html(markdown) do
-    (markdown || "")
-    |> String.trim()
-    |> Earmark.as_html!(breaks: true)
   end
 end
