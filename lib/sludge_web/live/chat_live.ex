@@ -47,21 +47,27 @@ defmodule SludgeWeb.ChatLive do
             maxlength="500"
             disabled={is_nil(@author)}
           >{@msg_body}</textarea>
-          <button
-            type="button"
-            class="border border-indigo-200 rounded-lg px-2 py-1 disabled:opacity-50"
-            phx-click="toggle-emoji-overlay"
-            disabled={is_nil(@author)}
-          >
-            <.icon name="hero-face-smile" />
-          </button>
+          <div class="relative">
+            <button
+              type="button"
+              class="border border-indigo-200 rounded-lg px-2 py-1 disabled:opacity-50 dark:text-neutral-400 dark:border-none dark:bg-zinc-800"
+              phx-click="toggle-emoji-overlay"
+              disabled={is_nil(@author)}
+            >
+              <.icon name="hero-face-smile" />
+            </button>
 
-          <div
-            class={["absolute bottom-[95%] right-0", !@show_emoji_overlay && "hidden"]}
-            id="emoji-picker-container"
-            phx-hook="EmojiPickerContainerHook"
-          >
-            <emoji-picker></emoji-picker>
+            <div
+              class={[
+                "absolute bottom-[calc(100%+4px)] right-0",
+                !@show_emoji_overlay && "hidden"
+              ]}
+              id="emoji-picker-container"
+              phx-hook="EmojiPickerContainerHook"
+            >
+              <emoji-picker class="dark:hidden"></emoji-picker>
+              <emoji-picker class="hidden dark:block dark"></emoji-picker>
+            </div>
           </div>
         </div>
         <div class="flex gap-2">

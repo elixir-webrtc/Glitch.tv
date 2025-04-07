@@ -3,10 +3,12 @@
  */
 export default {
   mounted() {
-    const emojiPicker = document.querySelector("emoji-picker");
+    const emojiPickers = document.querySelectorAll("emoji-picker");
 
-    emojiPicker.addEventListener("emoji-click", (event) => {
-      this.pushEvent("append_emoji", { emoji: event.detail.unicode });
-    });
+    for (const emojiPicker of emojiPickers) {
+      emojiPicker.addEventListener("emoji-click", (event) => {
+        this.pushEvent("append_emoji", { emoji: event.detail.unicode });
+      });
+    }
   },
 };
