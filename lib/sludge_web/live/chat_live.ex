@@ -30,6 +30,7 @@ defmodule SludgeWeb.ChatLive do
             </p>
           </div>
           <div class="dark:text-neutral-400">
+            {msg.body}
             {raw(SludgeWeb.Utils.to_html(msg.body))}
           </div>
         </li>
@@ -39,25 +40,53 @@ defmodule SludgeWeb.ChatLive do
         phx-submit="submit-form"
         class="border-t border-indigo-200 p-6 dark:border-zinc-800"
       >
-        <textarea
-          class="sludge-input-primary resize-none h-[96px] w-full dark:text-neutral-400"
-          placeholder="Your message"
-          maxlength="500"
-          name="body"
-          value={@msg_body}
-          disabled={is_nil(@author)}
-        />
-        <div class="flex flex-col sm:flex-row gap-2">
-          <input
-            class="sludge-input-primary px-4 py-2 dark:text-neutral-400"
-            placeholder="Your nickname"
-            maxlength="25"
-            name="author"
-            value={@author}
-            disabled={not is_nil(@author)}
+        <div class="flex flex-col relative">
+          <div class={
+            (String.length(@msg_body || "") == @max_msg_length &&
+               "absolute top-[-18px] right-[2px] text-xs w-full text-right text-rose-600 dark:text-rose-600") ||
+              (String.length(@msg_body || "") > @max_msg_length - 50 &&
+                 "absolute top-[-18px] right-[2px] text-xs w-full text-right text-neutral-400 dark:text-neutral-700") ||
+              "hidden"
+          }>
+            {String.length(@msg_body || "")}/{@max_msg_length}
+          </div>
+          <textarea
+            class="sludge-input-primary resize-none h-[96px] w-full dark:text-neutral-400"
+            placeholder="Your message"
+            maxlength={@max_msg_length}
+            name="body"
+            value={@msg_body}
+            disabled={not @joined}
           />
-          <button type="submit" class="sludge-button-primary">
-            <%= if is_nil(@author) do %>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-2 mt-2">
+          <div class="flex flex-1 relative">
+            <input
+              class="sludge-input-primary px-4 py-2 dark:text-neutral-400"
+              placeholder="Your nickname"
+              maxlength={@max_nickname_length}
+              name="author"
+              value={@author}
+              disabled={@joined}
+            />
+            <%= if not @joined do %>
+              <div class={
+                (String.length(@author || "") == @max_nickname_length &&
+                   "absolute bottom-[-18px] right-0 text-xs w-full text-rose-600 dark:text-rose-600") ||
+                  (String.length(@author || "") > @max_nickname_length - 5 &&
+                     "absolute bottom-[-18px] right-0 text-xs w-full text-neutral-400 dark:text-neutral-700") ||
+                  "hidden"
+              }>
+                {String.length(@author || "")}/{@max_nickname_length}
+              </div>
+            <% end %>
+          </div>
+          <button
+            type="submit"
+            class="sludge-button-primary"
+            disabled={String.length(@author || "") == 0}
+          >
+            <%= if not @joined do %>
               Join
             <% else %>
               Send
@@ -79,6 +108,8 @@ defmodule SludgeWeb.ChatLive do
       socket
       |> stream(:messages, [])
       |> assign(msg_body: nil, author: nil, next_msg_id: 0)
+      |> assign(max_msg_length: 500, max_nickname_length: 25)
+      |> assign(joined: false)
 
     {:ok, socket}
   end
@@ -89,8 +120,8 @@ defmodule SludgeWeb.ChatLive do
   end
 
   @impl true
-  def handle_event("validate-form", %{"author" => _author}, socket) do
-    {:noreply, socket}
+  def handle_event("validate-form", %{"author" => author}, socket) do
+    {:noreply, assign(socket, author: author)}
   end
 
   def handle_event("validate-form", %{"body" => body}, socket) do
@@ -107,14 +138,8 @@ defmodule SludgeWeb.ChatLive do
     end
   end
 
-  def handle_event("submit-form", %{"author" => author}, socket) do
-    author =
-      case author do
-        "" -> nil
-        n -> n
-      end
-
-    {:noreply, assign(socket, author: author)}
+  def handle_event("submit-form", %{"author" => _}, socket) do
+    {:noreply, assign(socket, joined: true)}
   end
 
   defp subscribe() do
