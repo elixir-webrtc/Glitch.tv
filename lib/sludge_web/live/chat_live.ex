@@ -213,8 +213,6 @@ defmodule SludgeWeb.ChatLive do
       subscribe()
     end
 
-    {:ok, timestamp} = DateTime.now("Etc/UTC")
-
     socket =
       socket
       |> assign(:messages, [])
