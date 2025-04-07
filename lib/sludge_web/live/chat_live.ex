@@ -152,6 +152,13 @@ defmodule SludgeWeb.ChatLive do
   end
 
   @impl true
+  def handle_event("hide-emoji-overlay", _, socket) do
+    socket = assign(socket, :show_emoji_overlay, false)
+
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_event("validate-form", %{"author" => _author}, socket) do
     {:noreply, socket}
   end
