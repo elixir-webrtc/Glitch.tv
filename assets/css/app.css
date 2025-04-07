@@ -2,22 +2,9 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
 /* This file is for your main application CSS */
-
-/* Please add those fonts to /priv/static/fonts */
-@font-face {
-    font-family: 'Aeonik';
-    font-style: normal;
-    font-weight: 400;
-    src: url('/fonts/Aeonik-Regular.otf')
-}
-
-@font-face {
-    font-family: 'Aeonik';
-    font-style: normal;
-    font-weight: 500;
-    src: url('/fonts/Aeonik-Medium.otf')
-}
 
 /* https://stackoverflow.com/questions/77936984/scrollbar-with-white-background */
 
@@ -46,7 +33,7 @@
 }
 
 .sludge-recordings-container {
-    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-fr justify-items-center gap-4;
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-fr justify-items-center gap-4 p-4;
 }
 
 .sludge-live-dropping-container {
