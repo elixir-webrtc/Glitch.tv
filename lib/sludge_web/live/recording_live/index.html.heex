@@ -15,9 +15,9 @@
           {seconds_to_duration_string(recording.length_seconds)}
         </p>
       </div>
-      <p class="font-medium text-sm line-clamp-2 dark:text-neutral-200 break-all">
-        {recording.title}
-      </p>
+      <div class="font-medium text-sm line-clamp-2 dark:text-neutral-200 break-all">
+        {raw(SludgeWeb.Utils.to_html(recording.title))}
+      </div>
       <div class="flex items-center gap-2 text-stone-500 text-xs dark:text-neutral-500">
         <span class="flex items-center gap-[6px]">
           <.icon name="hero-eye" class="w-3 h-3" />
