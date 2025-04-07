@@ -6,6 +6,7 @@ defmodule SludgeWeb.StreamViewerLive do
   alias Phoenix.Socket.Broadcast
   alias SludgeWeb.ChatLive
   alias SludgeWeb.Presence
+  alias SludgeWeb.Utils
 
   @impl true
   def render(assigns) do
@@ -24,7 +25,7 @@ defmodule SludgeWeb.StreamViewerLive do
               <.live_dropping />
             <% end %>
             <h1 class="text-2xl line-clamp-3 lg:line-clamp-2 dark:text-neutral-200 break-all">
-              {if @stream_metadata, do: @stream_metadata.title, else: "The stream is offline"}
+              {if @stream_metadata, do: raw(@stream_metadata.title), else: "The stream is offline"}
             </h1>
           </div>
           <div class="flex flex-wrap gap-4 text-sm">
@@ -45,9 +46,12 @@ defmodule SludgeWeb.StreamViewerLive do
             </.dropping>
             <.share_button />
           </div>
-          <p class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all lg:min-h-8 lg:h-32 max-h-32">
-            {@stream_metadata.description}
-          </p>
+          <div
+            id="stream-viewer-description"
+            class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all lg:min-h-8 lg:h-32 max-h-32"
+          >
+            {raw(@stream_metadata.description)}
+          </div>
         </div>
       </div>
       <div class="flex justify-stretch *:w-full lg:max-w-[440px] p-4 sm:p-0">
@@ -84,7 +88,7 @@ defmodule SludgeWeb.StreamViewerLive do
         # ice_ip_filter: Application.get_env(:live_broadcaster, :ice_ip_filter)
       )
       |> assign(:page_title, "Stream")
-      |> assign(:stream_metadata, metadata)
+      |> assign(:stream_metadata, metadata_to_html(metadata))
       |> assign(:viewers_count, get_viewers_count())
       |> assign(:stream_duration, measure_duration(metadata.started))
 
@@ -98,7 +102,12 @@ defmodule SludgeWeb.StreamViewerLive do
   end
 
   def handle_info({:changed, {title, description}}, socket) do
-    metadata = %{socket.assigns.stream_metadata | title: title, description: description}
+    metadata = %{
+      socket.assigns.stream_metadata
+      | title: Utils.to_html(title),
+        description: Utils.to_html(description)
+    }
+
     {:noreply, assign(socket, :stream_metadata, metadata)}
   end
 
@@ -135,5 +144,13 @@ defmodule SludgeWeb.StreamViewerLive do
         DateTime.utc_now()
         |> DateTime.diff(t, :minute)
     end
+  end
+
+  defp metadata_to_html(metadata) do
+    %{
+      metadata
+      | title: Utils.to_html(metadata.title),
+        description: Utils.to_html(metadata.description)
+    }
   end
 end
