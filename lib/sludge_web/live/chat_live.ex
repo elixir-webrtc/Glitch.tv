@@ -237,7 +237,7 @@ defmodule SludgeWeb.ChatLive do
         socket.assigns.messages
         |> Enum.map(fn message ->
           if message.id == flagged_message_id do
-            Map.put(message, :flagged, !message.flagged)
+            Map.put(message, :flagged, true)
           else
             message
           end
