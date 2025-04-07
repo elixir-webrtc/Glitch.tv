@@ -2,6 +2,7 @@ defmodule SludgeWeb.RecordingLive.Show do
   use SludgeWeb, :live_view
 
   alias Sludge.Recordings
+  alias SludgeWeb.Utils
 
   @impl true
   def mount(_params, _session, socket) do

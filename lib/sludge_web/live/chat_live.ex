@@ -1,5 +1,5 @@
 defmodule SludgeWeb.ChatLive do
-  use Phoenix.LiveView
+  use SludgeWeb, :live_view
 
   attr(:socket, Phoenix.LiveView.Socket, required: true, doc: "Parent live view socket")
   attr(:id, :string, required: true, doc: "Component id")
@@ -17,7 +17,7 @@ defmodule SludgeWeb.ChatLive do
       <ul
         class="h-[256px] overflow-y-scroll flex-grow flex flex-col gap-6 p-6"
         phx-hook="ScrollDownHook"
-        id="message_box"
+        id="chat-messages-box"
         phx-update="stream"
       >
         <li :for={{id, msg} <- @streams.messages} id={id} class="flex flex-col gap-1">
@@ -29,9 +29,9 @@ defmodule SludgeWeb.ChatLive do
               {Calendar.strftime(msg.timestamp, "%d %b %Y %H:%M:%S")}
             </p>
           </div>
-          <p class="dark:text-neutral-400">
-            {msg.body}
-          </p>
+          <div class="dark:text-neutral-400">
+            {raw(SludgeWeb.Utils.to_html(msg.body))}
+          </div>
         </li>
       </ul>
       <form
