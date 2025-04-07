@@ -10,7 +10,7 @@ defmodule SludgeWeb.StreamViewerLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="max-h-full h-full flex gap-4 flex-col lg:flex-row">
+    <div class="grid gap-4 grid-rows-2 lg:grid-rows-1 lg:grid-cols-[1fr_440px] lg:max-h-full pb-4">
       <div class="flex flex-col gap-4 justify-stretch w-full">
         <div class="flex-grow relative min-h-[0px] max-h-fit">
           <div class="h-full *:flex *:max-h-full *:w-full *:h-full">
@@ -50,9 +50,7 @@ defmodule SludgeWeb.StreamViewerLive do
           </p>
         </div>
       </div>
-      <div class="flex justify-stretch *:w-full lg:max-w-[440px] p-4 sm:p-0">
-        <ChatLive.live_render socket={@socket} id="livechat" role="user" />
-      </div>
+      <ChatLive.live_render socket={@socket} id="livechat" role="user" />
     </div>
     """
   end

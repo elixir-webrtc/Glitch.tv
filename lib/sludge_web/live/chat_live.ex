@@ -67,11 +67,7 @@ defmodule SludgeWeb.ChatLive do
       ]}
       id="sludge_chat"
     >
-      <ul
-        class="w-[440px] overflow-y-auto flex-grow flex flex-col"
-        phx-hook="ScrollDownHook"
-        id="message_box"
-      >
+      <ul class="overflow-y-auto flex-grow flex flex-col" phx-hook="ScrollDownHook" id="message_box">
         <li
           :for={msg <- @messages}
           id={msg.id <> "-msg"}
@@ -96,8 +92,9 @@ defmodule SludgeWeb.ChatLive do
           </p>
           <button
             class={[
-              "absolute right-6 bottom-2 rounded-full hover:bg-stone-200 dark:hover:bg-stone-700 flex items-center justify-center p-2",
+              "absolute right-6 bottom-2 rounded-full flex items-center justify-center p-2",
               msg.flagged && "hover:bg-red-300",
+              !msg.flagged && "hover:bg-stone-200 dark:hover:bg-stone-700",
               @role == "admin" && "hidden"
             ]}
             phx-click="flag-message"
@@ -106,11 +103,11 @@ defmodule SludgeWeb.ChatLive do
             <.icon name="hero-flag" class="w-4 h-4 text-red-400" />
           </button>
           <div class={[
-            "hidden gap-4 items-center *:flex-1",
+            "hidden gap-4 items-center *:flex-1 mt-4",
             @role == "admin" && "group-hover:flex"
           ]}>
             <button
-              class="bg-red-600 text-white rounded-lg py-1 mt-4"
+              class="bg-red-600 text-white rounded-lg py-1"
               phx-click="delete_message"
               phx-value-message-id={msg.id}
             >
@@ -164,7 +161,7 @@ defmodule SludgeWeb.ChatLive do
       ]}
       id="sludge_reported"
     >
-      <ul class="w-[440px] overflow-y-auto flex-grow flex flex-col">
+      <ul class="overflow-y-auto flex-grow flex flex-col">
         <li
           :for={msg <- Enum.filter(@messages, fn m -> m.flagged end)}
           id={msg.id <> "-reported"}
@@ -184,16 +181,16 @@ defmodule SludgeWeb.ChatLive do
           <p class="dark:text-neutral-400">
             {msg.body}
           </p>
-          <div class="flex gap-4 items-center *:flex-1">
+          <div class="flex gap-4 items-center *:flex-1 mt-4">
             <button
-              class="bg-red-600 text-white rounded-lg py-1 mt-4"
+              class="bg-red-600 text-white rounded-lg py-1"
               phx-click="delete_message"
               phx-value-message-id={msg.id}
             >
               Delete
             </button>
             <button
-              class="bg-gray-600 text-white rounded-lg py-1 mt-4"
+              class="bg-gray-600 text-white rounded-lg py-1"
               phx-click="ignore_flag"
               phx-value-message-id={msg.id}
             >
@@ -241,7 +238,9 @@ defmodule SludgeWeb.ChatLive do
 
   @impl true
   def handle_info({:new_msg, msg}, socket) do
-    {:noreply, assign(socket, :messages, [msg])}
+    messages = socket.assigns.messages ++ [msg]
+
+    {:noreply, assign(socket, :messages, messages)}
   end
 
   @impl true
