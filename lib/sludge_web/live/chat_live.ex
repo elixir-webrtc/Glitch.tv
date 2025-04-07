@@ -45,7 +45,7 @@ defmodule SludgeWeb.ChatLive do
                 "text-white bg-indigo-800 dark:hover:bg-indigo-700"
             ]}
           >
-            Reported
+            Reported ({Enum.count(@messages, fn x -> x.flagged end)})
           </button>
         </li>
       </ul>
