@@ -99,6 +99,6 @@
 }
 
 #stream-viewer-description p, #chat-messages-box p, #recording-description p {
-    @apply mb-4;
+    @apply mb-3 mt-3;
 }
 /* Markdown styling end */
