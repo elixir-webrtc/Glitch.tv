@@ -217,22 +217,7 @@ defmodule SludgeWeb.ChatLive do
 
     socket =
       socket
-      |> assign(:messages, [
-        %{
-          author: "Jan",
-          body: "Hello, world",
-          id: "Jan:Hello, world",
-          timestamp: timestamp,
-          flagged: false
-        },
-        %{
-          author: "Zbigniew",
-          body: "Hello, world",
-          id: "Zbigniew:Hello, world",
-          timestamp: timestamp,
-          flagged: false
-        }
-      ])
+      |> assign(:messages, [])
       |> assign(msg_body: nil, author: nil, next_msg_id: 0)
       |> assign(role: session["role"])
       |> assign(current_tab: "chat")
