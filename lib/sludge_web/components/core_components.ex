@@ -694,4 +694,31 @@ defmodule SludgeWeb.CoreComponents do
     </button>
     """
   end
+
+  attr :id, :string, required: true
+
+  def theme_toggle(assigns) do
+    ~H"""
+    <div class="flex items-center">
+      <input
+        id={@id}
+        type="checkbox"
+        class="sr-only peer appearance-none"
+        phx-hook="DarkModeToggleHook"
+      />
+      <label
+        for={@id}
+        class="border border-indigo-800 p-1 border-r-0 bg-indigo-800 text-white peer-checked:bg-transparent cursor-pointer rounded-l-lg"
+      >
+        <.icon name="hero-sun" class="w-6 h-6 lg:w-5 lg:h-5 block" />
+      </label>
+      <label
+        for={@id}
+        class="border border-indigo-800 p-1 bg-transparent text-indigo-800 peer-checked:bg-indigo-800 peer-checked:text-white cursor-pointer rounded-r-lg"
+      >
+        <.icon name="hero-moon" class="w-6 h-6 lg:w-5 lg:h-5 block" />
+      </label>
+    </div>
+    """
+  end
 end
