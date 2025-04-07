@@ -76,7 +76,7 @@ defmodule SludgeWeb.ChatLive do
           :for={msg <- @messages}
           id={msg.id <> "-msg"}
           class={[
-            "flex flex-col gap-1 px-6 py-4 relative hover:bg-stone-100 dark:hover:bg-stone-800",
+            "group flex flex-col gap-1 px-6 py-4 relative hover:bg-stone-100 dark:hover:bg-stone-800",
             msg.flagged && @role == "user" &&
               "bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800",
             @role == "user" && "first:rounded-t-[7px]"
@@ -104,6 +104,18 @@ defmodule SludgeWeb.ChatLive do
           >
             <.icon name="hero-flag" class="w-4 h-4 text-red-400" />
           </button>
+          <div class={[
+            "hidden gap-4 items-center *:flex-1",
+            @role == "admin" && "group-hover:flex"
+          ]}>
+            <button
+              class="bg-red-600 text-white rounded-lg py-1 mt-4"
+              phx-click="delete_message"
+              phx-value-message-id={msg.id}
+            >
+              Delete
+            </button>
+          </div>
         </li>
       </ul>
       <form
@@ -209,7 +221,7 @@ defmodule SludgeWeb.ChatLive do
           body: "Hello, world",
           id: "Jan:Hello, world",
           timestamp: timestamp,
-          flagged: true
+          flagged: false
         },
         %{
           author: "Zbigniew",
