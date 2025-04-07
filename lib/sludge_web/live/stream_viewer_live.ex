@@ -10,11 +10,11 @@ defmodule SludgeWeb.StreamViewerLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="max-h-full h-full flex gap-4 flex-col lg:flex-row *:flex-1">
+    <div class="max-h-full h-full flex gap-4 flex-col lg:flex-row">
       <div class="flex flex-col gap-4 justify-stretch w-full">
         <div class="flex-grow relative min-h-[0px] max-h-fit">
           <div class="h-full *:flex *:max-h-full *:w-full *:h-full">
-            <Player.live_render socket={@socket} player={@player} class="w-full" />
+            <Player.live_render socket={@socket} player={@player} class="w-full bg-black" />
           </div>
           <img src="/images/swm-white-logo.svg" class="absolute top-6 right-6 pointer-events-none" />
         </div>
@@ -45,12 +45,12 @@ defmodule SludgeWeb.StreamViewerLive do
             </.dropping>
             <.share_button />
           </div>
-          <p class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all min-h-8 h-32">
+          <p class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all lg:min-h-8 lg:h-32 max-h-32">
             {@stream_metadata.description}
           </p>
         </div>
       </div>
-      <div class="flex justify-stretch *:w-full lg:max-w-[440px] flex-1 p-4 sm:p-0">
+      <div class="flex justify-stretch *:w-full lg:max-w-[440px] p-4 sm:p-0">
         <ChatLive.live_render socket={@socket} id="livechat" />
       </div>
     </div>
