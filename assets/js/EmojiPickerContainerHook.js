@@ -20,7 +20,6 @@ export default {
         emojiPickers[0].parentElement.classList.contains("hidden");
 
       if (shouldHide && !isParentHidden) {
-        console.log("hide");
         this.pushEvent("hide-emoji-overlay", {});
       }
     });
