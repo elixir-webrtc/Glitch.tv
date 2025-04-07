@@ -721,4 +721,18 @@ defmodule SludgeWeb.CoreComponents do
     </div>
     """
   end
+
+  attr :tooltip, :string, required: true
+  slot :inner_block, required: true
+
+  def tooltip(assigns) do
+    ~H"""
+    <div class="group/tooltip">
+      {render_slot(@inner_block)}
+      <p class="absolute bottom-full left-1/2 w-max -translate-x-[50%] bg-stone-900 text-white py-1 px-2 rounded-lg hidden opacity-75 text-xs group-hover/tooltip:block">
+        {@tooltip}
+      </p>
+    </div>
+    """
+  end
 end

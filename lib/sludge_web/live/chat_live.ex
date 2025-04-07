@@ -90,18 +90,22 @@ defmodule SludgeWeb.ChatLive do
           <p class="dark:text-neutral-400">
             {msg.body}
           </p>
-          <button
-            class={[
-              "absolute right-6 bottom-2 rounded-full flex items-center justify-center p-2",
-              msg.flagged && "hover:bg-red-300",
-              !msg.flagged && "hover:bg-stone-200 dark:hover:bg-stone-700",
-              @role == "admin" && "hidden"
-            ]}
-            phx-click="flag-message"
-            phx-value-message-id={msg.id}
-          >
-            <.icon name="hero-flag" class="w-4 h-4 text-red-400" />
-          </button>
+          <div class="absolute right-6 bottom-2">
+            <.tooltip tooltip={if msg.flagged, do: "Unreport", else: "Report"}>
+              <button
+                class={[
+                  "rounded-full flex items-center justify-center p-2",
+                  msg.flagged && "hover:bg-red-300",
+                  !msg.flagged && "hover:bg-stone-200 dark:hover:bg-stone-700",
+                  @role == "admin" && "hidden"
+                ]}
+                phx-click="flag-message"
+                phx-value-message-id={msg.id}
+              >
+                <.icon name="hero-flag" class="w-4 h-4 text-red-400" />
+              </button>
+            </.tooltip>
+          </div>
           <div class={[
             "hidden gap-4 items-center *:flex-1 mt-4",
             @role == "admin" && "group-hover:flex"
@@ -213,7 +217,22 @@ defmodule SludgeWeb.ChatLive do
 
     socket =
       socket
-      |> assign(:messages, [])
+      |> assign(:messages, [
+        %{
+          author: "Jan",
+          body: "Hello, world",
+          id: "Jan:Hello, world",
+          timestamp: timestamp,
+          flagged: false
+        },
+        %{
+          author: "Zbigniew",
+          body: "Hello, world",
+          id: "Zbigniew:Hello, world",
+          timestamp: timestamp,
+          flagged: false
+        }
+      ])
       |> assign(msg_body: nil, author: nil, next_msg_id: 0)
       |> assign(role: session["role"])
       |> assign(current_tab: "chat")
