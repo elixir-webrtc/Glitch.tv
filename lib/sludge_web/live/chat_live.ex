@@ -2,25 +2,83 @@ defmodule SludgeWeb.ChatLive do
   use SludgeWeb, :live_view
 
   attr(:socket, Phoenix.LiveView.Socket, required: true, doc: "Parent live view socket")
+  attr(:role, :string, required: true, doc: "Admin or user")
   attr(:id, :string, required: true, doc: "Component id")
 
   def live_render(assigns) do
     ~H"""
-    {live_render(@socket, __MODULE__, id: @id)}
+    {live_render(@socket, __MODULE__, id: @id, session: %{"role" => @role})}
     """
   end
 
   @impl true
-  def render(assigns) do
+  def render(%{role: "user"} = assigns) do
     ~H"""
-    <div class="sludge-container-primary h-full justify-between">
-      <ul
-        class="h-[256px] overflow-y-scroll flex-grow flex flex-col gap-6 p-6"
-        phx-hook="ScrollDownHook"
-        id="chat-messages-box"
-        phx-update="stream"
-      >
-        <li :for={{id, msg} <- @streams.messages} id={id} class="flex flex-col gap-1">
+    {render_chat(assigns)}
+    """
+  end
+
+  def render(%{role: "admin"} = assigns) do
+    ~H"""
+    <div class="rounded-lg border border-indigo-200 flex flex-col h-full dark:border-zinc-800">
+      <ul class="flex *:flex-1 items-center border-b border-indigo-200 dark:border-zinc-800">
+        <li>
+          <button
+            phx-click="select-tab"
+            phx-value-tab="chat"
+            class={[
+              "w-full h-full px-4 py-3 rounded-tl-[7px] text-center text-indigo-700 text-indigo-800 text-sm hover:text-white hover:bg-indigo-900 dark:text-white",
+              @current_tab == "chat" &&
+                "text-white bg-indigo-800 dark:hover:bg-indigo-700"
+            ]}
+          >
+            Chat
+          </button>
+        </li>
+        <li>
+          <button
+            phx-click="select-tab"
+            phx-value-tab="reported"
+            class={[
+              "w-full h-full px-4 py-3 rounded-tr-[7px] text-center text-indigo-700 text-indigo-800 text-sm hover:text-white hover:bg-indigo-900 dark:text-white",
+              @current_tab == "reported" &&
+                "text-white bg-indigo-800 dark:hover:bg-indigo-700"
+            ]}
+          >
+            Reported ({Enum.count(@messages, fn x -> x.flagged end)})
+          </button>
+        </li>
+      </ul>
+      {render_chat(assigns)}
+      {render_reported(assigns)}
+    </div>
+    """
+  end
+
+  def render_chat(assigns) do
+    ~H"""
+    <div
+      class={[
+        "h-full justify-between flex-col",
+        @current_tab == "chat" && "flex",
+        @current_tab != "chat" && "hidden",
+        @role == "admin" && "",
+        @role == "user" && "rounded-lg border border-indigo-200 dark:border-zinc-800"
+      ]}
+      id="sludge_chat"
+    >
+      <ul class="overflow-y-auto flex-grow flex flex-col" phx-hook="ScrollDownHook" id="message_box">
+        <li
+          :for={msg <- @messages}
+          id={msg.id <> "-msg"}
+          class={[
+            "group flex flex-col gap-1 px-6 py-4 relative",
+            msg.flagged && @role == "user" &&
+              "bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800",
+            !msg.flagged && "hover:bg-stone-100 dark:hover:bg-stone-800",
+            @role == "user" && "first:rounded-t-[7px]"
+          ]}
+        >
           <div class="flex gap-4 justify-between items-center">
             <p class="text-indigo-800 text-sm text-medium dark:text-indigo-400">
               {msg.author}
@@ -30,8 +88,35 @@ defmodule SludgeWeb.ChatLive do
             </p>
           </div>
           <div class="dark:text-neutral-400">
-            {msg.body}
             {raw(SludgeWeb.Utils.to_html(msg.body))}
+          </div>
+          <div class="absolute right-6 bottom-2">
+            <.tooltip tooltip={if msg.flagged, do: "Unreport", else: "Report"}>
+              <button
+                class={[
+                  "rounded-full flex items-center justify-center p-2",
+                  msg.flagged && "hover:bg-red-300",
+                  !msg.flagged && "hover:bg-stone-200 dark:hover:bg-stone-700",
+                  @role == "admin" && "hidden"
+                ]}
+                phx-click="flag-message"
+                phx-value-message-id={msg.id}
+              >
+                <.icon name="hero-flag" class="w-4 h-4 text-red-400" />
+              </button>
+            </.tooltip>
+          </div>
+          <div class={[
+            "hidden gap-4 items-center *:flex-1 mt-4",
+            @role == "admin" && "group-hover:flex"
+          ]}>
+            <button
+              class="bg-red-600 text-white rounded-lg py-1"
+              phx-click="delete_message"
+              phx-value-message-id={msg.id}
+            >
+              Delete
+            </button>
           </div>
         </li>
       </ul>
@@ -98,16 +183,70 @@ defmodule SludgeWeb.ChatLive do
     """
   end
 
+  def render_reported(assigns) do
+    ~H"""
+    <div
+      class={[
+        "h-full justify-between flex-col",
+        @current_tab == "reported" && "flex",
+        @current_tab != "reported" && "hidden"
+      ]}
+      id="sludge_reported"
+    >
+      <ul class="overflow-y-auto flex-grow flex flex-col">
+        <li
+          :for={msg <- Enum.filter(@messages, fn m -> m.flagged end)}
+          id={msg.id <> "-reported"}
+          class={[
+            "flex flex-col gap-1 px-6 py-4 relative hover:bg-stone-100 dark:hover:bg-stone-800",
+            @role == "user" && "first:rounded-t-[7px]"
+          ]}
+        >
+          <div class="flex gap-4 justify-between items-center">
+            <p class="text-indigo-800 text-sm text-medium dark:text-indigo-400">
+              {msg.author}
+            </p>
+            <p class="text-xs text-neutral-500">
+              {Calendar.strftime(msg.timestamp, "%d %b %Y %H:%M:%S")}
+            </p>
+          </div>
+          <p class="dark:text-neutral-400">
+            {msg.body}
+          </p>
+          <div class="flex gap-4 items-center *:flex-1 mt-4">
+            <button
+              class="bg-red-600 text-white rounded-lg py-1"
+              phx-click="delete_message"
+              phx-value-message-id={msg.id}
+            >
+              Delete
+            </button>
+            <button
+              class="bg-gray-600 text-white rounded-lg py-1"
+              phx-click="ignore_flag"
+              phx-value-message-id={msg.id}
+            >
+              Ignore
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
+    """
+  end
+
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     if connected?(socket) do
       subscribe()
     end
 
     socket =
       socket
-      |> stream(:messages, [])
+      |> assign(:messages, [])
       |> assign(msg_body: nil, author: nil, next_msg_id: 0)
+      |> assign(role: session["role"])
+      |> assign(current_tab: "chat")
       |> assign(max_msg_length: 500, max_nickname_length: 25)
       |> assign(joined: false)
 
@@ -116,7 +255,82 @@ defmodule SludgeWeb.ChatLive do
 
   @impl true
   def handle_info({:new_msg, msg}, socket) do
-    {:noreply, stream(socket, :messages, [msg])}
+    messages = socket.assigns.messages ++ [msg]
+
+    {:noreply, assign(socket, :messages, messages)}
+  end
+
+  @impl true
+  def handle_info({:msg_flagged, flagged_message_id}, socket) do
+    if socket.assigns.role == "admin" do
+      messages =
+        socket.assigns.messages
+        |> Enum.map(fn message ->
+          if message.id == flagged_message_id do
+            Map.put(message, :flagged, true)
+          else
+            message
+          end
+        end)
+
+      socket =
+        socket
+        |> assign(:messages, messages)
+
+      {:noreply, socket}
+    else
+      {:noreply, socket}
+    end
+  end
+
+  @impl true
+  def handle_info({:delete_msg, messageId}, socket) do
+    messages =
+      socket.assigns.messages
+      |> Enum.filter(fn message -> message.id != messageId end)
+
+    socket =
+      socket
+      |> assign(:messages, messages)
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info({:ignore_flag, messageId}, socket) do
+    messages =
+      socket.assigns.messages
+      |> Enum.map(fn message ->
+        if message.id == messageId do
+          Map.put(message, :flagged, false)
+        else
+          message
+        end
+      end)
+
+    socket =
+      socket
+      |> assign(:messages, messages)
+
+    {:noreply, socket}
+  end
+
+  def handle_event("select-tab", %{"tab" => tab}, socket) do
+    socket = assign(socket, :current_tab, tab)
+
+    {:noreply, socket}
+  end
+
+  def handle_event("delete_message", %{"message-id" => messageId}, socket) do
+    Phoenix.PubSub.broadcast(Sludge.PubSub, "chatroom", {:delete_msg, messageId})
+
+    {:noreply, socket}
+  end
+
+  def handle_event("ignore_flag", %{"message-id" => messageId}, socket) do
+    Phoenix.PubSub.broadcast(Sludge.PubSub, "chatroom", {:ignore_flag, messageId})
+
+    {:noreply, socket}
   end
 
   @impl true
@@ -142,13 +356,41 @@ defmodule SludgeWeb.ChatLive do
     {:noreply, assign(socket, joined: true)}
   end
 
+  def handle_event("flag-message", %{"message-id" => flagged_message_id}, socket) do
+    messages =
+      socket.assigns.messages
+      |> Enum.map(fn message ->
+        if message.id == flagged_message_id do
+          Map.put(message, :flagged, true)
+        else
+          message
+        end
+      end)
+
+    socket =
+      socket
+      |> assign(:messages, messages)
+
+    Phoenix.PubSub.broadcast(Sludge.PubSub, "chatroom", {:msg_flagged, flagged_message_id})
+
+    {:noreply, socket}
+  end
+
   defp subscribe() do
     Phoenix.PubSub.subscribe(Sludge.PubSub, "chatroom")
   end
 
   defp send_message(body, author, id) do
     {:ok, timestamp} = DateTime.now("Etc/UTC")
-    msg = %{author: author, body: body, id: "#{author}:#{id}", timestamp: timestamp}
+
+    msg = %{
+      author: author,
+      body: body,
+      id: "#{author}:#{id}",
+      timestamp: timestamp,
+      flagged: false
+    }
+
     Phoenix.PubSub.broadcast(Sludge.PubSub, "chatroom", {:new_msg, msg})
   end
 end
