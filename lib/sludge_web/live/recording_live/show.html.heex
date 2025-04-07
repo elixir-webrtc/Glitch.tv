@@ -9,13 +9,13 @@
       />
       <img src="/images/swm-white-logo.svg" class="sludge-swm-video-watermark" />
     </div>
-    <div class="flex flex-col gap-4 flex-shrink">
+    <div class="flex flex-col gap-4 flex-shrink px-4 lg:px-0">
       <div class="flex gap-3 items-center justify-start">
         <h1 class="text-2xl line-clamp-2 dark:text-neutral-200 break-all">
           {@recording.title}
         </h1>
       </div>
-      <div class="flex gap-4 text-sm h-[44px] items-stretch">
+      <div class="flex flex-wrap gap-4 text-sm">
         <.dropping>
           Recorded:&nbsp;
           <span class="sludge-dropping-featured-text">
@@ -35,11 +35,11 @@
       </p>
     </div>
   </div>
-  <div class="flex flex-col justify-start flex-none">
+  <div class="flex flex-col justify-start flex-none pb-4 px-4 lg:px-0 border-t border-zinc-800 pt-4 lg:pt-0 lg:border-0">
     <ul class="flex flex-col gap-4">
       <li
         :for={recording <- @recordings}
-        class="w-[317px] pb-4 border-b border-indigo-200 last:border-0 dark:border-zinc-800"
+        class="lg:w-[317px] pb-4 border-b border-indigo-200 last:border-0 dark:border-zinc-800"
       >
         <.link href={"/recordings/#{recording.id}"} class="flex gap-4">
           <img

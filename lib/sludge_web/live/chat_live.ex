@@ -37,9 +37,9 @@ defmodule SludgeWeb.ChatLive do
       <form
         phx-change="validate-form"
         phx-submit="submit-form"
-        class="flex flex-col gap-2 border-t border-indigo-200 p-6 dark:border-zinc-800"
+        class="border-t border-indigo-200 p-6 dark:border-zinc-800"
       >
-        <div class="flex items-end gap-2 relative">
+        <div class="flex items-end gap-2 relative mb-2">
           <textarea
             name="body"
             class="sludge-input-primary resize-none h-[128px] dark:text-neutral-400 disabled:opacity-50"
@@ -66,7 +66,7 @@ defmodule SludgeWeb.ChatLive do
         </div>
         <div class="flex gap-2">
           <input
-            class="sludge-input-primary px-4 dark:text-neutral-400"
+            class="sludge-input-primary px-4 py-2 dark:text-neutral-400"
             placeholder="Your nickname"
             maxlength="25"
             name="author"
