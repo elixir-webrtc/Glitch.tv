@@ -76,9 +76,10 @@ defmodule SludgeWeb.ChatLive do
           :for={msg <- @messages}
           id={msg.id <> "-msg"}
           class={[
-            "group flex flex-col gap-1 px-6 py-4 relative hover:bg-stone-100 dark:hover:bg-stone-800",
+            "group flex flex-col gap-1 px-6 py-4 relative",
             msg.flagged && @role == "user" &&
               "bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800",
+            !msg.flagged && "hover:bg-stone-100 dark:hover:bg-stone-800",
             @role == "user" && "first:rounded-t-[7px]"
           ]}
         >
