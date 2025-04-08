@@ -19,7 +19,12 @@ defmodule SludgeWeb.StreamViewerLive do
       <div class="flex flex-col gap-4 justify-stretch w-full">
         <div class="flex-grow relative min-h-[0px] max-h-fit">
           <div class="h-full *:flex *:max-h-full *:w-full *:h-full">
-            <Player.live_render socket={@socket} player={@player} class="w-full bg-black" />
+            <Player.live_render
+              socket={@socket}
+              player={@player}
+              class="w-full"
+              video_class="rounded-lg bg-black"
+            />
           </div>
           <img src="/images/swm-white-logo.svg" class="absolute top-6 right-6 pointer-events-none" />
         </div>
@@ -140,6 +145,7 @@ defmodule SludgeWeb.StreamViewerLive do
     {:noreply, assign(socket, :viewers_count, get_viewers_count())}
   end
 
+  @impl true
   def handle_event("toggle_chat", _, socket) do
     socket = assign(socket, chat_visible: !socket.assigns.chat_visible)
 
