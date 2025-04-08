@@ -11,7 +11,11 @@ defmodule SludgeWeb.StreamViewerLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="grid gap-4 grid-rows-2 lg:grid-rows-1 lg:grid-cols-[1fr_440px] lg:max-h-full pb-4">
+    <div class={[
+      "grid gap-4 grid-rows-2 lg:grid-rows-1  lg:max-h-full pb-4",
+      @chat_visible && "lg:grid-cols-[1fr_440px]",
+      !@chat_visible && "lg:grid-cols-1"
+    ]}>
       <div class="flex flex-col gap-4 justify-stretch w-full">
         <div class="flex-grow relative min-h-[0px] max-h-fit">
           <div class="h-full *:flex *:max-h-full *:w-full *:h-full">
@@ -45,6 +49,12 @@ defmodule SludgeWeb.StreamViewerLive do
               </span>
             </.dropping>
             <.share_button />
+            <button
+              class="bg-indigo-800 disabled:bg-indigo-500 disabled:text-indigo-300 text-white px-4 py-2 rounded-lg text-sm font-medium"
+              phx-click="toggle_chat"
+            >
+              {if @chat_visible, do: "Hide chat", else: "Show chat"}
+            </button>
           </div>
           <div
             id="stream-viewer-description"
@@ -54,7 +64,7 @@ defmodule SludgeWeb.StreamViewerLive do
           </div>
         </div>
       </div>
-      <ChatLive.live_render socket={@socket} id="livechat" role="user" />
+      <ChatLive.live_render :if={@chat_visible} socket={@socket} id="livechat" role="user" />
     </div>
     """
   end
@@ -89,6 +99,7 @@ defmodule SludgeWeb.StreamViewerLive do
       |> assign(:stream_metadata, metadata_to_html(metadata))
       |> assign(:viewers_count, get_viewers_count())
       |> assign(:stream_duration, measure_duration(metadata.started))
+      |> assign(:chat_visible, true)
 
     {:ok, socket}
   end
@@ -127,6 +138,12 @@ defmodule SludgeWeb.StreamViewerLive do
 
   def handle_info(%Broadcast{event: "presence_diff"}, socket) do
     {:noreply, assign(socket, :viewers_count, get_viewers_count())}
+  end
+
+  def handle_event("toggle_chat", _, socket) do
+    socket = assign(socket, chat_visible: !socket.assigns.chat_visible)
+
+    {:noreply, socket}
   end
 
   def get_viewers_count() do
