@@ -49,11 +49,11 @@ emoji-picker {
 }
 
 .sludge-input-primary {
-    @apply rounded-lg border border-indigo-200 text-sm flex-1 dark:bg-zinc-800 dark:border-none dark:text-indigo-400;
+    @apply rounded-lg border border-indigo-200 disabled:bg-neutral-100 disabled:placeholder-neutral-300 text-sm flex-1 dark:bg-zinc-800 dark:disabled:bg-zinc-800 dark:disabled:placeholder-zinc-700 dark:border-none dark:text-red-500;
 }
 
 .sludge-button-primary {
-    @apply bg-indigo-800 text-white px-12 py-2 rounded-lg text-sm font-medium;
+    @apply bg-indigo-800 disabled:bg-indigo-500 disabled:text-indigo-300 text-white px-12 py-2 rounded-lg text-sm font-medium;
 }
 
 .sludge-button-browser-all {
@@ -63,3 +63,46 @@ emoji-picker {
 .sludge-swm-video-watermark {
     @apply absolute top-6 right-6 pointer-events-none;
 }
+
+/* Markdown styling start */
+#stream-viewer-description ul, #stream-viewer-description ol, #chat-messages-box ul, #chat-messages-box ol, #recording-description ul, #recording-description ol {
+    list-style: revert;
+    margin: revert;
+    padding: revert;
+}
+
+#stream-viewer-description a, #chat-messages-box a, #recording-description a{
+    @apply underline;
+}
+
+#stream-viewer-description blockquote, #chat-messages-box blockquote, #recording-description blockquote {
+    @apply border-l-4 border-zinc-300 pl-2 dark:border-zinc-700;
+}
+
+/* not sure about that dark background color in code blocks */
+#stream-viewer-description code, #chat-messages-box code, #recording-description code {
+    @apply text-sm border-[1px] rounded-md px-[2px] bg-zinc-50 border-zinc-300 dark:border-zinc-700 bg-zinc-900;
+}
+
+#stream-viewer-description pre, #chat-messages-box pre, #recording-description pre {
+    @apply text-sm border-[1px] rounded-md px-[2px] bg-zinc-50 border-zinc-300 dark:border-zinc-700 bg-zinc-900;
+}
+
+#stream-viewer-description pre code, #chat-messages-box pre code, #recording-description pre code {
+    @apply border-0 bg-transparent;
+}
+
+#stream-viewer-description h1, #chat-messages-box h1, #recording-description h1 {
+    @apply text-2xl font-bold;
+}
+#stream-viewer-description h2, #chat-messages-box h2, #recording-description h2 {
+    @apply text-xl font-bold;
+}
+#stream-viewer-description h3, #chat-messages-box h3, #recording-description h3 {
+    @apply text-lg font-bold;
+}
+
+#stream-viewer-description p, #chat-messages-box p, #recording-description p {
+    @apply mb-3 mt-3;
+}
+/* Markdown styling end */

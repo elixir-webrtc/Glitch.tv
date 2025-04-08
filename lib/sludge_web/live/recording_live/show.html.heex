@@ -12,7 +12,7 @@
     <div class="flex flex-col gap-4 flex-shrink px-4 lg:px-0">
       <div class="flex gap-3 items-center justify-start">
         <h1 class="text-2xl line-clamp-2 dark:text-neutral-200 break-all">
-          {@recording.title}
+          {raw(SludgeWeb.Utils.to_html(@recording.title))}
         </h1>
       </div>
       <div class="flex flex-wrap gap-4 text-sm">
@@ -30,9 +30,12 @@
         </.dropping>
         <.share_button />
       </div>
-      <p class="overflow-y-scroll dark:text-neutral-400 break-all">
-        {@recording.description}
-      </p>
+      <div
+        id="recording-description"
+        class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all min-h-8 h-32"
+      >
+        {raw(SludgeWeb.Utils.to_html(@recording.description))}
+      </div>
     </div>
   </div>
   <div class="flex flex-col justify-start flex-none pb-4 px-4 lg:px-0 border-t border-zinc-800 pt-4 lg:pt-0 lg:border-0">
@@ -47,9 +50,9 @@
             class="h-[64px] lg:h-[80px] rounded-lg object-contain"
           />
           <div class="flex flex-col justify-between py-2">
-            <p class="text-sm line-clamp-3 dark:text-neutral-200 break-all">
-              {recording.title}
-            </p>
+            <div class="text-sm line-clamp-3 dark:text-neutral-200 break-all">
+              {raw(SludgeWeb.Utils.to_html(recording.title))}
+            </div>
             <div class="flex items-center gap-1">
               <.icon name="hero-eye" class="w-3 h-3 text-stone-500 dark:text-neutral-600" />
 
