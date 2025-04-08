@@ -48,7 +48,7 @@ defmodule SludgeWeb.StreamViewerLive do
           </div>
           <div
             id="stream-viewer-description"
-            class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all lg:min-h-8 lg:h-32 max-h-32"
+            class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all lg:min-h-8 lg:h-32 max-h-32 2xl:h-64 2xl:max-h-64"
           >
             {raw(@stream_metadata.description)}
           </div>
