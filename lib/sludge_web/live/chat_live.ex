@@ -102,8 +102,8 @@ defmodule SludgeWeb.ChatLive do
           <div class="dark:text-neutral-400">
             {raw(SludgeWeb.Utils.to_html(msg.body))}
           </div>
-          <div class="absolute right-6 bottom-2">
-            <.tooltip tooltip={if msg.flagged, do: "Unreport", else: "Report"}>
+          <div :if={!msg.flagged} class="absolute right-6 bottom-2">
+            <.tooltip tooltip="Report">
               <button
                 class={[
                   "rounded-full flex items-center justify-center p-2",
@@ -427,7 +427,7 @@ defmodule SludgeWeb.ChatLive do
       socket.assigns.messages
       |> Enum.map(fn message ->
         if message.id == flagged_message_id do
-          Map.put(message, :flagged, true)
+          Map.put(message, :flagged, !message.flagged)
         else
           message
         end
