@@ -69,7 +69,7 @@ defmodule SludgeWeb.ChatLive do
     >
       <div
         :if={@role == "user"}
-        class="py-4 px-8 border-b border-indigo-200 text-center hidden lg:block"
+        class="py-4 px-8 border-b border-indigo-200 text-center dark:border-zinc-800 dark:text-neutral-400 hidden lg:block"
       >
         Chat
       </div>

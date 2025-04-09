@@ -80,9 +80,9 @@ defmodule SludgeWeb.StreamViewerLive do
         </div>
         <button
           phx-click="toggle_chat"
-          class="hidden lg:block absolute top-[13px] left-4 z-10 hover:bg-stone-200 p-2 rounded-lg"
+          class="hidden lg:block absolute top-[13px] left-4 z-10 hover:bg-stone-200 dark:hover:bg-stone-800 p-2 rounded-lg"
         >
-          <.icon name="hero-chevron-left" class="w-4 h-4 block" />
+          <.icon name="hero-chevron-left" class="w-4 h-4 block dark:text-neutral-400" />
         </button>
       </div>
     </div>
