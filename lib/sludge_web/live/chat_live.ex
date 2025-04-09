@@ -162,7 +162,7 @@ defmodule SludgeWeb.ChatLive do
               id="emoji-picker-container"
               phx-hook="EmojiPickerContainerHook"
             >
-              <emoji-picker class="dark:hidden"></emoji-picker>
+              <emoji-picker class="light dark:hidden"></emoji-picker>
               <emoji-picker class="hidden dark:block dark"></emoji-picker>
             </div>
           </div>
