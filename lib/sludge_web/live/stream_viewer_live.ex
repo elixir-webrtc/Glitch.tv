@@ -12,64 +12,63 @@ defmodule SludgeWeb.StreamViewerLive do
   def render(assigns) do
     ~H"""
     <div class={[
-      "grid gap-4 grid-rows-2 lg:grid-rows-1  lg:max-h-full pb-4",
-      @chat_visible && "lg:grid-cols-[1fr_440px]",
+      "grid gap-4 grid-rows-2 lg:grid-rows-1 lg:max-h-full",
+      @chat_visible && "lg:grid-cols-[1fr_400px]",
       !@chat_visible && "lg:grid-cols-1"
     ]}>
-      <div class="flex flex-col gap-4 justify-stretch w-full">
-        <div class="flex-grow relative min-h-[0px] max-h-fit">
-          <div class="h-full *:flex *:max-h-full *:w-full *:h-full">
-            <Player.live_render
-              socket={@socket}
-              player={@player}
-              class="w-full"
-              video_class="rounded-lg bg-black"
-            />
-          </div>
+      <div class="flex flex-col gap-4 justify-stretch w-full h-full overflow-y-auto">
+        <div class={[
+          "relative grid grid-cols-1",
+          @chat_visible && "grid-rows-[70vh]",
+          !@chat_visible && "grid-rows-[80vh]"
+        ]}>
+          <Player.live_render
+            socket={@socket}
+            player={@player}
+            class="w-full h-full"
+            video_class="rounded-lg bg-black"
+          />
           <img src="/images/swm-white-logo.svg" class="absolute top-6 right-6 pointer-events-none" />
         </div>
-        <div class="flex flex-col gap-4 flex-shrink px-4 sm:p-0">
-          <div class="flex gap-3 items-center justify-start">
+        <div class="flex gap-3 items-center justify-start">
+          <%= if @stream_metadata.streaming? do %>
+            <.live_dropping />
+          <% end %>
+          <h1 class="text-2xl line-clamp-3 lg:line-clamp-2 dark:text-neutral-200 break-all">
+            {if @stream_metadata, do: raw(@stream_metadata.title), else: "The stream is offline"}
+          </h1>
+        </div>
+        <div class="flex flex-wrap gap-4 text-sm">
+          <.dropping>
             <%= if @stream_metadata.streaming? do %>
-              <.live_dropping />
-            <% end %>
-            <h1 class="text-2xl line-clamp-3 lg:line-clamp-2 dark:text-neutral-200 break-all">
-              {if @stream_metadata, do: raw(@stream_metadata.title), else: "The stream is offline"}
-            </h1>
-          </div>
-          <div class="flex flex-wrap gap-4 text-sm">
-            <.dropping>
-              <%= if @stream_metadata.streaming? do %>
-                Started:&nbsp;
-                <span class="sludge-dropping-featured-text">
-                  {@stream_duration} minutes ago
-                </span>
-              <% else %>
-                Stream is offline
-              <% end %>
-            </.dropping>
-            <.dropping>
+              Started:&nbsp;
               <span class="sludge-dropping-featured-text">
-                {@viewers_count} viewers
+                {@stream_duration} minutes ago
               </span>
-            </.dropping>
-            <.share_button />
-            <button
-              class="bg-indigo-800 disabled:bg-indigo-500 disabled:text-indigo-300 text-white px-4 py-2 rounded-lg text-sm font-medium"
-              phx-click="toggle_chat"
-            >
-              {if @chat_visible, do: "Hide chat", else: "Show chat"}
-            </button>
-          </div>
-          <div
-            id="stream-viewer-description"
-            class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all lg:min-h-8 lg:h-32 max-h-32 2xl:h-64 2xl:max-h-64"
+            <% else %>
+              Stream is offline
+            <% end %>
+          </.dropping>
+          <.dropping>
+            <span class="sludge-dropping-featured-text">
+              {@viewers_count} viewers
+            </span>
+          </.dropping>
+          <.share_button />
+          <button
+            class="bg-indigo-800 disabled:bg-indigo-500 disabled:text-indigo-300 text-white px-4 py-2 rounded-lg text-sm font-medium"
+            phx-click="toggle_chat"
           >
-            {raw(@stream_metadata.description)}
-          </div>
+            {if @chat_visible, do: "Hide chat", else: "Show chat"}
+          </button>
+        </div>
+        <div id="stream-viewer-description" class="dark:text-neutral-400 break-all">
+          {raw(@stream_metadata.description)}
         </div>
       </div>
-      <ChatLive.live_render :if={@chat_visible} socket={@socket} id="livechat" role="user" />
+      <div class="pb-4 *:h-full">
+        <ChatLive.live_render :if={@chat_visible} socket={@socket} id="livechat" role="user" />
+      </div>
     </div>
     """
   end
