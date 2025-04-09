@@ -69,7 +69,7 @@ defmodule SludgeWeb.ChatLive do
     >
       <div class={
         (@role == "user" &&
-           "p-2 text-center text-xs border-b-2 border-indigo-200 dark:border-zinc-800 dark:text-neutral-400") ||
+           "p-2 text-center text-xs border-b-[1px] border-indigo-200 dark:border-zinc-800 dark:text-neutral-400") ||
           "hidden"
       }>
         This is not an official ElixirConf EU chat, so if you have any questions for the speakers, please ask them under the SwapCard stream.
