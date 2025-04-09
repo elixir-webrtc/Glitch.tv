@@ -149,7 +149,7 @@ defmodule SludgeWeb.ChatLive do
               type="button"
               class="border border-indigo-200 rounded-lg px-2 py-1 disabled:opacity-50 dark:text-neutral-400 dark:border-none dark:bg-zinc-800"
               phx-click="toggle-emoji-overlay"
-              disabled={is_nil(@author)}
+              disabled={not @joined}
             >
               <.icon name="hero-face-smile" />
             </button>
