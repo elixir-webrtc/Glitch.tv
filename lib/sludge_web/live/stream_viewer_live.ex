@@ -18,9 +18,9 @@ defmodule SludgeWeb.StreamViewerLive do
     ]}>
       <div class="flex flex-col gap-4 justify-stretch w-full h-full overflow-y-auto">
         <div class={[
-          "relative grid grid-cols-1",
-          @chat_visible && "grid-rows-[70vh]",
-          !@chat_visible && "grid-rows-[80vh]"
+          "relative grid grid-cols-1 grid-rows-1",
+          @chat_visible && "lg:grid-rows-[70vh]",
+          !@chat_visible && "lg:grid-rows-[80vh]"
         ]}>
           <Player.live_render
             socket={@socket}
