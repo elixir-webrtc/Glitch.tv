@@ -132,24 +132,47 @@ defmodule SludgeWeb.ChatLive do
         phx-submit="submit-form"
         class="border-t border-indigo-200 p-6 dark:border-zinc-800"
       >
-        <div class="flex flex-col relative">
-          <div class={
-            (String.length(@msg_body || "") == @max_msg_length &&
-               "absolute top-[-18px] right-[2px] text-xs w-full text-right text-rose-600 dark:text-rose-600") ||
-              (String.length(@msg_body || "") > @max_msg_length - 50 &&
-                 "absolute top-[-18px] right-[2px] text-xs w-full text-right text-neutral-400 dark:text-neutral-700") ||
-              "hidden"
-          }>
-            {String.length(@msg_body || "")}/{@max_msg_length}
+        <div class="flex items-end gap-2 relative mb-2">
+          <div class="flex flex-col relative w-full">
+            <div class={
+              (String.length(@msg_body || "") == @max_msg_length &&
+                 "absolute top-[-18px] right-[2px] text-xs w-full text-right text-rose-600 dark:text-rose-600") ||
+                (String.length(@msg_body || "") > @max_msg_length - 50 &&
+                   "absolute top-[-18px] right-[2px] text-xs w-full text-right text-neutral-400 dark:text-neutral-700") ||
+                "hidden"
+            }>
+              {String.length(@msg_body || "")}/{@max_msg_length}
+            </div>
+            <textarea
+              class="sludge-input-primary resize-none h-[96px] w-full dark:text-neutral-400"
+              placeholder="Your message"
+              maxlength={@max_msg_length}
+              name="body"
+              disabled={not @joined}
+            >{@msg_body}</textarea>
           </div>
-          <textarea
-            class="sludge-input-primary resize-none h-[96px] w-full dark:text-neutral-400"
-            placeholder="Your message"
-            maxlength={@max_msg_length}
-            name="body"
-            value={@msg_body}
-            disabled={not @joined}
-          />
+          <div class="relative">
+            <button
+              type="button"
+              class="border border-indigo-200 rounded-lg px-2 py-1 disabled:opacity-50 dark:text-neutral-400 dark:border-none dark:bg-zinc-800"
+              phx-click="toggle-emoji-overlay"
+              disabled={not @joined}
+            >
+              <.icon name="hero-face-smile" />
+            </button>
+
+            <div
+              class={[
+                "absolute bottom-[calc(100%+4px)] right-0",
+                !@show_emoji_overlay && "hidden"
+              ]}
+              id="emoji-picker-container"
+              phx-hook="EmojiPickerContainerHook"
+            >
+              <emoji-picker class="light dark:hidden"></emoji-picker>
+              <emoji-picker class="hidden dark:block dark"></emoji-picker>
+            </div>
+          </div>
         </div>
         <div class="flex flex-col sm:flex-row gap-2 mt-2">
           <div class="flex flex-1 relative">
@@ -256,6 +279,7 @@ defmodule SludgeWeb.ChatLive do
       |> assign(current_tab: "chat")
       |> assign(max_msg_length: 500, max_nickname_length: 25)
       |> assign(joined: false)
+      |> assign(show_emoji_overlay: false)
 
     {:ok, socket}
   end
@@ -267,7 +291,6 @@ defmodule SludgeWeb.ChatLive do
     {:noreply, assign(socket, :messages, messages)}
   end
 
-  @impl true
   def handle_info({:msg_flagged, flagged_message_id}, socket) do
     if socket.assigns.role == "admin" do
       messages =
@@ -318,6 +341,37 @@ defmodule SludgeWeb.ChatLive do
     socket =
       socket
       |> assign(:messages, messages)
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("append_emoji", %{"emoji" => emoji}, socket) do
+    msg_body =
+      if socket.assigns.msg_body != nil do
+        socket.assigns.msg_body <> emoji
+      else
+        emoji
+      end
+
+    socket =
+      socket
+      |> assign(msg_body: msg_body)
+      |> assign(show_emoji_overlay: false)
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("toggle-emoji-overlay", _, socket) do
+    socket = assign(socket, :show_emoji_overlay, !socket.assigns.show_emoji_overlay)
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("hide-emoji-overlay", _, socket) do
+    socket = assign(socket, :show_emoji_overlay, false)
 
     {:noreply, socket}
   end

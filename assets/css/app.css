@@ -28,6 +28,10 @@
 
 /*  */
 
+emoji-picker {
+    --border-radius: 8px;
+}
+
 .sludge-container-primary {
     @apply flex flex-col border border-indigo-200 rounded-lg dark:border-zinc-800;
 }
