@@ -41,7 +41,7 @@ defmodule SludgeWeb.StreamViewerLive do
             phx-click="toggle_chat"
             class="absolute right-3 top-5 z-20 hidden lg:block hover:bg-stone-700 p-2 rounded-lg"
           >
-            <.icon name="hero-chevron-right" class="text-white w-4 h-4 block" />
+            <.icon name="hero-chevron-left" class="text-white w-4 h-4 block" />
           </button>
         </div>
         <div class="flex gap-3 items-center justify-start">
@@ -82,7 +82,7 @@ defmodule SludgeWeb.StreamViewerLive do
           phx-click="toggle_chat"
           class="hidden lg:block absolute top-[13px] left-4 z-10 hover:bg-stone-200 dark:hover:bg-stone-800 p-2 rounded-lg"
         >
-          <.icon name="hero-chevron-left" class="w-4 h-4 block dark:text-neutral-400" />
+          <.icon name="hero-chevron-right" class="w-4 h-4 block dark:text-neutral-400" />
         </button>
       </div>
     </div>
