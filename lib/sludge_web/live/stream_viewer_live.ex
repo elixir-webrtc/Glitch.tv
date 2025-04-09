@@ -39,7 +39,7 @@ defmodule SludgeWeb.StreamViewerLive do
           <button
             :if={!@chat_visible}
             phx-click="toggle_chat"
-            class="absolute right-2 top-5 z-20 hidden lg:block hover:bg-stone-700 p-2 rounded-lg"
+            class="absolute right-3 top-5 z-20 hidden lg:block hover:bg-stone-700 p-2 rounded-lg"
           >
             <.icon name="hero-chevron-right" class="text-white w-4 h-4 block" />
           </button>
