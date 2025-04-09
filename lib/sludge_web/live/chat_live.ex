@@ -67,6 +67,12 @@ defmodule SludgeWeb.ChatLive do
       ]}
       id="sludge_chat"
     >
+      <div
+        :if={@role == "user"}
+        class="py-4 px-8 border-b border-indigo-200 text-center hidden lg:block"
+      >
+        Chat
+      </div>
       <ul class="overflow-y-auto flex-grow flex flex-col" phx-hook="ScrollDownHook" id="message_box">
         <li
           :for={msg <- @messages}

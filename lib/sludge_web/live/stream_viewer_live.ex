@@ -28,7 +28,21 @@ defmodule SludgeWeb.StreamViewerLive do
             class="w-full h-full"
             video_class="rounded-lg bg-black"
           />
-          <img src="/images/swm-white-logo.svg" class="absolute top-6 right-6 pointer-events-none" />
+          <img
+            src="/images/swm-white-logo.svg"
+            class={[
+              "absolute top-6 pointer-events-none",
+              @chat_visible && "right-6",
+              !@chat_visible && "right-14"
+            ]}
+          />
+          <button
+            :if={!@chat_visible}
+            phx-click="toggle_chat"
+            class="absolute right-2 top-5 z-20 hidden lg:block hover:bg-stone-700 p-2 rounded-lg"
+          >
+            <.icon name="hero-chevron-right" class="text-white w-4 h-4 block" />
+          </button>
         </div>
         <div class="flex gap-3 items-center justify-start">
           <%= if @stream_metadata.streaming? do %>
@@ -55,19 +69,21 @@ defmodule SludgeWeb.StreamViewerLive do
             </span>
           </.dropping>
           <.share_button />
-          <button
-            class="bg-indigo-800 disabled:bg-indigo-500 disabled:text-indigo-300 text-white px-4 py-2 rounded-lg text-sm font-medium"
-            phx-click="toggle_chat"
-          >
-            {if @chat_visible, do: "Hide chat", else: "Show chat"}
-          </button>
         </div>
         <div id="stream-viewer-description" class="dark:text-neutral-400 break-all">
           {raw(@stream_metadata.description)}
         </div>
       </div>
-      <div class="pb-4 *:h-full">
-        <ChatLive.live_render :if={@chat_visible} socket={@socket} id="livechat" role="user" />
+      <div :if={@chat_visible} class="pb-4 relative">
+        <div class="h-full *:h-full">
+          <ChatLive.live_render socket={@socket} id="livechat" role="user" />
+        </div>
+        <button
+          phx-click="toggle_chat"
+          class="hidden lg:block absolute top-[13px] left-4 z-10 hover:bg-stone-200 p-2 rounded-lg"
+        >
+          <.icon name="hero-chevron-left" class="w-4 h-4 block" />
+        </button>
       </div>
     </div>
     """
