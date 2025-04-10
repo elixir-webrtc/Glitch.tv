@@ -1,4 +1,5 @@
 defmodule SludgeWeb.Router do
+  import Phoenix.LiveDashboard.Router
   use SludgeWeb, :router
 
   pipeline :browser do
@@ -10,38 +11,33 @@ defmodule SludgeWeb.Router do
     plug :put_secure_browser_headers
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
+  pipeline :auth do
+    plug :admin_auth
   end
 
   scope "/", SludgeWeb do
     pipe_through :browser
 
     live "/", StreamViewerLive, :show
-    live "/streamer", StreamerLive, :show
 
     live "/recordings", RecordingLive.Index, :index
     live "/recordings/:id", RecordingLive.Show, :show
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", SludgeWeb do
-  #   pipe_through :api
-  # end
+  scope "/streamer", SludgeWeb do
+    pipe_through :auth
+    pipe_through :browser
 
-  # Enable LiveDashboard in development
-  if Application.compile_env(:sludge, :dev_routes) do
-    # If you want to use the LiveDashboard in production, you should put
-    # it behind authentication and allow only admins to access it.
-    # If your application does not have an admins-only section yet,
-    # you can use Plug.BasicAuth to set up some basic authentication
-    # as long as you are also using SSL (which you should anyway).
-    import Phoenix.LiveDashboard.Router
+    live "/", StreamerLive, :show
 
-    scope "/dev" do
-      pipe_through :browser
+    live_dashboard "/dashboard",
+      metrics: SludgeWeb.Telemetry,
+      additional_pages: [exwebrtc: ExWebRTCDashboard]
+  end
 
-      live_dashboard "/dashboard", metrics: SludgeWeb.Telemetry
-    end
+  defp admin_auth(conn, _opts) do
+    username = Application.fetch_env!(:sludge, :admin_username)
+    password = Application.fetch_env!(:sludge, :admin_password)
+    Plug.BasicAuth.basic_auth(conn, username: username, password: password)
   end
 end
