@@ -67,6 +67,12 @@ defmodule SludgeWeb.ChatLive do
       ]}
       id="sludge_chat"
     >
+      <div
+        :if={@role == "user"}
+        class="py-4 px-8 border-b border-indigo-200 text-center dark:border-zinc-800 dark:text-neutral-400 hidden lg:block"
+      >
+        Chat
+      </div>
       <div class={
         (@role == "user" &&
            "p-2 text-center text-xs border-b-[1px] border-indigo-200 dark:border-zinc-800 dark:text-neutral-400") ||
@@ -82,8 +88,7 @@ defmodule SludgeWeb.ChatLive do
             "group flex flex-col gap-1 px-6 py-4 relative",
             msg.flagged && @role == "user" &&
               "bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800",
-            !msg.flagged && "hover:bg-stone-100 dark:hover:bg-stone-800",
-            @role == "user" && "first:rounded-t-[7px]"
+            !msg.flagged && "hover:bg-stone-100 dark:hover:bg-stone-800"
           ]}
         >
           <div class="flex gap-4 justify-between items-center">
@@ -97,8 +102,8 @@ defmodule SludgeWeb.ChatLive do
           <div class="dark:text-neutral-400">
             {raw(SludgeWeb.Utils.to_html(msg.body))}
           </div>
-          <div class="absolute right-6 bottom-2">
-            <.tooltip tooltip={if msg.flagged, do: "Unreport", else: "Report"}>
+          <div :if={!msg.flagged} class="absolute right-6 bottom-2">
+            <.tooltip tooltip="Report">
               <button
                 class={[
                   "rounded-full flex items-center justify-center p-2",
@@ -422,7 +427,7 @@ defmodule SludgeWeb.ChatLive do
       socket.assigns.messages
       |> Enum.map(fn message ->
         if message.id == flagged_message_id do
-          Map.put(message, :flagged, true)
+          Map.put(message, :flagged, !message.flagged)
         else
           message
         end
