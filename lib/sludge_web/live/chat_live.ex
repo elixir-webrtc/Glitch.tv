@@ -99,7 +99,7 @@ defmodule SludgeWeb.ChatLive do
               {Calendar.strftime(msg.timestamp, "%d %b %Y %H:%M:%S")}
             </p>
           </div>
-          <div class="dark:text-neutral-400">
+          <div class="dark:text-neutral-400 break-all">
             {raw(SludgeWeb.Utils.to_html(msg.body))}
           </div>
           <div :if={!msg.flagged} class="absolute right-6 bottom-2">
