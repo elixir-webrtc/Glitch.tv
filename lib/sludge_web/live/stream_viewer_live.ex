@@ -48,9 +48,12 @@ defmodule SludgeWeb.StreamViewerLive do
           <%= if @stream_metadata.streaming? do %>
             <.live_dropping />
           <% end %>
-          <h1 class="text-2xl line-clamp-3 lg:line-clamp-2 dark:text-neutral-200 break-all">
-            {if @stream_metadata, do: raw(@stream_metadata.title), else: "The stream is offline"}
-          </h1>
+          <div
+            id="stream-viewer-title"
+            class="text-2xl line-clamp-3 lg:line-clamp-2 dark:text-neutral-200 break-all"
+          >
+            {raw(@stream_metadata.title)}
+          </div>
         </div>
         <div class="flex flex-wrap gap-4 text-sm">
           <.dropping>
