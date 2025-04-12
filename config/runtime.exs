@@ -71,6 +71,15 @@ if config_env() == :prod do
     admin_username: admin_username,
     admin_password: admin_password
 
+  enable_recordings =
+    case System.get_env("SLUDGE_ENABLE_RECORDINGS") do
+      "true" -> true
+      _ -> false
+    end
+
+  config :sludge,
+    enable_recordings: enable_recordings
+
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key

@@ -9,6 +9,7 @@ defmodule SludgeWeb.RecordingLive.Show do
     socket =
       socket
       |> assign(:recordings, Recordings.list_five_recordings())
+      |> assign(:enable_recordings, Application.fetch_env!(:sludge, :enable_recordings))
 
     {:ok, socket}
   end

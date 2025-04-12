@@ -91,9 +91,11 @@
         <li>
           <a href="/">Stream</a>
         </li>
-        <li>
-          <a href="/recordings">Recordings</a>
-        </li>
+        <%= if Application.fetch_env!(:sludge, :enable_recordings) do %>
+          <li>
+            <a href="/recordings">Recordings</a>
+          </li>
+        <% end %>
         <li>
           <a href="https://hexdocs.pm/ex_webrtc" target="blank">Docs</a>
         </li>
