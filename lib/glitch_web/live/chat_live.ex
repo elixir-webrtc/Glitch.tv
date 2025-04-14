@@ -278,56 +278,9 @@ defmodule GlitchWeb.ChatLive do
       subscribe()
     end
 
-    {:ok, timestamp} = DateTime.now("Etc/UTC")
-
-    msgs = [
-      %{
-        author: "Jan",
-        body: "Hello",
-        id: "Jan:1",
-        timestamp: timestamp,
-        flagged: false
-      },
-      %{
-        author: "Jan",
-        body: "Hello",
-        id: "Jan:3",
-        timestamp: timestamp,
-        flagged: false
-      },
-      %{
-        author: "Jan",
-        body: "Hello",
-        id: "Jan:4",
-        timestamp: timestamp,
-        flagged: false
-      },
-      %{
-        author: "Jan",
-        body: "Hello",
-        id: "Jan:5",
-        timestamp: timestamp,
-        flagged: false
-      },
-      %{
-        author: "Jan",
-        body: "Hello",
-        id: "Jan:2",
-        timestamp: timestamp,
-        flagged: false
-      },
-      %{
-        author: "Jan",
-        body: "Hello",
-        id: "Jan:6",
-        timestamp: timestamp,
-        flagged: false
-      }
-    ]
-
     socket =
       socket
-      |> assign(:messages, msgs)
+      |> assign(:messages, [])
       |> assign(msg_body: nil, author: nil, next_msg_id: 0)
       |> assign(role: session["role"])
       |> assign(current_tab: "chat")
