@@ -129,7 +129,6 @@ emoji-picker {
 }
 
 #stream-viewer-description p,
-#message_box p,
 #recording-description p {
     @apply mb-3 mt-3;
 }

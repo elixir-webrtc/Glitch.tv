@@ -12,7 +12,7 @@ defmodule SludgeWeb.StreamViewerLive do
   def render(assigns) do
     ~H"""
     <div class={[
-      "grid gap-4 grid-rows-2 lg:grid-rows-1 lg:max-h-full",
+      "grid gap-4 grid-rows-2 lg:grid-rows-1 lg:h-full",
       @chat_visible && "lg:grid-cols-[1fr_400px]",
       !@chat_visible && "lg:grid-cols-1"
     ]}>
