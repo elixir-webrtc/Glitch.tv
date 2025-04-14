@@ -10,6 +10,7 @@ defmodule SludgeWeb.RecordingLive.Index do
       |> assign(:page_title, "Recordings")
       |> assign(:recording, nil)
       |> stream(:recordings, Recordings.list_recordings())
+      |> assign(:enable_recordings, Sludge.FeatureFlags.recordings_enabled())
 
     {:ok, socket}
   end
