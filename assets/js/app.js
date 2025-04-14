@@ -26,6 +26,7 @@ import ScrollDownHook from "./ScrollDownHook";
 import ShareButtonHook from "./ShareButtonHook";
 import DarkModeToggleHook from "./DarkModeToggleHook";
 import EmojiPickerContainerHook from "./EmojiPickerContainerHook";
+import MessageBodyHook from "./MessageBodyHook";
 
 let Hooks = {};
 
@@ -33,6 +34,7 @@ Hooks.ScrollDownHook = ScrollDownHook;
 Hooks.ShareButton = ShareButtonHook;
 Hooks.DarkModeToggleHook = DarkModeToggleHook;
 Hooks.EmojiPickerContainerHook = EmojiPickerContainerHook;
+Hooks.MessageBodyHook = MessageBodyHook;
 
 const iceServers = [{ urls: "stun:stun.l.google.com:19302" }];
 Hooks.Publisher = createPublisherHook(iceServers);

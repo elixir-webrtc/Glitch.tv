@@ -154,6 +154,8 @@ defmodule SludgeWeb.ChatLive do
               maxlength={@max_msg_length}
               name="body"
               disabled={not @joined}
+              id="message_body"
+              phx-hook="MessageBodyHook"
             >{@msg_body}</textarea>
           </div>
           <div class="relative">
