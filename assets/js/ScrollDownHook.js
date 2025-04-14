@@ -6,7 +6,12 @@ export default {
     this.el.scrollTo(0, this.el.scrollHeight);
 
     this.handleEvent("new-message", () => {
-      this.el.scrollTo(0, this.el.scrollHeight);
+      if (
+        this.el.scrollTop + this.el.clientHeight ===
+        this.el.scrollHeight - this.el.lastElementChild.clientHeight
+      ) {
+        this.el.scrollTo(0, this.el.scrollHeight);
+      }
     });
   },
 };
