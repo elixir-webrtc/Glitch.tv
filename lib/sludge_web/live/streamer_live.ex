@@ -83,7 +83,7 @@ defmodule SludgeWeb.StreamerLive do
         on_connected: &on_connected/1,
         on_disconnected: &on_disconnected/1,
         on_recording_finished: &on_recording_finished/2,
-        recordings?: Application.fetch_env!(:sludge, :enable_recordings),
+        recordings?: Sludge.FeatureFlags.recordings_enabled(),
         ice_servers: [%{urls: "stun:stun.l.google.com:19302"}],
         # ice_ip_filter: Application.get_env(:live_broadcaster, :ice_ip_filter),
         video_codecs: @video_codecs,

@@ -91,7 +91,7 @@
         <li>
           <a href="/">Stream</a>
         </li>
-        <%= if Application.fetch_env!(:sludge, :enable_recordings) do %>
+        <%= if Sludge.FeatureFlags.recordings_enabled() do %>
           <li>
             <a href="/recordings">Recordings</a>
           </li>
