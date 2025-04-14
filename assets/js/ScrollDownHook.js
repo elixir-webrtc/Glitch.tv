@@ -9,7 +9,8 @@ export default {
       if (
         this.el.scrollTop + this.el.clientHeight ===
           this.el.scrollHeight - this.el.lastElementChild.clientHeight ||
-        this.el.scrollTop + this.el.clientHeight < this.el.scrollHeight
+        this.el.clientHeight >
+          this.el.scrollHeight - this.el.lastElementChild.clientHeight
       ) {
         this.el.scrollTo(0, this.el.scrollHeight);
       }
