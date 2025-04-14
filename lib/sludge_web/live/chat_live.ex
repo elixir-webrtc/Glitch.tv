@@ -182,7 +182,7 @@ defmodule SludgeWeb.ChatLive do
         <div class="flex flex-col sm:flex-row gap-2 mt-2">
           <div class="flex flex-1 relative">
             <input
-              class="sludge-input-primary px-4 py-2 dark:text-neutral-400"
+              class="sludge-input-primary px-4 py-2"
               placeholder="Your nickname"
               maxlength={@max_nickname_length}
               name="author"
