@@ -1,7 +1,7 @@
 <%= if @enable_recordings do %>
-  <div class="h-full flex gap-4">
+  <div class="h-full flex gap-4 flex-col lg:flex-row pb-4">
     <div class="flex-grow flex flex-col gap-4">
-      <div class="flex-shrink w-full max-h-[440px] relative">
+      <div class="flex-shrink w-full max-h-[70%] relative">
         <video
           src={@recording.link}
           poster={@recording.thumbnail_link}
@@ -11,11 +11,9 @@
         <img src="/images/swm-white-logo.svg" class="glitch-swm-video-watermark" />
       </div>
       <div class="flex flex-col gap-4 flex-shrink px-4 lg:px-0">
-        <div class="flex gap-3 items-center justify-start">
-          <h1 class="text-2xl line-clamp-2 dark:text-neutral-200 break-all">
-            {raw(GlitchWeb.Utils.to_html(@recording.title))}
-          </h1>
-        </div>
+        <h1 class="text-2xl line-clamp-2 dark:text-neutral-200 break-all">
+          {raw(SludgeWeb.Utils.to_html(@recording.title))}
+        </h1>
         <div class="flex flex-wrap gap-4 text-sm">
           <.dropping>
             Recorded:&nbsp;
@@ -31,15 +29,17 @@
           </.dropping>
           <.share_button />
         </div>
-        <div
-          id="recording-description"
-          class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all min-h-8 h-32"
-        >
-          {raw(GlitchWeb.Utils.to_html(@recording.description))}
+        <div class="pb-4">
+          <div
+            id="recording-description"
+            class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all min-h-8 h-32"
+          >
+            {raw(SludgeWeb.Utils.to_html(@recording.description))}
+          </div>
         </div>
       </div>
     </div>
-    <div class="flex flex-col justify-start flex-none pb-4 px-4 lg:px-0 border-t border-zinc-800 pt-4 lg:pt-0 lg:border-0">
+    <div class="flex flex-col justify-start flex-none pb-4 px-4 lg:px-0 border-t border-zinc-200 pt-4 lg:pt-0 lg:border-0">
       <ul class="flex flex-col gap-4">
         <li
           :for={recording <- @recordings}
