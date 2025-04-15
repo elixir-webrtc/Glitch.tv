@@ -3,5 +3,6 @@ defmodule GlitchWeb.Utils do
     (markdown || "")
     |> String.trim()
     |> Earmark.as_html!(breaks: true)
+    |> HtmlSanitizeEx.basic_html()
   end
 end
