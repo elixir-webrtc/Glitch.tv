@@ -1,12 +1,36 @@
-defmodule SludgeWeb.RecordingLiveTest do
-  use SludgeWeb.ConnCase
+defmodule GlitchWeb.RecordingLiveTest do
+  use GlitchWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Sludge.RecordingsFixtures
+  import Glitch.RecordingsFixtures
 
-  @create_attrs %{date: "2025-02-11T12:28:00Z", link: "some link", description: "some description", title: "some title", thumbnail_link: "some thumbnail_link", length_seconds: 42, views_count: 42}
-  @update_attrs %{date: "2025-02-12T12:28:00Z", link: "some updated link", description: "some updated description", title: "some updated title", thumbnail_link: "some updated thumbnail_link", length_seconds: 43, views_count: 43}
-  @invalid_attrs %{date: nil, link: nil, description: nil, title: nil, thumbnail_link: nil, length_seconds: nil, views_count: nil}
+  @create_attrs %{
+    date: "2025-02-11T12:28:00Z",
+    link: "some link",
+    description: "some description",
+    title: "some title",
+    thumbnail_link: "some thumbnail_link",
+    length_seconds: 42,
+    views_count: 42
+  }
+  @update_attrs %{
+    date: "2025-02-12T12:28:00Z",
+    link: "some updated link",
+    description: "some updated description",
+    title: "some updated title",
+    thumbnail_link: "some updated thumbnail_link",
+    length_seconds: 43,
+    views_count: 43
+  }
+  @invalid_attrs %{
+    date: nil,
+    link: nil,
+    description: nil,
+    title: nil,
+    thumbnail_link: nil,
+    length_seconds: nil,
+    views_count: nil
+  }
 
   defp create_recording(_) do
     recording = recording_fixture()

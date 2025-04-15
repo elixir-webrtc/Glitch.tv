@@ -1,14 +1,22 @@
-defmodule Sludge.RecordingsTest do
-  use Sludge.DataCase
+defmodule Glitch.RecordingsTest do
+  use Glitch.DataCase
 
-  alias Sludge.Recordings
+  alias Glitch.Recordings
 
   describe "recordings" do
-    alias Sludge.Recordings.Recording
+    alias Glitch.Recordings.Recording
 
-    import Sludge.RecordingsFixtures
+    import Glitch.RecordingsFixtures
 
-    @invalid_attrs %{date: nil, link: nil, description: nil, title: nil, thumbnail_link: nil, length_seconds: nil, views_count: nil}
+    @invalid_attrs %{
+      date: nil,
+      link: nil,
+      description: nil,
+      title: nil,
+      thumbnail_link: nil,
+      length_seconds: nil,
+      views_count: nil
+    }
 
     test "list_recordings/0 returns all recordings" do
       recording = recording_fixture()
@@ -21,7 +29,15 @@ defmodule Sludge.RecordingsTest do
     end
 
     test "create_recording/1 with valid data creates a recording" do
-      valid_attrs = %{date: ~U[2025-02-11 12:28:00Z], link: "some link", description: "some description", title: "some title", thumbnail_link: "some thumbnail_link", length_seconds: 42, views_count: 42}
+      valid_attrs = %{
+        date: ~U[2025-02-11 12:28:00Z],
+        link: "some link",
+        description: "some description",
+        title: "some title",
+        thumbnail_link: "some thumbnail_link",
+        length_seconds: 42,
+        views_count: 42
+      }
 
       assert {:ok, %Recording{} = recording} = Recordings.create_recording(valid_attrs)
       assert recording.date == ~U[2025-02-11 12:28:00Z]
@@ -39,9 +55,20 @@ defmodule Sludge.RecordingsTest do
 
     test "update_recording/2 with valid data updates the recording" do
       recording = recording_fixture()
-      update_attrs = %{date: ~U[2025-02-12 12:28:00Z], link: "some updated link", description: "some updated description", title: "some updated title", thumbnail_link: "some updated thumbnail_link", length_seconds: 43, views_count: 43}
 
-      assert {:ok, %Recording{} = recording} = Recordings.update_recording(recording, update_attrs)
+      update_attrs = %{
+        date: ~U[2025-02-12 12:28:00Z],
+        link: "some updated link",
+        description: "some updated description",
+        title: "some updated title",
+        thumbnail_link: "some updated thumbnail_link",
+        length_seconds: 43,
+        views_count: 43
+      }
+
+      assert {:ok, %Recording{} = recording} =
+               Recordings.update_recording(recording, update_attrs)
+
       assert recording.date == ~U[2025-02-12 12:28:00Z]
       assert recording.link == "some updated link"
       assert recording.description == "some updated description"

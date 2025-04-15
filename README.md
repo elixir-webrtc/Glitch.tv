@@ -1,4 +1,4 @@
-# Sludge
+# Glitch
 
 To start your Phoenix server:
 

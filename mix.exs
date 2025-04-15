@@ -1,9 +1,9 @@
-defmodule Sludge.MixProject do
+defmodule Glitch.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :sludge,
+      app: :glitch,
       version: "0.1.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,7 +18,7 @@ defmodule Sludge.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Sludge.Application, []},
+      mod: {Glitch.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -78,10 +78,10 @@ defmodule Sludge.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind sludge", "esbuild sludge"],
+      "assets.build": ["tailwind glitch", "esbuild glitch"],
       "assets.deploy": [
-        "tailwind sludge --minify",
-        "esbuild sludge --minify",
+        "tailwind glitch --minify",
+        "esbuild glitch --minify",
         "phx.digest"
       ]
     ]
