@@ -12,7 +12,7 @@ defmodule GlitchWeb.StreamViewerLive do
   def render(assigns) do
     ~H"""
     <div class={[
-      "grid gap-4 grid-rows-2 lg:grid-rows-1 lg:h-full",
+      "grid gap-4 grid-rows-[auto_512px] lg:grid-rows-1 lg:h-full",
       @chat_visible && "lg:grid-cols-[1fr_400px]",
       !@chat_visible && "lg:grid-cols-1"
     ]}>
@@ -73,7 +73,10 @@ defmodule GlitchWeb.StreamViewerLive do
           </.dropping>
           <.share_button />
         </div>
-        <div id="stream-viewer-description" class="dark:text-neutral-400 break-all">
+        <div
+          id="stream-viewer-description"
+          class="max-h-[128px] lg:max-h-none overflow-auto lg:overflow-visible dark:text-neutral-400 break-all"
+        >
           {raw(@stream_metadata.description)}
         </div>
       </div>
