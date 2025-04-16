@@ -97,7 +97,7 @@ defmodule GlitchWeb.ChatLive do
               {msg.author}
             </p>
             <p class="text-xs text-neutral-500">
-              {Calendar.strftime(msg.timestamp, "%d %b %Y %H:%M:%S")}
+              {Calendar.strftime(msg.inserted_at, "%d %b %Y %H:%M:%S")}
             </p>
           </div>
           <div class="dark:text-neutral-400 break-all">

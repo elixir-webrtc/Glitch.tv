@@ -3,7 +3,6 @@ defmodule Glitch.Repo.Migrations.CreateMessages do
 
   def change do
     create table(:messages) do
-      add :timestamp, :utc_datetime
       add :author, :string
       add :body, :string
       add :flagged, :boolean

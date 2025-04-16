@@ -101,4 +101,13 @@ defmodule Glitch.Messages do
   def change_message(%Message{} = message, attrs \\ %{}) do
     Message.changeset(message, attrs)
   end
+
+  def delete_stale_messages() do
+    current_time = DateTime.utc_now()
+    cutoff_time = DateTime.add(current_time, -5 * 60, :second)
+
+    query = from(m in Message, where: m.inserted_at < ^cutoff_time)
+
+    Repo.delete_all(query)
+  end
 end

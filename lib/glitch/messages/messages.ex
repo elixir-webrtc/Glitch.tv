@@ -3,7 +3,6 @@ defmodule Glitch.Messages.Message do
   import Ecto.Changeset
 
   schema "messages" do
-    field :timestamp, :utc_datetime
     field :author, :string
     field :body, :string
     field :flagged, :boolean
@@ -15,13 +14,11 @@ defmodule Glitch.Messages.Message do
   def changeset(recording, attrs) do
     recording
     |> cast(attrs, [
-      :timestamp,
       :author,
       :body,
       :flagged
     ])
     |> validate_required([
-      :timestamp,
       :author,
       :body,
       :flagged
