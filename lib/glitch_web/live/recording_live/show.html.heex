@@ -12,7 +12,7 @@
       </div>
       <div class="flex flex-col gap-4 flex-shrink px-4 lg:px-0">
         <h1 class="text-2xl line-clamp-2 dark:text-neutral-200 break-all">
-          {raw(SludgeWeb.Utils.to_html(@recording.title))}
+          {raw(GlitchWeb.Utils.to_html(@recording.title))}
         </h1>
         <div class="flex flex-wrap gap-4 text-sm">
           <.dropping>
@@ -34,7 +34,7 @@
             id="recording-description"
             class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all min-h-8 h-32"
           >
-            {raw(SludgeWeb.Utils.to_html(@recording.description))}
+            {raw(GlitchWeb.Utils.to_html(@recording.description))}
           </div>
         </div>
       </div>
