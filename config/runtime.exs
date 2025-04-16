@@ -12,12 +12,12 @@ import Config
 # If you use `mix release`, you need to explicitly enable the server
 # by passing the PHX_SERVER=true when you start it:
 #
-#     PHX_SERVER=true bin/sludge start
+#     PHX_SERVER=true bin/glitch start
 #
 # Alternatively, you can use `mix phx.gen.release` to generate a `bin/server`
 # script that automatically sets the env var above.
 if System.get_env("PHX_SERVER") do
-  config :sludge, SludgeWeb.Endpoint, server: true
+  config :glitch, GlitchWeb.Endpoint, server: true
 end
 
 if config_env() == :prod do
@@ -25,10 +25,10 @@ if config_env() == :prod do
     System.get_env("DATABASE_PATH") ||
       raise """
       environment variable DATABASE_PATH is missing.
-      For example: /etc/sludge/sludge.db
+      For example: /etc/glitch/glitch.db
       """
 
-  config :sludge, Sludge.Repo,
+  config :glitch, Glitch.Repo,
     database: database_path,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "5")
 
@@ -47,9 +47,9 @@ if config_env() == :prod do
   host = System.get_env("PHX_HOST") || "example.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
 
-  config :sludge, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
+  config :glitch, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
-  config :sludge, SludgeWeb.Endpoint,
+  config :glitch, GlitchWeb.Endpoint,
     url: [host: host, port: 443, scheme: "https"],
     http: [
       # Enable IPv6 and bind on all interfaces.
@@ -67,17 +67,17 @@ if config_env() == :prod do
   admin_password =
     System.get_env("ADMIN_PASSWORD") || raise "Environment variable ADMIN_PASSWORD is missing."
 
-  config :sludge,
+  config :glitch,
     admin_username: admin_username,
     admin_password: admin_password
 
   enable_recordings =
-    case System.get_env("SLUDGE_ENABLE_RECORDINGS") do
+    case System.get_env("GLITCH_ENABLE_RECORDINGS") do
       "true" -> true
       _ -> false
     end
 
-  config :sludge,
+  config :glitch,
     enable_recordings: enable_recordings
 
   # ## SSL Support
@@ -85,7 +85,7 @@ if config_env() == :prod do
   # To get SSL working, you will need to add the `https` key
   # to your endpoint configuration:
   #
-  #     config :sludge, SludgeWeb.Endpoint,
+  #     config :glitch, GlitchWeb.Endpoint,
   #       https: [
   #         ...,
   #         port: 443,
@@ -107,7 +107,7 @@ if config_env() == :prod do
   # We also recommend setting `force_ssl` in your config/prod.exs,
   # ensuring no data is ever sent via http, always redirecting to https:
   #
-  #     config :sludge, SludgeWeb.Endpoint,
+  #     config :glitch, GlitchWeb.Endpoint,
   #       force_ssl: [hsts: true]
   #
   # Check `Plug.SSL` for all available options in `force_ssl`.

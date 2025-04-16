@@ -1,5 +1,5 @@
-defmodule SludgeWeb.PageControllerTest do
-  use SludgeWeb.ConnCase
+defmodule GlitchWeb.PageControllerTest do
+  use GlitchWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")
