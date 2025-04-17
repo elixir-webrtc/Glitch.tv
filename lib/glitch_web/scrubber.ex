@@ -2,8 +2,6 @@ defmodule GlitchWeb.Scrubber do
   require HtmlSanitizeEx.Scrubber.Meta
   alias HtmlSanitizeEx.Scrubber.Meta
 
-  @valid_schemes ["http", "https", "mailto"]
-
   Meta.remove_cdata_sections_before_scrub()
 
   Meta.strip_comments()
@@ -22,15 +20,6 @@ defmodule GlitchWeb.Scrubber do
   Meta.allow_tag_with_these_attributes("h6", [])
   Meta.allow_tag_with_these_attributes("hr", [])
   Meta.allow_tag_with_these_attributes("i", [])
-
-  Meta.allow_tag_with_uri_attributes("img", ["src"], @valid_schemes)
-
-  Meta.allow_tag_with_these_attributes("img", [
-    "width",
-    "height",
-    "title",
-    "alt"
-  ])
 
   Meta.allow_tag_with_these_attributes("li", [])
   Meta.allow_tag_with_these_attributes("ol", [])
