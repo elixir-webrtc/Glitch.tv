@@ -77,7 +77,7 @@ defmodule GlitchWeb.StreamViewerLive do
           {raw(@stream_metadata.description)}
         </div>
       </div>
-      <div :if={@chat_visible} class="pb-4 relative">
+      <div class={["pb-4 relative", !@chat_visible && "hidden"]}>
         <div class="h-full *:h-full">
           <ChatLive.live_render socket={@socket} id="livechat" role="user" />
         </div>
