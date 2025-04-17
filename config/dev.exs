@@ -79,7 +79,6 @@ config :phoenix_live_view,
 
 config :glitch,
   admin_username: "admin",
-  admin_password: "admin"
-
-config :glitch,
-  enable_recordings: true
+  admin_password: "admin",
+  enable_recordings: true,
+  slow_mode_delay_ms: 1000

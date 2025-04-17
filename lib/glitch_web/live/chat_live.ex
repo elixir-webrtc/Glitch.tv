@@ -139,14 +139,19 @@ defmodule GlitchWeb.ChatLive do
       >
         <div class="flex items-end gap-2 relative mb-2">
           <div class="flex flex-col relative w-full">
-            <div class={
-              (String.length(@msg_body || "") == @max_msg_length &&
-                 "absolute top-[-18px] right-[2px] text-xs w-full text-right text-rose-600 dark:text-rose-600") ||
+            <div class="flex justify-between mt-[-14px] mb-[2px]">
+              <div class="text-xs text-neutral-400 dark:text-neutral-700">
+                Slow Mode {@slow_mode_delay_ms / 1000}s
+              </div>
+              <div class={
+                (String.length(@msg_body || "") == @max_msg_length &&
+                  "text-xs text-rose-600 dark:text-rose-600") ||
                 (String.length(@msg_body || "") > @max_msg_length - 50 &&
-                   "absolute top-[-18px] right-[2px] text-xs w-full text-right text-neutral-400 dark:text-neutral-700") ||
+                   "text-xs text-neutral-400 dark:text-neutral-700") ||
                 "hidden"
-            }>
-              {String.length(@msg_body || "")}/{@max_msg_length}
+              }>
+                {String.length(@msg_body || "")}/{@max_msg_length}
+              </div>
             </div>
             <textarea
               class="glitch-input-primary resize-none h-[96px] w-full dark:text-neutral-400"
@@ -281,10 +286,12 @@ defmodule GlitchWeb.ChatLive do
     socket =
       socket
       |> assign(:messages, [])
+      |> assign(:last_msg_timestamp, System.monotonic_time(:millisecond))
       |> assign(msg_body: nil, author: nil, next_msg_id: 0)
       |> assign(role: session["role"])
       |> assign(current_tab: "chat")
       |> assign(max_msg_length: 500, max_nickname_length: 25)
+      |> assign(slow_mode_delay_ms: Application.fetch_env!(:glitch, :slow_mode_delay_ms))
       |> assign(joined: false)
       |> assign(show_emoji_overlay: false)
 
@@ -413,10 +420,12 @@ defmodule GlitchWeb.ChatLive do
   end
 
   def handle_event("submit-form", %{"body" => body}, socket) do
-    if body != "" do
+    now = System.monotonic_time(:millisecond)
+
+    if body != "" && now - socket.assigns.last_msg_timestamp >= socket.assigns.slow_mode_delay_ms do
       id = socket.assigns.next_msg_id
       send_message(body, socket.assigns.author, id)
-      {:noreply, assign(socket, msg_body: nil, next_msg_id: id + 1)}
+      {:noreply, assign(socket, msg_body: nil, next_msg_id: id + 1, last_msg_timestamp: now)}
     else
       {:noreply, socket}
     end
