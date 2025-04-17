@@ -20,8 +20,7 @@ defmodule Glitch.Application do
       # {Glitch.Worker, arg},
       # Start to serve requests, typically the last entry
       GlitchWeb.Presence,
-      GlitchWeb.Endpoint,
-      {Glitch.MessagesService, 1000 * 60}
+      GlitchWeb.Endpoint
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
