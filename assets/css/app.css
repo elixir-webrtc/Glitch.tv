@@ -107,7 +107,7 @@ emoji-picker {
 #stream-viewer-description pre code,
 #message_box pre code,
 #recording-description pre code {
-    @apply border-0 bg-transparent;
+    @apply border-0 bg-transparent w-full break-all;
 }
 
 #stream-viewer-description h1,
