@@ -295,6 +295,8 @@ defmodule GlitchWeb.ChatLive do
   def handle_info({:new_msg, msg}, socket) do
     messages = socket.assigns.messages ++ [msg]
 
+    socket = push_event(socket, "new-message", %{})
+
     {:noreply, assign(socket, :messages, messages)}
   end
 
