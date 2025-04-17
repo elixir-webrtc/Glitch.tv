@@ -60,11 +60,11 @@ defmodule GlitchWeb.ChatLive do
     ~H"""
     <div
       class={[
-        "h-full justify-between flex-col",
+        "justify-between flex-col",
         @current_tab == "chat" && "flex",
         @current_tab != "chat" && "hidden",
-        @role == "admin" && "",
-        @role == "user" && "rounded-lg border border-indigo-200 dark:border-zinc-800"
+        @role == "admin" && "h-[0px] flex-grow",
+        @role == "user" && "h-full rounded-lg border border-indigo-200 dark:border-zinc-800"
       ]}
       id="glitch_chat"
     >
@@ -225,7 +225,7 @@ defmodule GlitchWeb.ChatLive do
     ~H"""
     <div
       class={[
-        "h-full justify-between flex-col",
+        "h-[0px] flex-grow justify-between flex-col",
         @current_tab == "reported" && "flex",
         @current_tab != "reported" && "hidden"
       ]}
