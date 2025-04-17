@@ -1,5 +1,6 @@
 defmodule GlitchWeb.ChatLive do
   alias Glitch.Messages
+  alias Glitch.Messages.Message
   use GlitchWeb, :live_view
 
   attr(:socket, Phoenix.LiveView.Socket, required: true, doc: "Parent live view socket")
@@ -75,7 +76,8 @@ defmodule GlitchWeb.ChatLive do
         Chat
       </div>
       <div class={[
-        @role == "user" && "p-2 text-center text-xs border-b-[1px] border-indigo-200 dark:border-zinc-800 dark:text-neutral-400",
+        @role == "user" &&
+          "p-2 text-center text-xs border-b-[1px] border-indigo-200 dark:border-zinc-800 dark:text-neutral-400",
         @role != "user" && "hidden"
       ]}>
         This is not an official ElixirConf EU chat, so if you have any questions for the speakers, please ask them under the SwapCard stream.
@@ -144,14 +146,16 @@ defmodule GlitchWeb.ChatLive do
                 "text-xs",
                 @highlight_slow_mode && "text-rose-600",
                 !@highlight_slow_mode &&
-                "text-neutral-400 dark:text-neutral-700"
+                  "text-neutral-400 dark:text-neutral-700"
               ]}>
                 Slow Mode {@slow_mode_delay_s}s
               </div>
               <div class={[
-                String.length(@msg_body || "") == @max_msg_length && "text-xs text-rose-600 text-rose-600", 
-                String.length(@msg_body || "") > @max_msg_length - 50 && "text-xs text-neutral-400 dark:text-neutral-700", 
-                String.length(@msg_body || "") <= @max_msg_length - 50  && "hidden"
+                String.length(@msg_body || "") == @max_msg_length &&
+                  "text-xs text-rose-600 text-rose-600",
+                String.length(@msg_body || "") > @max_msg_length - 50 &&
+                  "text-xs text-neutral-400 dark:text-neutral-700",
+                String.length(@msg_body || "") <= @max_msg_length - 50 && "hidden"
               ]}>
                 {String.length(@msg_body || "")}/{@max_msg_length}
               </div>
@@ -202,8 +206,10 @@ defmodule GlitchWeb.ChatLive do
             />
             <%= if not @joined do %>
               <div class={[
-                String.length(@author || "") == @max_nickname_length && "absolute bottom-[-18px] right-0 text-xs w-full text-rose-600 dark:text-rose-600",
-                String.length(@author || "") > @max_nickname_length - 5 && "absolute bottom-[-18px] right-0 text-xs w-full text-neutral-400 dark:text-neutral-700",
+                String.length(@author || "") == @max_nickname_length &&
+                  "absolute bottom-[-18px] right-0 text-xs w-full text-rose-600 dark:text-rose-600",
+                String.length(@author || "") > @max_nickname_length - 5 &&
+                  "absolute bottom-[-18px] right-0 text-xs w-full text-neutral-400 dark:text-neutral-700",
                 String.length(@author || "") <= @max_nickname_length - 5 && "hidden"
               ]}>
                 {String.length(@author || "")}/{@max_nickname_length}
@@ -240,7 +246,7 @@ defmodule GlitchWeb.ChatLive do
       <ul class="overflow-y-auto flex-grow flex flex-col">
         <li
           :for={msg <- Enum.filter(@messages, fn m -> m.flagged end)}
-          id={msg.id <> "-reported"}
+          id={"#{msg.id}-reported"}
           class={[
             "flex flex-col gap-1 px-6 py-4 relative hover:bg-stone-100 dark:hover:bg-stone-800",
             @role == "user" && "first:rounded-t-[7px]"
@@ -251,7 +257,7 @@ defmodule GlitchWeb.ChatLive do
               {msg.author}
             </p>
             <p class="text-xs text-neutral-500">
-              {Calendar.strftime(msg.timestamp, "%d %b %Y %H:%M:%S")}
+              {Calendar.strftime(msg.inserted_at, "%d %b %Y %H:%M:%S")}
             </p>
           </div>
           <p class="dark:text-neutral-400">
@@ -287,8 +293,6 @@ defmodule GlitchWeb.ChatLive do
 
     messages = Messages.list_last_50_messages()
 
-    dbg(length(messages))
-
     socket =
       socket
       |> assign(:last_msg_timestamp, System.monotonic_time(:millisecond))
@@ -315,31 +319,27 @@ defmodule GlitchWeb.ChatLive do
   end
 
   def handle_info({:msg_flagged, flagged_message_id}, socket) do
-    if socket.assigns.role == "admin" do
-      messages =
-        socket.assigns.messages
-        |> Enum.map(fn message ->
-          if message.id == flagged_message_id do
-            Map.put(message, :flagged, true)
-          else
-            message
-          end
-        end)
+    messages =
+      socket.assigns.messages
+      |> Enum.map(fn message ->
+        if to_string(message.id) == flagged_message_id do
+          Map.put(message, :flagged, true)
+        else
+          message
+        end
+      end)
 
-      socket =
-        socket
-        |> assign(:messages, messages)
+    socket =
+      socket
+      |> assign(:messages, messages)
 
-      {:noreply, socket}
-    else
-      {:noreply, socket}
-    end
+    {:noreply, socket}
   end
 
   def handle_info({:delete_msg, messageId}, socket) do
     messages =
       socket.assigns.messages
-      |> Enum.filter(fn message -> message.id != messageId end)
+      |> Enum.filter(fn message -> message.id != String.to_integer(messageId) end)
 
     socket =
       socket
@@ -352,7 +352,7 @@ defmodule GlitchWeb.ChatLive do
     messages =
       socket.assigns.messages
       |> Enum.map(fn message ->
-        if message.id == messageId do
+        if message.id == String.to_integer(messageId) do
           Map.put(message, :flagged, false)
         else
           message
@@ -406,12 +406,23 @@ defmodule GlitchWeb.ChatLive do
   end
 
   def handle_event("delete_message", %{"message-id" => messageId}, socket) do
+    {:ok, _} = Messages.delete_message(%Message{id: String.to_integer(messageId)})
+
     Phoenix.PubSub.broadcast(Glitch.PubSub, "chatroom", {:delete_msg, messageId})
 
     {:noreply, socket}
   end
 
   def handle_event("ignore_flag", %{"message-id" => messageId}, socket) do
+    message =
+      socket.assigns.messages
+      |> Enum.find(fn message ->
+        message.id == String.to_integer(messageId)
+      end)
+
+    {:ok, _} =
+      Messages.update_message(message, %{flagged: false})
+
     Phoenix.PubSub.broadcast(Glitch.PubSub, "chatroom", {:ignore_flag, messageId})
 
     {:noreply, socket}
@@ -427,9 +438,11 @@ defmodule GlitchWeb.ChatLive do
 
   def handle_event("submit-form", %{"body" => body}, socket) do
     now = System.monotonic_time(:millisecond)
+    text = GlitchWeb.Utils.to_text(body)
 
     if body != "" &&
-         now - socket.assigns.last_msg_timestamp >= socket.assigns.slow_mode_delay_s * 1000 do
+         now - socket.assigns.last_msg_timestamp >= socket.assigns.slow_mode_delay_s * 1000 &&
+         String.length(text) > 0 do
       send_message(body, socket.assigns.author)
       {:noreply, assign(socket, msg_body: nil, last_msg_timestamp: now)}
     else
@@ -446,8 +459,10 @@ defmodule GlitchWeb.ChatLive do
     messages =
       socket.assigns.messages
       |> Enum.map(fn message ->
-        if message.id == flagged_message_id do
-          Map.put(message, :flagged, !message.flagged)
+        if to_string(message.id) == flagged_message_id do
+          {:ok, _} = Messages.update_message(message, %{flagged: true})
+
+          Map.put(message, :flagged, true)
         else
           message
         end
