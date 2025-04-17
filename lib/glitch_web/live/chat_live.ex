@@ -1,4 +1,5 @@
 defmodule GlitchWeb.ChatLive do
+  alias Glitch.Messages
   use GlitchWeb, :live_view
 
   attr(:socket, Phoenix.LiveView.Socket, required: true, doc: "Parent live view socket")
@@ -83,7 +84,7 @@ defmodule GlitchWeb.ChatLive do
       <ul class="overflow-y-auto flex-grow flex flex-col" phx-hook="ScrollDownHook" id="message_box">
         <li
           :for={msg <- @messages}
-          id={msg.id <> "-msg"}
+          id={"#{msg.id}-msg"}
           class={[
             "group flex flex-col gap-1 px-6 py-4 relative",
             msg.flagged && @role == "user" &&
@@ -96,7 +97,7 @@ defmodule GlitchWeb.ChatLive do
               {msg.author}
             </p>
             <p class="text-xs text-neutral-500">
-              {Calendar.strftime(msg.timestamp, "%d %b %Y %H:%M:%S")}
+              {Calendar.strftime(msg.inserted_at, "%d %b %Y %H:%M:%S")}
             </p>
           </div>
           <div class="dark:text-neutral-400 break-all">
@@ -278,10 +279,14 @@ defmodule GlitchWeb.ChatLive do
       subscribe()
     end
 
+    messages = Messages.list_last_50_messages()
+
+    dbg(length(messages))
+
     socket =
       socket
-      |> assign(:messages, [])
-      |> assign(msg_body: nil, author: nil, next_msg_id: 0)
+      |> assign(messages: messages)
+      |> assign(msg_body: nil, author: nil)
       |> assign(role: session["role"])
       |> assign(current_tab: "chat")
       |> assign(max_msg_length: 500, max_nickname_length: 25)
@@ -414,9 +419,8 @@ defmodule GlitchWeb.ChatLive do
 
   def handle_event("submit-form", %{"body" => body}, socket) do
     if body != "" do
-      id = socket.assigns.next_msg_id
-      send_message(body, socket.assigns.author, id)
-      {:noreply, assign(socket, msg_body: nil, next_msg_id: id + 1)}
+      send_message(body, socket.assigns.author)
+      {:noreply, assign(socket, msg_body: nil)}
     else
       {:noreply, socket}
     end
@@ -450,16 +454,17 @@ defmodule GlitchWeb.ChatLive do
     Phoenix.PubSub.subscribe(Glitch.PubSub, "chatroom")
   end
 
-  defp send_message(body, author, id) do
+  defp send_message(body, author) do
     {:ok, timestamp} = DateTime.now("Etc/UTC")
 
-    msg = %{
+    message_attr = %{
       author: author,
       body: body,
-      id: "#{author}:#{id}",
       timestamp: timestamp,
       flagged: false
     }
+
+    {:ok, msg} = Messages.create_message(message_attr)
 
     Phoenix.PubSub.broadcast(Glitch.PubSub, "chatroom", {:new_msg, msg})
   end
