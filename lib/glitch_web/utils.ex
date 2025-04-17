@@ -1,8 +1,10 @@
 defmodule GlitchWeb.Utils do
+  alias GlitchWeb.HtmlSanitizer
+
   def to_html(markdown) do
     (markdown || "")
     |> String.trim()
     |> Earmark.as_html!(breaks: true)
-    |> HtmlSanitizeEx.basic_html()
+    |> HtmlSanitizer.sanitize_html()
   end
 end
