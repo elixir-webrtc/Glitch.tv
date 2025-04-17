@@ -279,7 +279,9 @@ defmodule GlitchWeb.ChatLive do
       subscribe()
     end
 
-    messages = Messages.list_messages()
+    messages = Messages.list_last_50_messages()
+
+    dbg(length(messages))
 
     socket =
       socket

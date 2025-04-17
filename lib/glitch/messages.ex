@@ -21,6 +21,19 @@ defmodule Glitch.Messages do
     Repo.all(Message)
   end
 
+  def list_last_50_messages do
+    inner_query =
+      from m in Message,
+        order_by: [desc: m.inserted_at],
+        limit: 50
+
+    query =
+      from m in subquery(inner_query),
+        order_by: [asc: m.inserted_at]
+
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single Message.
 
