@@ -140,12 +140,17 @@ defmodule GlitchWeb.ChatLive do
         <div class="flex items-end gap-2 relative mb-2">
           <div class="flex flex-col relative w-full">
             <div class="flex justify-between mt-[-14px] mb-[2px]">
-              <div class="text-xs text-neutral-400 dark:text-neutral-700">
+              <div class={[
+                "text-xs",
+                @highlight_slow_mode && "text-rose-600",
+                !@highlight_slow_mode &&
+                "text-neutral-400 dark:text-neutral-700"
+              ]}>
                 Slow Mode {@slow_mode_delay_ms / 1000}s
               </div>
               <div class={
                 (String.length(@msg_body || "") == @max_msg_length &&
-                  "text-xs text-rose-600 dark:text-rose-600") ||
+                  "text-xs text-rose-600 text-rose-600") ||
                 (String.length(@msg_body || "") > @max_msg_length - 50 &&
                    "text-xs text-neutral-400 dark:text-neutral-700") ||
                 "hidden"
@@ -292,6 +297,7 @@ defmodule GlitchWeb.ChatLive do
       |> assign(current_tab: "chat")
       |> assign(max_msg_length: 500, max_nickname_length: 25)
       |> assign(slow_mode_delay_ms: Application.fetch_env!(:glitch, :slow_mode_delay_ms))
+      |> assign(highlight_slow_mode: false)
       |> assign(joined: false)
       |> assign(show_emoji_overlay: false)
 
@@ -329,7 +335,6 @@ defmodule GlitchWeb.ChatLive do
     end
   end
 
-  @impl true
   def handle_info({:delete_msg, messageId}, socket) do
     messages =
       socket.assigns.messages
@@ -342,7 +347,6 @@ defmodule GlitchWeb.ChatLive do
     {:noreply, socket}
   end
 
-  @impl true
   def handle_info({:ignore_flag, messageId}, socket) do
     messages =
       socket.assigns.messages
@@ -359,6 +363,10 @@ defmodule GlitchWeb.ChatLive do
       |> assign(:messages, messages)
 
     {:noreply, socket}
+  end
+
+  def handle_info(:reset_slow_mode_highlight, socket) do
+    {:noreply, assign(socket, highlight_slow_mode: false)}
   end
 
   @impl true
@@ -378,14 +386,12 @@ defmodule GlitchWeb.ChatLive do
     {:noreply, socket}
   end
 
-  @impl true
   def handle_event("toggle-emoji-overlay", _, socket) do
     socket = assign(socket, :show_emoji_overlay, !socket.assigns.show_emoji_overlay)
 
     {:noreply, socket}
   end
 
-  @impl true
   def handle_event("hide-emoji-overlay", _, socket) do
     socket = assign(socket, :show_emoji_overlay, false)
 
@@ -410,7 +416,6 @@ defmodule GlitchWeb.ChatLive do
     {:noreply, socket}
   end
 
-  @impl true
   def handle_event("validate-form", %{"author" => author}, socket) do
     {:noreply, assign(socket, author: author)}
   end
@@ -427,7 +432,8 @@ defmodule GlitchWeb.ChatLive do
       send_message(body, socket.assigns.author, id)
       {:noreply, assign(socket, msg_body: nil, next_msg_id: id + 1, last_msg_timestamp: now)}
     else
-      {:noreply, socket}
+      Process.send_after(self(), :reset_slow_mode_highlight, 1000)
+      {:noreply, assign(socket, highlight_slow_mode: true)}
     end
   end
 
