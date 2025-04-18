@@ -65,6 +65,8 @@ emoji-picker {
 }
 
 /* Markdown styling start */
+.glitch-markdown ul,
+.glitch-markdown ol,
 #stream-viewer-description ul,
 #stream-viewer-description ol,
 #message_box ul,
@@ -76,6 +78,7 @@ emoji-picker {
     padding: revert;
 }
 
+.glitch-markdown a,
 #stream-viewer-description a,
 #message_box a,
 #recording-description a,
@@ -83,6 +86,7 @@ emoji-picker {
     @apply underline;
 }
 
+.glitch-markdown blockquote,
 #stream-viewer-description blockquote,
 #message_box blockquote,
 #recording-description blockquote {
@@ -90,6 +94,7 @@ emoji-picker {
 }
 
 /* not sure about that dark background color in code blocks */
+.glitch-markdown code,
 #stream-viewer-description code,
 #message_box code,
 #recording-description code,
@@ -97,6 +102,7 @@ emoji-picker {
     @apply border-[1px] rounded-md px-[2px] bg-zinc-50 border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900;
 }
 
+.glitch-markdown pre,
 #stream-viewer-description pre,
 #message_box pre,
 #recording-description pre,
@@ -104,30 +110,35 @@ emoji-picker {
     @apply border-[1px] rounded-md px-[2px] bg-zinc-50 border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900;
 }
 
+.glitch-markdown pre code,
 #stream-viewer-description pre code,
 #message_box pre code,
 #recording-description pre code {
     @apply border-0 bg-transparent w-full break-all;
 }
 
+.glitch-markdown h1,
 #stream-viewer-description h1,
 #message_box h1,
 #recording-description h1 {
     @apply text-2xl font-bold;
 }
 
+.glitch-markdown h2,
 #stream-viewer-description h2,
 #message_box h2,
 #recording-description h2 {
     @apply text-xl font-bold;
 }
 
+.glitch-markdown h3,
 #stream-viewer-description h3,
 #message_box h3,
 #recording-description h3 {
     @apply text-lg font-bold;
 }
 
+.glitch-markdown p,
 #stream-viewer-description p,
 #recording-description p {
     @apply mb-3 mt-3;

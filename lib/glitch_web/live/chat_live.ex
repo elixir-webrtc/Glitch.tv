@@ -82,7 +82,11 @@ defmodule GlitchWeb.ChatLive do
       ]}>
         This is not an official ElixirConf EU chat, so if you have any questions for the speakers, please ask them under the SwapCard stream.
       </div>
-      <ul class="overflow-y-auto flex-grow flex flex-col" phx-hook="ScrollDownHook" id="message_box">
+      <ul
+        class="overflow-y-auto flex-grow flex flex-col glitch-markdown"
+        phx-hook="ScrollDownHook"
+        id="message_box"
+      >
         <li
           :for={msg <- @messages}
           id={"#{msg.id}-msg"}
@@ -243,7 +247,7 @@ defmodule GlitchWeb.ChatLive do
       ]}
       id="glitch_reported"
     >
-      <ul class="overflow-y-auto flex-grow flex flex-col">
+      <ul class="overflow-y-auto flex-grow flex flex-col glitch-markdown">
         <li
           :for={msg <- Enum.filter(@messages, fn m -> m.flagged end)}
           id={"#{msg.id}-reported"}
@@ -260,9 +264,9 @@ defmodule GlitchWeb.ChatLive do
               {Calendar.strftime(msg.inserted_at, "%d %b %Y %H:%M:%S")}
             </p>
           </div>
-          <p class="dark:text-neutral-400">
-            {msg.body}
-          </p>
+          <div class="dark:text-neutral-400 break-all">
+            {raw(GlitchWeb.Utils.to_html(msg.body))}
+          </div>
           <div class="flex gap-4 items-center *:flex-1 mt-4">
             <button
               class="bg-red-600 text-white rounded-lg py-1"
