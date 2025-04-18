@@ -93,7 +93,6 @@ defmodule GlitchWeb.StreamerLive do
       |> assign(:page_title, "Streamer Panel")
       |> assign(:viewers_count, StreamViewerLive.get_viewers_count())
 
-    Glitch.StreamService.put_stream_metadata(%{title: "", description: ""})
     {:ok, socket}
   end
 
