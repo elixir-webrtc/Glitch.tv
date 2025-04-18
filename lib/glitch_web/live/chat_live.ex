@@ -247,7 +247,7 @@ defmodule GlitchWeb.ChatLive do
       ]}
       id="glitch_reported"
     >
-      <ul class="overflow-y-auto flex-grow flex flex-col glitch-markdown">
+      <ul class="overflow-y-auto flex-grow flex flex-col">
         <li
           :for={msg <- Enum.filter(@messages, fn m -> m.flagged end)}
           id={"#{msg.id}-reported"}
@@ -264,7 +264,7 @@ defmodule GlitchWeb.ChatLive do
               {Calendar.strftime(msg.inserted_at, "%d %b %Y %H:%M:%S")}
             </p>
           </div>
-          <div class="dark:text-neutral-400 break-all">
+          <div class="dark:text-neutral-400 break-all glitch-markdown">
             {raw(GlitchWeb.Utils.to_html(msg.body))}
           </div>
           <div class="flex gap-4 items-center *:flex-1 mt-4">
