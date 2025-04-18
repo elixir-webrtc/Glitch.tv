@@ -73,15 +73,15 @@ if config_env() == :prod do
       _ -> false
     end
 
-  slow_mode_delay_ms =
-    case System.get_env("GLITCH_SLOW_MODE_DELAY_MS") do
+  slow_mode_delay_s =
+    case System.get_env("GLITCH_SLOW_MODE_DELAY_S") do
       nil ->
-        1000
+        1
 
       seconds ->
         case Integer.parse(String.trim(seconds)) do
           {num, _} -> num
-          :error -> 1000
+          :error -> 1
         end
     end
 
@@ -89,7 +89,7 @@ if config_env() == :prod do
     admin_username: admin_username,
     admin_password: admin_password,
     enable_recordings: enable_recordings,
-    slow_mode_delay_ms: slow_mode_delay_ms
+    slow_mode_delay_s: slow_mode_delay_s
 
   # ## SSL Support
   #

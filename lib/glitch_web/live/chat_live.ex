@@ -147,7 +147,7 @@ defmodule GlitchWeb.ChatLive do
                 !@highlight_slow_mode &&
                 "text-neutral-400 dark:text-neutral-700"
               ]}>
-                Slow Mode {@slow_mode_delay_ms / 1000}s
+                Slow Mode {@slow_mode_delay_s}s
               </div>
               <div class={
                 (String.length(@msg_body || "") == @max_msg_length &&
@@ -301,7 +301,7 @@ defmodule GlitchWeb.ChatLive do
       |> assign(role: session["role"])
       |> assign(current_tab: "chat")
       |> assign(max_msg_length: 500, max_nickname_length: 25)
-      |> assign(slow_mode_delay_ms: Application.fetch_env!(:glitch, :slow_mode_delay_ms))
+      |> assign(slow_mode_delay_s: Application.fetch_env!(:glitch, :slow_mode_delay_s))
       |> assign(highlight_slow_mode: false)
       |> assign(joined: false)
       |> assign(show_emoji_overlay: false)
@@ -432,7 +432,8 @@ defmodule GlitchWeb.ChatLive do
   def handle_event("submit-form", %{"body" => body}, socket) do
     now = System.monotonic_time(:millisecond)
 
-    if body != "" && now - socket.assigns.last_msg_timestamp >= socket.assigns.slow_mode_delay_ms do
+    if body != "" &&
+         now - socket.assigns.last_msg_timestamp >= socket.assigns.slow_mode_delay_s * 1000 do
       send_message(body, socket.assigns.author)
       {:noreply, assign(socket, msg_body: nil, last_msg_timestamp: now)}
     else
