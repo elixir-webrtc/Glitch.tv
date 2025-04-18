@@ -61,7 +61,8 @@ defmodule Glitch.MixProject do
       {:ex_aws, ">=0.0.0"},
       {:ex_aws_s3, ">=0.0.0"},
       {:sweet_xml, ">=0.0.0"},
-      {:earmark, "~> 1.4"}
+      {:earmark, "~> 1.4"},
+      {:html_sanitize_ex, "~> 1.4"}
     ]
   end
 
