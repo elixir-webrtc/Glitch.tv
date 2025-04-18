@@ -167,6 +167,7 @@ defmodule GlitchWeb.ChatLive do
               disabled={not @joined}
               id="message_body"
               phx-hook="MessageBodyHook"
+              data-slow-mode={to_string(@highlight_slow_mode)}
             >{@msg_body}</textarea>
           </div>
           <div class="relative">

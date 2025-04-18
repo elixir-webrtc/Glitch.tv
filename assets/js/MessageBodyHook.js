@@ -9,7 +9,9 @@ export default {
       }
 
       this.pushEvent("submit-form", { body: e.target.value });
-      e.target.value = "";
+      if (this.el.dataset.slowMode === "false") {
+        e.target.value = "";
+      }
 
       e.preventDefault();
     });
