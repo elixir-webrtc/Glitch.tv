@@ -2,7 +2,6 @@ defmodule GlitchWeb.RecordingLive.Show do
   use GlitchWeb, :live_view
 
   alias Glitch.Recordings
-  alias GlitchWeb.Utils
 
   @impl true
   def mount(_params, _session, socket) do
