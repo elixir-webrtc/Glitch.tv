@@ -49,7 +49,7 @@ emoji-picker {
 }
 
 .glitch-input-primary {
-    @apply rounded-lg border border-indigo-200 disabled:bg-neutral-100 disabled:placeholder-neutral-300 text-sm flex-1 dark:bg-zinc-800 dark:disabled:bg-zinc-800 dark:disabled:placeholder-zinc-700 dark:border-none dark:text-neutral-400;
+    @apply rounded-lg border border-indigo-200 disabled:bg-neutral-100 disabled:placeholder-neutral-300 text-sm flex-1 dark:bg-zinc-800 dark:disabled:bg-zinc-800 dark:disabled:placeholder-zinc-700 dark:border-zinc-800 dark:text-neutral-400;
 }
 
 .glitch-button-primary {
