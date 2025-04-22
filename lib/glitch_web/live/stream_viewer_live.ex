@@ -170,6 +170,11 @@ defmodule GlitchWeb.StreamViewerLive do
     {:noreply, socket}
   end
 
+  @impl true
+  def handle_params(_params, _uri, socket) do
+    {:noreply, socket}
+  end
+
   def get_viewers_count() do
     map_size(Presence.list("stream_info:viewers"))
   end

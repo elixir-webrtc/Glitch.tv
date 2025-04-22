@@ -156,11 +156,9 @@ defmodule GlitchWeb.ChatLive do
                 Slow Mode {@slow_mode_delay_s}s
               </div>
               <div class={[
-                String.length(@msg_body || "") == @max_msg_length &&
-                  "text-xs text-rose-600 text-rose-600",
-                String.length(@msg_body || "") > @max_msg_length - 50 &&
-                  "text-xs text-neutral-400 dark:text-neutral-700",
-                String.length(@msg_body || "") <= @max_msg_length - 50 && "hidden"
+                "text-xs text-neutral-400 dark:text-neutral-700",
+                String.length(@msg_body || "") < @max_msg_length - 50 && "hidden",
+                String.length(@msg_body || "") == @max_msg_length && "text-rose-600 dark:text-rose-600",
               ]}>
                 {String.length(@msg_body || "")}/{@max_msg_length}
               </div>
@@ -211,11 +209,9 @@ defmodule GlitchWeb.ChatLive do
             />
             <%= if not @joined do %>
               <div class={[
-                String.length(@author || "") == @max_nickname_length &&
-                  "absolute bottom-[-18px] right-0 text-xs w-full text-rose-600 dark:text-rose-600",
-                String.length(@author || "") > @max_nickname_length - 5 &&
-                  "absolute bottom-[-18px] right-0 text-xs w-full text-neutral-400 dark:text-neutral-700",
-                String.length(@author || "") <= @max_nickname_length - 5 && "hidden"
+                "absolute bottom-[-18px] right-0 text-xs w-full text-neutral-400 dark:text-neutral-700",
+                String.length(@author || "") < @max_nickname_length - 5 && "hidden",
+                String.length(@author || "") == @max_nickname_length && "text-rose-600 dark:text-rose-600",
               ]}>
                 {String.length(@author || "")}/{@max_nickname_length}
               </div>
