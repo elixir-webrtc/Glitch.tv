@@ -722,14 +722,15 @@ defmodule GlitchWeb.CoreComponents do
     """
   end
 
+  attr :id, :string, required: true
   attr :tooltip, :string, required: true
   slot :inner_block, required: true
 
   def tooltip(assigns) do
     ~H"""
-    <div class="group/tooltip relative">
+    <div id={@id} phx-hook="TooltipHook">
       {render_slot(@inner_block)}
-      <p class="absolute bottom-full left-1/2 w-max -translate-x-[50%] bg-stone-900 text-white py-1 px-2 rounded-lg hidden opacity-75 text-xs group-hover/tooltip:block">
+      <p class="fixed w-max bg-stone-900 text-white py-1 px-2 rounded-lg opacity-0 text-xs tooltip-content">
         {@tooltip}
       </p>
     </div>

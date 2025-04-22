@@ -98,14 +98,17 @@ defmodule GlitchWeb.ChatLive do
               <p class="text-indigo-800 text-sm text-medium dark:text-indigo-400">
                 {msg.author}
               </p>
-              <.tooltip tooltip={Calendar.strftime(msg.inserted_at, "%d %b %Y %H:%M:%S")}>
+              <.tooltip
+                tooltip={Calendar.strftime(msg.inserted_at, "%d %b %Y %H:%M:%S")}
+                id={"#{msg.id}-time"}
+              >
                 <p class="text-xs text-neutral-500 m-0">
                   {Calendar.strftime(msg.inserted_at, "%H:%M")}
                 </p>
               </.tooltip>
             </div>
             <div class={[msg.flagged && "opacity-0"]}>
-              <.tooltip tooltip="Report">
+              <.tooltip tooltip="Report" id={"#{msg.id}-report"}>
                 <button
                   class={[
                     "rounded-full flex items-center justify-center p-2",
@@ -158,7 +161,8 @@ defmodule GlitchWeb.ChatLive do
               <div class={[
                 "text-xs text-neutral-400 dark:text-neutral-700",
                 String.length(@msg_body || "") < @max_msg_length - 50 && "hidden",
-                String.length(@msg_body || "") == @max_msg_length && "text-rose-600 dark:text-rose-600",
+                String.length(@msg_body || "") == @max_msg_length &&
+                  "text-rose-600 dark:text-rose-600"
               ]}>
                 {String.length(@msg_body || "")}/{@max_msg_length}
               </div>
@@ -211,7 +215,8 @@ defmodule GlitchWeb.ChatLive do
               <div class={[
                 "absolute bottom-[-18px] right-0 text-xs w-full text-neutral-400 dark:text-neutral-700",
                 String.length(@author || "") < @max_nickname_length - 5 && "hidden",
-                String.length(@author || "") == @max_nickname_length && "text-rose-600 dark:text-rose-600",
+                String.length(@author || "") == @max_nickname_length &&
+                  "text-rose-600 dark:text-rose-600"
               ]}>
                 {String.length(@author || "")}/{@max_nickname_length}
               </div>
