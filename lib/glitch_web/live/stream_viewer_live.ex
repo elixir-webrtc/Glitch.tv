@@ -73,10 +73,7 @@ defmodule GlitchWeb.StreamViewerLive do
           </.dropping>
           <.share_button />
         </div>
-        <div
-          id="stream-viewer-description"
-          class="max-h-[128px] lg:max-h-none overflow-auto lg:overflow-visible dark:text-neutral-400 break-all"
-        >
+        <div class="max-h-[128px] lg:max-h-none overflow-auto lg:overflow-visible dark:text-neutral-400 break-all glitch-markdown">
           {raw(@stream_metadata.description)}
         </div>
       </div>

@@ -30,10 +30,7 @@
           <.share_button />
         </div>
         <div class="pb-4">
-          <div
-            id="recording-description"
-            class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all min-h-8 h-32"
-          >
+          <div class="flex-shrink overflow-y-scroll dark:text-neutral-400 break-all min-h-8 h-32 glitch-markdown">
             {raw(GlitchWeb.Utils.to_html(@recording.description))}
           </div>
         </div>

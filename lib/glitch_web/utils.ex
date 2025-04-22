@@ -7,4 +7,11 @@ defmodule GlitchWeb.Utils do
     |> Earmark.as_html!(breaks: true)
     |> HtmlSanitizer.sanitize_html()
   end
+
+  def to_text(markdown) do
+    (markdown || "")
+    |> Earmark.as_html!(breaks: true)
+    |> HtmlSanitizeEx.strip_tags()
+    |> String.trim()
+  end
 end
