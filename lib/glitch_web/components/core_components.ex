@@ -727,7 +727,7 @@ defmodule GlitchWeb.CoreComponents do
 
   def tooltip(assigns) do
     ~H"""
-    <div class="group/tooltip">
+    <div class="group/tooltip relative">
       {render_slot(@inner_block)}
       <p class="absolute bottom-full left-1/2 w-max -translate-x-[50%] bg-stone-900 text-white py-1 px-2 rounded-lg hidden opacity-75 text-xs group-hover/tooltip:block">
         {@tooltip}

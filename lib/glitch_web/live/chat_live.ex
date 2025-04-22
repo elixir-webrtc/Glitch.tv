@@ -82,11 +82,7 @@ defmodule GlitchWeb.ChatLive do
       ]}>
         This is not an official ElixirConf EU chat, so if you have any questions for the speakers, please ask them under the SwapCard stream.
       </div>
-      <ul
-        class="overflow-y-auto flex-grow flex flex-col glitch-markdown"
-        phx-hook="ScrollDownHook"
-        id="message_box"
-      >
+      <ul class="overflow-y-auto flex-grow flex flex-col" phx-hook="ScrollDownHook" id="message_box">
         <li
           :for={msg <- @messages}
           id={"#{msg.id}-msg"}
@@ -98,31 +94,36 @@ defmodule GlitchWeb.ChatLive do
           ]}
         >
           <div class="flex gap-4 justify-between items-center">
-            <p class="text-indigo-800 text-sm text-medium dark:text-indigo-400">
-              {msg.author}
-            </p>
-            <p class="text-xs text-neutral-500">
-              {Calendar.strftime(msg.inserted_at, "%d %b %Y %H:%M:%S")}
-            </p>
+            <div class="flex gap-4 items-center">
+              <p class="text-indigo-800 text-sm text-medium dark:text-indigo-400">
+                {msg.author}
+              </p>
+              <.tooltip tooltip={Calendar.strftime(msg.inserted_at, "%d %b %Y %H:%M:%S")}>
+                <p class="text-xs text-neutral-500 m-0">
+                  {Calendar.strftime(msg.inserted_at, "%H:%M")}
+                </p>
+              </.tooltip>
+            </div>
+            <div class={[msg.flagged && "opacity-0"]}>
+              <.tooltip tooltip="Report">
+                <button
+                  class={[
+                    "rounded-full flex items-center justify-center p-2",
+                    msg.flagged && "hover:bg-red-300",
+                    !msg.flagged && "hover:bg-stone-200 dark:hover:bg-stone-700",
+                    @role == "admin" && "hidden"
+                  ]}
+                  phx-click="flag-message"
+                  phx-value-message-id={msg.id}
+                  disabled={msg.flagged}
+                >
+                  <.icon name="hero-flag" class="w-4 h-4 text-red-400" />
+                </button>
+              </.tooltip>
+            </div>
           </div>
-          <div class="dark:text-neutral-400 break-all">
+          <div class="dark:text-neutral-400 break-all glitch-markdown">
             {raw(GlitchWeb.Utils.to_html(msg.body))}
-          </div>
-          <div :if={!msg.flagged} class="absolute right-6 bottom-2">
-            <.tooltip tooltip="Report">
-              <button
-                class={[
-                  "rounded-full flex items-center justify-center p-2",
-                  msg.flagged && "hover:bg-red-300",
-                  !msg.flagged && "hover:bg-stone-200 dark:hover:bg-stone-700",
-                  @role == "admin" && "hidden"
-                ]}
-                phx-click="flag-message"
-                phx-value-message-id={msg.id}
-              >
-                <.icon name="hero-flag" class="w-4 h-4 text-red-400" />
-              </button>
-            </.tooltip>
           </div>
           <div class={[
             "hidden gap-4 items-center *:flex-1 mt-4",
