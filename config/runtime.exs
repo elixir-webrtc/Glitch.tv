@@ -67,18 +67,29 @@ if config_env() == :prod do
   admin_password =
     System.get_env("ADMIN_PASSWORD") || raise "Environment variable ADMIN_PASSWORD is missing."
 
-  config :glitch,
-    admin_username: admin_username,
-    admin_password: admin_password
-
   enable_recordings =
-    case System.get_env("GLITCH_ENABLE_RECORDINGS") do
+    case(System.get_env("GLITCH_ENABLE_RECORDINGS")) do
       "true" -> true
       _ -> false
     end
 
+  slow_mode_delay_s =
+    case System.get_env("GLITCH_SLOW_MODE_DELAY_S") do
+      nil ->
+        1
+
+      seconds ->
+        case Integer.parse(String.trim(seconds)) do
+          {num, _} -> num
+          :error -> 1
+        end
+    end
+
   config :glitch,
-    enable_recordings: enable_recordings
+    admin_username: admin_username,
+    admin_password: admin_password,
+    enable_recordings: enable_recordings,
+    slow_mode_delay_s: slow_mode_delay_s
 
   # ## SSL Support
   #

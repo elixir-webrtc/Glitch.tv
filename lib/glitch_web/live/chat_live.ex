@@ -74,11 +74,10 @@ defmodule GlitchWeb.ChatLive do
       >
         Chat
       </div>
-      <div class={
-        (@role == "user" &&
-           "p-2 text-center text-xs border-b-[1px] border-indigo-200 dark:border-zinc-800 dark:text-neutral-400") ||
-          "hidden"
-      }>
+      <div class={[
+        @role == "user" && "p-2 text-center text-xs border-b-[1px] border-indigo-200 dark:border-zinc-800 dark:text-neutral-400",
+        @role != "user" && "hidden"
+      ]}>
         This is not an official ElixirConf EU chat, so if you have any questions for the speakers, please ask them under the SwapCard stream.
       </div>
       <ul class="overflow-y-auto flex-grow flex flex-col" phx-hook="ScrollDownHook" id="message_box">
@@ -140,14 +139,22 @@ defmodule GlitchWeb.ChatLive do
       >
         <div class="flex items-end gap-2 relative mb-2">
           <div class="flex flex-col relative w-full">
-            <div class={
-              (String.length(@msg_body || "") == @max_msg_length &&
-                 "absolute top-[-18px] right-[2px] text-xs w-full text-right text-rose-600 dark:text-rose-600") ||
-                (String.length(@msg_body || "") > @max_msg_length - 50 &&
-                   "absolute top-[-18px] right-[2px] text-xs w-full text-right text-neutral-400 dark:text-neutral-700") ||
-                "hidden"
-            }>
-              {String.length(@msg_body || "")}/{@max_msg_length}
+            <div class="flex justify-between mt-[-14px] mb-[2px]">
+              <div class={[
+                "text-xs",
+                @highlight_slow_mode && "text-rose-600",
+                !@highlight_slow_mode &&
+                "text-neutral-400 dark:text-neutral-700"
+              ]}>
+                Slow Mode {@slow_mode_delay_s}s
+              </div>
+              <div class={[
+                String.length(@msg_body || "") == @max_msg_length && "text-xs text-rose-600 text-rose-600", 
+                String.length(@msg_body || "") > @max_msg_length - 50 && "text-xs text-neutral-400 dark:text-neutral-700", 
+                String.length(@msg_body || "") <= @max_msg_length - 50  && "hidden"
+              ]}>
+                {String.length(@msg_body || "")}/{@max_msg_length}
+              </div>
             </div>
             <textarea
               class="glitch-input-primary resize-none h-[96px] w-full dark:text-neutral-400"
@@ -157,6 +164,7 @@ defmodule GlitchWeb.ChatLive do
               disabled={not @joined}
               id="message_body"
               phx-hook="MessageBodyHook"
+              data-slow-mode={to_string(@highlight_slow_mode)}
             >{@msg_body}</textarea>
           </div>
           <div class="relative">
@@ -193,13 +201,11 @@ defmodule GlitchWeb.ChatLive do
               disabled={@joined}
             />
             <%= if not @joined do %>
-              <div class={
-                (String.length(@author || "") == @max_nickname_length &&
-                   "absolute bottom-[-18px] right-0 text-xs w-full text-rose-600 dark:text-rose-600") ||
-                  (String.length(@author || "") > @max_nickname_length - 5 &&
-                     "absolute bottom-[-18px] right-0 text-xs w-full text-neutral-400 dark:text-neutral-700") ||
-                  "hidden"
-              }>
+              <div class={[
+                String.length(@author || "") == @max_nickname_length && "absolute bottom-[-18px] right-0 text-xs w-full text-rose-600 dark:text-rose-600",
+                String.length(@author || "") > @max_nickname_length - 5 && "absolute bottom-[-18px] right-0 text-xs w-full text-neutral-400 dark:text-neutral-700",
+                String.length(@author || "") <= @max_nickname_length - 5 && "hidden"
+              ]}>
                 {String.length(@author || "")}/{@max_nickname_length}
               </div>
             <% end %>
@@ -285,11 +291,14 @@ defmodule GlitchWeb.ChatLive do
 
     socket =
       socket
+      |> assign(:last_msg_timestamp, System.monotonic_time(:millisecond))
       |> assign(messages: messages)
       |> assign(msg_body: nil, author: nil)
       |> assign(role: session["role"])
       |> assign(current_tab: "chat")
       |> assign(max_msg_length: 500, max_nickname_length: 25)
+      |> assign(slow_mode_delay_s: Application.fetch_env!(:glitch, :slow_mode_delay_s))
+      |> assign(highlight_slow_mode: false)
       |> assign(joined: false)
       |> assign(show_emoji_overlay: false)
 
@@ -327,7 +336,6 @@ defmodule GlitchWeb.ChatLive do
     end
   end
 
-  @impl true
   def handle_info({:delete_msg, messageId}, socket) do
     messages =
       socket.assigns.messages
@@ -340,7 +348,6 @@ defmodule GlitchWeb.ChatLive do
     {:noreply, socket}
   end
 
-  @impl true
   def handle_info({:ignore_flag, messageId}, socket) do
     messages =
       socket.assigns.messages
@@ -357,6 +364,10 @@ defmodule GlitchWeb.ChatLive do
       |> assign(:messages, messages)
 
     {:noreply, socket}
+  end
+
+  def handle_info(:reset_slow_mode_highlight, socket) do
+    {:noreply, assign(socket, highlight_slow_mode: false)}
   end
 
   @impl true
@@ -376,14 +387,12 @@ defmodule GlitchWeb.ChatLive do
     {:noreply, socket}
   end
 
-  @impl true
   def handle_event("toggle-emoji-overlay", _, socket) do
     socket = assign(socket, :show_emoji_overlay, !socket.assigns.show_emoji_overlay)
 
     {:noreply, socket}
   end
 
-  @impl true
   def handle_event("hide-emoji-overlay", _, socket) do
     socket = assign(socket, :show_emoji_overlay, false)
 
@@ -408,7 +417,6 @@ defmodule GlitchWeb.ChatLive do
     {:noreply, socket}
   end
 
-  @impl true
   def handle_event("validate-form", %{"author" => author}, socket) do
     {:noreply, assign(socket, author: author)}
   end
@@ -418,11 +426,15 @@ defmodule GlitchWeb.ChatLive do
   end
 
   def handle_event("submit-form", %{"body" => body}, socket) do
-    if body != "" do
+    now = System.monotonic_time(:millisecond)
+
+    if body != "" &&
+         now - socket.assigns.last_msg_timestamp >= socket.assigns.slow_mode_delay_s * 1000 do
       send_message(body, socket.assigns.author)
-      {:noreply, assign(socket, msg_body: nil)}
+      {:noreply, assign(socket, msg_body: nil, last_msg_timestamp: now)}
     else
-      {:noreply, socket}
+      Process.send_after(self(), :reset_slow_mode_highlight, 1000)
+      {:noreply, assign(socket, highlight_slow_mode: true)}
     end
   end
 
