@@ -28,6 +28,11 @@ defmodule GlitchWeb.RecordingLive.Index do
     {:noreply, stream_delete(socket, :recordings, recording)}
   end
 
+  @impl true
+  def handle_params(_params, _uri, socket) do
+    {:noreply, socket}
+  end
+
   defp seconds_to_duration_string(seconds) do
     hours = div(seconds, 3600)
     minutes = div(seconds - hours * 3600, 60)
