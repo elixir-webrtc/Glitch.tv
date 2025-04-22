@@ -146,8 +146,9 @@ defmodule GlitchWeb.ChatLive do
       >
         <div class="flex items-end gap-2 relative mb-2">
           <div class="flex flex-col relative w-full">
-            <div class="flex justify-between mt-[-14px] mb-[2px]">
+            <div class="flex justify-between min-h-[16px] mt-[-14px] mb-[2px]">
               <div class={[
+                @role == "admin" && "hidden",
                 "text-xs",
                 @highlight_slow_mode && "text-rose-600",
                 !@highlight_slow_mode &&
@@ -155,6 +156,8 @@ defmodule GlitchWeb.ChatLive do
               ]}>
                 Slow Mode {@slow_mode_delay_s}s
               </div>
+              <%!-- spacer to preserve layout with admin role --%>
+              <div></div>
               <div class={[
                 "text-xs text-neutral-400 dark:text-neutral-700",
                 String.length(@msg_body || "") < @max_msg_length - 50 && "hidden",
@@ -440,14 +443,26 @@ defmodule GlitchWeb.ChatLive do
   def handle_event("submit-form", %{"body" => body}, socket) do
     now = System.monotonic_time(:millisecond)
     text = GlitchWeb.Utils.to_text(body)
+    role = socket.assigns.role
+    time_elapsed = now - socket.assigns.last_msg_timestamp
+    slow_mode_delay = socket.assigns.slow_mode_delay_s * 1000
 
-    if body != "" &&
-         now - socket.assigns.last_msg_timestamp >= socket.assigns.slow_mode_delay_s * 1000 &&
-         String.length(text) > 0 do
+    if String.length(text) > 0 &&
+         (role == "admin" ||
+            time_elapsed >= slow_mode_delay) do
       send_message(body, socket.assigns.author)
       {:noreply, assign(socket, msg_body: nil, last_msg_timestamp: now)}
     else
-      Process.send_after(self(), :reset_slow_mode_highlight, 1000)
+      if socket.assigns.highlight_slow_mode == true do
+        {:noreply, socket}
+      end
+
+      Process.send_after(
+        self(),
+        :reset_slow_mode_highlight,
+        slow_mode_delay - time_elapsed
+      )
+
       {:noreply, assign(socket, highlight_slow_mode: true)}
     end
   end
