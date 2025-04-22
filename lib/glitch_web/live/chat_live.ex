@@ -179,7 +179,7 @@ defmodule GlitchWeb.ChatLive do
           <div class="relative">
             <button
               type="button"
-              class="border border-indigo-200 rounded-lg px-2 py-1 disabled:opacity-50 dark:text-neutral-400 dark:border-none dark:bg-zinc-800"
+              class="border border-indigo-200 rounded-lg px-2 py-1 disabled:opacity-50 dark:text-neutral-400 dark:border-zinc-800 dark:bg-zinc-800"
               phx-click="toggle-emoji-overlay"
               disabled={not @joined}
             >
