@@ -74,11 +74,10 @@ defmodule GlitchWeb.ChatLive do
       >
         Chat
       </div>
-      <div class={
-        (@role == "user" &&
-           "p-2 text-center text-xs border-b-[1px] border-indigo-200 dark:border-zinc-800 dark:text-neutral-400") ||
-          "hidden"
-      }>
+      <div class={[
+        @role == "user" && "p-2 text-center text-xs border-b-[1px] border-indigo-200 dark:border-zinc-800 dark:text-neutral-400",
+        @role != "user" && "hidden"
+      ]}>
         This is not an official ElixirConf EU chat, so if you have any questions for the speakers, please ask them under the SwapCard stream.
       </div>
       <ul class="overflow-y-auto flex-grow flex flex-col" phx-hook="ScrollDownHook" id="message_box">
@@ -149,13 +148,11 @@ defmodule GlitchWeb.ChatLive do
               ]}>
                 Slow Mode {@slow_mode_delay_s}s
               </div>
-              <div class={
-                (String.length(@msg_body || "") == @max_msg_length &&
-                  "text-xs text-rose-600 text-rose-600") ||
-                (String.length(@msg_body || "") > @max_msg_length - 50 &&
-                   "text-xs text-neutral-400 dark:text-neutral-700") ||
-                "hidden"
-              }>
+              <div class={[
+                String.length(@msg_body || "") == @max_msg_length && "text-xs text-rose-600 text-rose-600", 
+                String.length(@msg_body || "") > @max_msg_length - 50 && "text-xs text-neutral-400 dark:text-neutral-700", 
+                String.length(@msg_body || "") <= @max_msg_length - 50  && "hidden"
+              ]}>
                 {String.length(@msg_body || "")}/{@max_msg_length}
               </div>
             </div>
@@ -204,13 +201,11 @@ defmodule GlitchWeb.ChatLive do
               disabled={@joined}
             />
             <%= if not @joined do %>
-              <div class={
-                (String.length(@author || "") == @max_nickname_length &&
-                   "absolute bottom-[-18px] right-0 text-xs w-full text-rose-600 dark:text-rose-600") ||
-                  (String.length(@author || "") > @max_nickname_length - 5 &&
-                     "absolute bottom-[-18px] right-0 text-xs w-full text-neutral-400 dark:text-neutral-700") ||
-                  "hidden"
-              }>
+              <div class={[
+                String.length(@author || "") == @max_nickname_length && "absolute bottom-[-18px] right-0 text-xs w-full text-rose-600 dark:text-rose-600",
+                String.length(@author || "") > @max_nickname_length - 5 && "absolute bottom-[-18px] right-0 text-xs w-full text-neutral-400 dark:text-neutral-700",
+                String.length(@author || "") <= @max_nickname_length - 5 && "hidden"
+              ]}>
                 {String.length(@author || "")}/{@max_nickname_length}
               </div>
             <% end %>
