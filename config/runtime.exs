@@ -79,7 +79,7 @@ if config_env() == :prod do
       _ -> false
     end
 
-  enable_elixirconf_link =
+  enable_elixirconf_links =
     case(System.get_env("GLITCH_ENABLE_ELIXIRCONF_LINKS")) do
       "true" -> true
       _ -> false
@@ -88,13 +88,10 @@ if config_env() == :prod do
   elixirconf_day =
     case(System.get_env("GLITCH_ELIXIRCONF_DAY")) do
       nil ->
-        1
+        "day1"
 
       day ->
-        case Integer.parse(String.trim(day)) do
-          {num, _} -> num
-          :error -> 1
-        end
+        day
     end
 
   slow_mode_delay_s =
@@ -114,6 +111,7 @@ if config_env() == :prod do
     admin_password: admin_password,
     enable_recordings: enable_recordings,
     enable_share_button: enable_share_button,
+    enable_elixirconf_links: enable_elixirconf_links,
     elixirconf_day: elixirconf_day,
     slow_mode_delay_s: slow_mode_delay_s
 
