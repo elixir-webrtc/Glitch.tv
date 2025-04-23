@@ -87,8 +87,14 @@ if config_env() == :prod do
 
   elixirconf_day =
     case(System.get_env("GLITCH_ELIXIRCONF_DAY")) do
-      "true" -> true
-      _ -> false
+      nil ->
+        1
+
+      day ->
+        case Integer.parse(String.trim(day)) do
+          {num, _} -> num
+          :error -> 1
+        end
     end
 
   slow_mode_delay_s =
