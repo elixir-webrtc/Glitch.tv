@@ -80,7 +80,7 @@ defmodule GlitchWeb.StreamViewerLive do
       </div>
       <div class={["pb-4 relative", !@chat_visible && "hidden"]}>
         <div class="h-full *:h-full">
-          <ChatLive.live_render socket={@socket} id="livechat" role="user" />
+          <ChatLive.live_render socket={@socket} id="livechat" role="user" timezone={@timezone} />
         </div>
         <button
           phx-click="toggle_chat"
@@ -111,6 +111,15 @@ defmodule GlitchWeb.StreamViewerLive do
 
     metadata = Glitch.StreamService.get_stream_metadata()
 
+    connect_params = get_connect_params(socket)
+
+    timezone =
+      if connect_params != nil do
+        Map.get(connect_params, "timezone")
+      else
+        "Etc/UTC"
+      end
+
     socket =
       Player.attach(socket,
         id: "player",
@@ -124,6 +133,7 @@ defmodule GlitchWeb.StreamViewerLive do
       |> assign(:viewers_count, get_viewers_count())
       |> assign(:stream_duration, measure_duration(metadata.started))
       |> assign(:chat_visible, true)
+      |> assign(:timezone, timezone)
 
     {:ok, socket}
   end
