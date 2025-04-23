@@ -1,4 +1,5 @@
 defmodule GlitchWeb.StreamViewerLive do
+  alias Glitch.FeatureFlags
   use GlitchWeb, :live_view
 
   alias LiveExWebRTC.Player
@@ -71,7 +72,7 @@ defmodule GlitchWeb.StreamViewerLive do
               {@viewers_count} viewers
             </span>
           </.dropping>
-          <.share_button />
+          <.share_button :if={FeatureFlags.share_button_enabled()} />
         </div>
         <div class="max-h-[128px] lg:max-h-none overflow-auto lg:overflow-visible dark:text-neutral-400 break-all glitch-markdown">
           {raw(@stream_metadata.description)}

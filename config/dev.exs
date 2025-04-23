@@ -81,4 +81,5 @@ config :glitch,
   admin_username: "admin",
   admin_password: "admin",
   enable_recordings: true,
+  enable_share_button: true,
   slow_mode_delay_s: 1
