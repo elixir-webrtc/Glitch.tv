@@ -40,12 +40,32 @@
             Stream
           </.link>
         </li>
-        <li>
+        <li :if={Glitch.FeatureFlags.recordings_enabled()}>
           <.link
             patch={~p"/recordings"}
             class="block w-full text-center hover:bg-indigo-200 dark:hover:bg-stone-700 p-4"
           >
             Recordings
+          </.link>
+        </li>
+        <li :if={Glitch.FeatureFlags.elixirconf_links_enabled()}>
+          <.link
+            href={
+            "https://#{Application.fetch_env!(:glitch, :elixirconf_day)}-track1.elixir-webrtc.org/"
+            }
+            class="block w-full text-center hover:bg-indigo-200 dark:hover:bg-stone-700 p-4"
+          >
+            Track 1
+          </.link>
+        </li>
+        <li :if={Glitch.FeatureFlags.elixirconf_links_enabled()}>
+          <.link
+            href={
+            "https://#{Application.fetch_env!(:glitch, :elixirconf_day)}-track2.elixir-webrtc.org/"
+            }
+            class="block w-full text-center hover:bg-indigo-200 dark:hover:bg-stone-700 p-4"
+          >
+            Track 2
           </.link>
         </li>
         <li>
@@ -93,13 +113,25 @@
             Stream
           </.link>
         </li>
-        <%= if Glitch.FeatureFlags.recordings_enabled() do %>
-          <li>
-            <.link patch={~p"/recordings"}>
-              Recordings
-            </.link>
-          </li>
-        <% end %>
+        <li :if={Glitch.FeatureFlags.recordings_enabled()}>
+          <.link patch={~p"/recordings"}>
+            Recordings
+          </.link>
+        </li>
+        <li :if={Glitch.FeatureFlags.elixirconf_links_enabled()}>
+          <.link href={
+            "https://#{Application.fetch_env!(:glitch, :elixirconf_day)}-track1.elixir-webrtc.org/"
+            }>
+            Track 1
+          </.link>
+        </li>
+        <li :if={Glitch.FeatureFlags.elixirconf_links_enabled()}>
+          <.link href={
+            "https://#{Application.fetch_env!(:glitch, :elixirconf_day)}-track2.elixir-webrtc.org/"
+            }>
+            Track 2
+          </.link>
+        </li>
         <li>
           <.link href="https://hexdocs.pm/ex_webrtc" target="_blank">
             Docs
