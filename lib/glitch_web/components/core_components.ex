@@ -730,7 +730,7 @@ defmodule GlitchWeb.CoreComponents do
     ~H"""
     <div id={@id} phx-hook="TooltipHook">
       {render_slot(@inner_block)}
-      <p class="fixed w-max bg-stone-900 text-white py-1 px-2 rounded-lg opacity-0 text-xs tooltip-content">
+      <p class="fixed w-max bg-stone-900 text-white py-1 px-2 rounded-lg opacity-0 text-xs tooltip-content border border-transparent dark:border-neutral-600">
         {@tooltip}
       </p>
     </div>

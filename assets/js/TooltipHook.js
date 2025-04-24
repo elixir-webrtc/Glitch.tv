@@ -23,7 +23,7 @@ export default {
         y - tooltipContent.getBoundingClientRect().height - 2 + "px";
     });
 
-    this.el.addEventListener("pointerleave", (ev) => {
+    this.el.addEventListener("pointerleave", () => {
       tooltipContent.style.display = "none";
     });
   },
