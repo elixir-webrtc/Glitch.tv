@@ -65,7 +65,7 @@ defmodule GlitchWeb.StreamerLive do
           <Publisher.live_render socket={@socket} publisher={@publisher} />
         </div>
       </div>
-      <ChatLive.live_render socket={@socket} id="livechat" role="admin" />
+      <ChatLive.live_render socket={@socket} id="livechat" role="admin" timezone={@timezone} />
     </div>
     """
   end
@@ -75,6 +75,15 @@ defmodule GlitchWeb.StreamerLive do
     if connected?(socket) do
       Phoenix.PubSub.subscribe(Glitch.PubSub, "stream_info:viewers")
     end
+
+    connect_params = get_connect_params(socket)
+
+    timezone =
+      if connect_params != nil do
+        Map.get(connect_params, "timezone", "Etc/UTC")
+      else
+        "Etc/UTC"
+      end
 
     socket =
       Publisher.attach(socket,
@@ -92,6 +101,7 @@ defmodule GlitchWeb.StreamerLive do
       |> assign(:form_data, %{title: "", description: ""})
       |> assign(:page_title, "Streamer Panel")
       |> assign(:viewers_count, StreamViewerLive.get_viewers_count())
+      |> assign(:timezone, timezone)
 
     {:ok, socket}
   end

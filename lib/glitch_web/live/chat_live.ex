@@ -3,13 +3,14 @@ defmodule GlitchWeb.ChatLive do
   alias Glitch.Messages.Message
   use GlitchWeb, :live_view
 
+  attr(:timezone, :string, required: true)
   attr(:socket, Phoenix.LiveView.Socket, required: true, doc: "Parent live view socket")
   attr(:role, :string, required: true, doc: "Admin or user")
   attr(:id, :string, required: true, doc: "Component id")
 
   def live_render(assigns) do
     ~H"""
-    {live_render(@socket, __MODULE__, id: @id, session: %{"role" => @role})}
+    {live_render(@socket, __MODULE__, id: @id, session: %{"role" => @role, "timezone" => @timezone})}
     """
   end
 
@@ -99,11 +100,16 @@ defmodule GlitchWeb.ChatLive do
                 {msg.author}
               </p>
               <.tooltip
-                tooltip={Calendar.strftime(msg.inserted_at, "%d %b %Y %H:%M:%S")}
+                tooltip={
+                  Calendar.strftime(
+                    DateTime.shift_zone!(msg.inserted_at, @timezone),
+                    "%d %b %Y %H:%M:%S"
+                  )
+                }
                 id={"#{msg.id}-time"}
               >
                 <p class="text-xs text-neutral-500 m-0">
-                  {Calendar.strftime(msg.inserted_at, "%H:%M")}
+                  {Calendar.strftime(DateTime.shift_zone!(msg.inserted_at, @timezone), "%H:%M")}
                 </p>
               </.tooltip>
             </div>
@@ -266,7 +272,10 @@ defmodule GlitchWeb.ChatLive do
               {msg.author}
             </p>
             <p class="text-xs text-neutral-500">
-              {Calendar.strftime(msg.inserted_at, "%d %b %Y %H:%M:%S")}
+              {Calendar.strftime(
+                DateTime.shift_zone!(msg.inserted_at, @timezone),
+                "%d %b %Y %H:%M:%S"
+              )}
             </p>
           </div>
           <div class="dark:text-neutral-400 break-all glitch-markdown">
@@ -314,6 +323,7 @@ defmodule GlitchWeb.ChatLive do
       |> assign(highlight_slow_mode: false)
       |> assign(joined: false)
       |> assign(show_emoji_overlay: false)
+      |> assign(timezone: session["timezone"])
 
     {:ok, socket}
   end
