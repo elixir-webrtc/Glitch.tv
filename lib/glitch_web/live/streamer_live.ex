@@ -80,7 +80,7 @@ defmodule GlitchWeb.StreamerLive do
 
     timezone =
       if connect_params != nil do
-        Map.get(connect_params, "timezone")
+        Map.get(connect_params, "timezone", "Etc/UTC")
       else
         "Etc/UTC"
       end
