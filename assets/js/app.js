@@ -22,21 +22,15 @@ import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar";
 import { createPublisherHook, createPlayerHook } from "live_ex_webrtc";
-import ScrollDownHook from "./ScrollDownHook";
 import ShareButtonHook from "./ShareButtonHook";
 import DarkModeToggleHook from "./DarkModeToggleHook";
-import EmojiPickerContainerHook from "./EmojiPickerContainerHook";
-import MessageBodyHook from "./MessageBodyHook";
 import TooltipHook from "./TooltipHook";
 import ChatHook from "./ChatHook";
 
 let Hooks = {};
 
-Hooks.ScrollDownHook = ScrollDownHook;
 Hooks.ShareButton = ShareButtonHook;
 Hooks.DarkModeToggleHook = DarkModeToggleHook;
-Hooks.EmojiPickerContainerHook = EmojiPickerContainerHook;
-Hooks.MessageBodyHook = MessageBodyHook;
 Hooks.TooltipHook = TooltipHook;
 Hooks.ChatHook = ChatHook;
 
