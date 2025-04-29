@@ -12,7 +12,7 @@ defmodule GlitchWeb.Router do
   end
 
   pipeline :auth do
-    plug :admin_auth
+    plug :streamer_auth
   end
 
   scope "/", GlitchWeb do
@@ -35,9 +35,9 @@ defmodule GlitchWeb.Router do
       additional_pages: [exwebrtc: ExWebRTCDashboard]
   end
 
-  defp admin_auth(conn, _opts) do
-    username = Application.fetch_env!(:glitch, :admin_username)
-    password = Application.fetch_env!(:glitch, :admin_password)
+  defp streamer_auth(conn, _opts) do
+    username = Application.fetch_env!(:glitch, :streamer_username)
+    password = Application.fetch_env!(:glitch, :streamer_password)
     Plug.BasicAuth.basic_auth(conn, username: username, password: password)
   end
 end

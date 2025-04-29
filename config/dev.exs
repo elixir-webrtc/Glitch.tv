@@ -78,8 +78,8 @@ config :phoenix_live_view,
   enable_expensive_runtime_checks: true
 
 config :glitch,
-  admin_username: "admin",
-  admin_password: "admin",
+  streamer_username: "username",
+  streamer_password: "password",
   enable_recordings: true,
   enable_share_button: true,
   enable_elixirconf_links: true,

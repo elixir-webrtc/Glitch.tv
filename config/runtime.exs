@@ -61,11 +61,13 @@ if config_env() == :prod do
     ],
     secret_key_base: secret_key_base
 
-  admin_username =
-    System.get_env("ADMIN_USERNAME") || raise "Environment variable ADMIN_USERNAME is missing."
+  streamer_username =
+    System.get_env("GLITCH_STREAMER_USERNAME") ||
+      raise "Environment variable GLITCH_STREAMER_USERNAME is missing."
 
-  admin_password =
-    System.get_env("ADMIN_PASSWORD") || raise "Environment variable ADMIN_PASSWORD is missing."
+  streamer_password =
+    System.get_env("GLITCH_STREAMER_PASSWORD") ||
+      raise "Environment variable GLITCH_STREAMER_PASSWORD is missing."
 
   enable_recordings =
     case(System.get_env("GLITCH_ENABLE_RECORDINGS")) do
@@ -107,8 +109,8 @@ if config_env() == :prod do
     end
 
   config :glitch,
-    admin_username: admin_username,
-    admin_password: admin_password,
+    streamer_username: streamer_username,
+    streamer_password: streamer_password,
     enable_recordings: enable_recordings,
     enable_share_button: enable_share_button,
     enable_elixirconf_links: enable_elixirconf_links,

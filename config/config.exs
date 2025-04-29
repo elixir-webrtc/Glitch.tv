@@ -55,8 +55,8 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :glitch,
-  admin_username: "admin",
-  admin_password: "admin"
+  streamer_username: "streamer",
+  streamer_password: "streamer"
 
 config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
 
