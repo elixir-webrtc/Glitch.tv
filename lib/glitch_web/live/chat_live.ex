@@ -69,6 +69,8 @@ defmodule GlitchWeb.ChatLive do
         @role == "user" && "h-full rounded-lg border border-indigo-200 dark:border-zinc-800"
       ]}
       id="glitch_chat"
+      phx-hook="ChatHook"
+      data-slow-mode={to_string(@highlight_slow_mode)}
     >
       <div
         :if={@role == "user"}
@@ -83,12 +85,12 @@ defmodule GlitchWeb.ChatLive do
       ]}>
         This is not an official ElixirConf EU chat, so if you have any questions for the speakers, please ask them under the SwapCard stream.
       </div>
-      <ul class="overflow-y-auto flex-grow flex flex-col" phx-hook="ScrollDownHook" id="message_box">
+      <ul class="overflow-y-auto flex-grow flex flex-col" id="message_box">
         <li
           :for={msg <- @messages}
           id={"#{msg.id}-msg"}
           class={[
-            "group flex flex-col gap-1 px-6 py-4 relative",
+            "group flex flex-col gap-1 px-6 py-4 relative message_box__element",
             msg.flagged && @role == "user" &&
               "bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800",
             !msg.flagged && "hover:bg-stone-100 dark:hover:bg-stone-800"
@@ -183,8 +185,6 @@ defmodule GlitchWeb.ChatLive do
               name="body"
               disabled={not @joined}
               id="message_body"
-              phx-hook="MessageBodyHook"
-              data-slow-mode={to_string(@highlight_slow_mode)}
             >{@msg_body}</textarea>
           </div>
           <div class="relative">
@@ -203,7 +203,7 @@ defmodule GlitchWeb.ChatLive do
                 !@show_emoji_overlay && "hidden"
               ]}
               id="emoji-picker-container"
-              phx-hook="EmojiPickerContainerHook"
+              phx-click-away="hide-emoji-overlay"
             >
               <emoji-picker class="light dark:hidden"></emoji-picker>
               <emoji-picker class="hidden dark:block dark"></emoji-picker>

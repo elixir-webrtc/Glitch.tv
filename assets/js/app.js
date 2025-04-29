@@ -28,6 +28,7 @@ import DarkModeToggleHook from "./DarkModeToggleHook";
 import EmojiPickerContainerHook from "./EmojiPickerContainerHook";
 import MessageBodyHook from "./MessageBodyHook";
 import TooltipHook from "./TooltipHook";
+import ChatHook from "./ChatHook";
 
 let Hooks = {};
 
@@ -37,6 +38,7 @@ Hooks.DarkModeToggleHook = DarkModeToggleHook;
 Hooks.EmojiPickerContainerHook = EmojiPickerContainerHook;
 Hooks.MessageBodyHook = MessageBodyHook;
 Hooks.TooltipHook = TooltipHook;
+Hooks.ChatHook = ChatHook;
 
 const iceServers = [{ urls: "stun:stun.l.google.com:19302" }];
 Hooks.Publisher = createPublisherHook(iceServers);
