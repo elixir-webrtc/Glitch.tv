@@ -90,7 +90,7 @@ defmodule GlitchWeb.ChatLive do
           :for={msg <- @messages}
           id={"#{msg.id}-msg"}
           class={[
-            "group flex flex-col gap-1 px-6 py-4 relative",
+            "group flex flex-col gap-1 px-6 py-4 relative message_box__element",
             msg.flagged && @role == "user" &&
               "bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800",
             !msg.flagged && "hover:bg-stone-100 dark:hover:bg-stone-800"
