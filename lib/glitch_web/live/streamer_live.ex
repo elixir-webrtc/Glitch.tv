@@ -65,7 +65,7 @@ defmodule GlitchWeb.StreamerLive do
           <Publisher.live_render socket={@socket} publisher={@publisher} />
         </div>
       </div>
-      <ChatLive.live_render socket={@socket} id="livechat" role="admin" timezone={@timezone} />
+      <ChatLive.live_render socket={@socket} id="livechat" role="streamer" timezone={@timezone} />
     </div>
     """
   end

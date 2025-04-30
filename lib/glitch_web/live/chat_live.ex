@@ -5,7 +5,7 @@ defmodule GlitchWeb.ChatLive do
 
   attr(:timezone, :string, required: true)
   attr(:socket, Phoenix.LiveView.Socket, required: true, doc: "Parent live view socket")
-  attr(:role, :string, required: true, doc: "Admin or user")
+  attr(:role, :string, required: true, doc: "Streamer or user")
   attr(:id, :string, required: true, doc: "Component id")
 
   def live_render(assigns) do
@@ -21,7 +21,7 @@ defmodule GlitchWeb.ChatLive do
     """
   end
 
-  def render(%{role: "admin"} = assigns) do
+  def render(%{role: "streamer"} = assigns) do
     ~H"""
     <div class="rounded-lg border border-indigo-200 flex flex-col h-full dark:border-zinc-800">
       <ul class="flex *:flex-1 items-center border-b border-indigo-200 dark:border-zinc-800">
@@ -65,7 +65,7 @@ defmodule GlitchWeb.ChatLive do
         "justify-between flex-col",
         @current_tab == "chat" && "flex",
         @current_tab != "chat" && "hidden",
-        @role == "admin" && "h-[0px] flex-grow",
+        @role == "streamer" && "h-[0px] flex-grow",
         @role == "user" && "h-full rounded-lg border border-indigo-200 dark:border-zinc-800"
       ]}
       id="glitch_chat"
@@ -120,7 +120,7 @@ defmodule GlitchWeb.ChatLive do
                     "rounded-full flex items-center justify-center p-2",
                     msg.flagged && "hover:bg-red-300",
                     !msg.flagged && "hover:bg-stone-200 dark:hover:bg-stone-700",
-                    @role == "admin" && "hidden"
+                    @role == "streamer" && "hidden"
                   ]}
                   phx-click="flag-message"
                   phx-value-message-id={msg.id}
@@ -136,7 +136,7 @@ defmodule GlitchWeb.ChatLive do
           </div>
           <div class={[
             "hidden gap-4 items-center *:flex-1 mt-4",
-            @role == "admin" && "group-hover:flex"
+            @role == "streamer" && "group-hover:flex"
           ]}>
             <button
               class="bg-red-600 text-white rounded-lg py-1"
@@ -157,7 +157,7 @@ defmodule GlitchWeb.ChatLive do
           <div class="flex flex-col relative w-full">
             <div class="flex justify-between min-h-[16px] mt-[-14px] mb-[2px]">
               <div class={[
-                @role == "admin" && "hidden",
+                @role == "streamer" && "hidden",
                 "text-xs",
                 @highlight_slow_mode && "text-rose-600",
                 !@highlight_slow_mode &&
@@ -165,7 +165,7 @@ defmodule GlitchWeb.ChatLive do
               ]}>
                 Slow Mode {@slow_mode_delay_s}s
               </div>
-              <%!-- spacer to preserve layout with admin role --%>
+              <%!-- spacer to preserve layout with streamer role --%>
               <div></div>
               <div class={[
                 "text-xs text-neutral-400 dark:text-neutral-700",
@@ -463,7 +463,7 @@ defmodule GlitchWeb.ChatLive do
     slow_mode_delay = socket.assigns.slow_mode_delay_s * 1000
 
     if String.length(text) > 0 &&
-         (role == "admin" ||
+         (role == "streamer" ||
             time_elapsed >= slow_mode_delay) do
       send_message(body, socket.assigns.author)
       {:noreply, assign(socket, msg_body: nil, last_msg_timestamp: now)}
