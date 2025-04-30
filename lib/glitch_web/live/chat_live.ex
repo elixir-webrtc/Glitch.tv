@@ -17,7 +17,7 @@ defmodule GlitchWeb.ChatLive do
   @impl true
   def render(%{role: "user"} = assigns) do
     ~H"""
-    {render_chat(assigns)}
+    {render_chat2(assigns)}
     """
   end
 
@@ -69,7 +69,7 @@ defmodule GlitchWeb.ChatLive do
         @role == "user" && "h-full rounded-lg border border-indigo-200 dark:border-zinc-800"
       ]}
       id="glitch_chat"
-      phx-hook="ChatHook"
+      phx-hook="ChatHook2"
       data-slow-mode={to_string(@highlight_slow_mode)}
     >
       <div
@@ -245,6 +245,12 @@ defmodule GlitchWeb.ChatLive do
         </div>
       </form>
     </div>
+    """
+  end
+
+  def render_chat2(assigns) do
+    ~H"""
+    <div id="glitch_chat2" phx-hook="ChatHook2"></div>
     """
   end
 

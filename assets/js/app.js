@@ -26,6 +26,11 @@ import ShareButtonHook from "./ShareButtonHook";
 import DarkModeToggleHook from "./DarkModeToggleHook";
 import TooltipHook from "./TooltipHook";
 import ChatHook from "./ChatHook";
+import ChatHook2 from "./ChatHook2";
+import * as preact from "preact";
+
+window.React = preact;
+window.ReactDOM = preact;
 
 let Hooks = {};
 
@@ -33,6 +38,7 @@ Hooks.ShareButton = ShareButtonHook;
 Hooks.DarkModeToggleHook = DarkModeToggleHook;
 Hooks.TooltipHook = TooltipHook;
 Hooks.ChatHook = ChatHook;
+Hooks.ChatHook2 = ChatHook2;
 
 config = document.getElementById("config").dataset
 const defaultIceServers = [{ urls: "stun:stun.l.google.com:19302" }]

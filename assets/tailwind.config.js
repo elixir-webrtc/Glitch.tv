@@ -8,6 +8,7 @@ const path = require("path");
 module.exports = {
   content: [
     "./js/**/*.js",
+    "./js/**/*.jsx",
     "../lib/glitch_web.ex",
     "../lib/glitch_web/**/*.*ex",
     "../deps/live_ex_webrtc/**/*.*ex",

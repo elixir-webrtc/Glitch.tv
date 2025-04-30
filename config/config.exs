@@ -30,7 +30,8 @@ config :esbuild,
       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
     cd: Path.expand("../assets", __DIR__),
     env: %{
-      "NODE_PATH" => "#{Path.expand("../deps", __DIR__)}:/Users/kuba/git/w/lw"
+      "NODE_PATH" =>
+        "#{Path.expand("../deps", __DIR__)}:/Users/kuba/git/w/lw:#{Path.expand("../assets", __DIR__)}"
     }
   ]
 
