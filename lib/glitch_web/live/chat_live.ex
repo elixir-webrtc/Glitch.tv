@@ -90,7 +90,7 @@ defmodule GlitchWeb.ChatLive do
           :for={msg <- @messages}
           id={"#{msg.id}-msg"}
           class={[
-            "group flex flex-col gap-1 px-6 py-4 relative message_box__element",
+            "group flex flex-col gap-1 px-6 py-4 relative",
             msg.flagged && @role == "user" &&
               "bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800",
             !msg.flagged && "hover:bg-stone-100 dark:hover:bg-stone-800"
@@ -456,29 +456,35 @@ defmodule GlitchWeb.ChatLive do
   end
 
   def handle_event("submit-form", %{"body" => body}, socket) do
-    now = System.monotonic_time(:millisecond)
-    text = GlitchWeb.Utils.to_text(body)
     role = socket.assigns.role
+    is_highlight_slow_mode = socket.assigns.highlight_slow_mode
+
+    now = System.monotonic_time(:millisecond)
     time_elapsed = now - socket.assigns.last_msg_timestamp
     slow_mode_delay = socket.assigns.slow_mode_delay_s * 1000
 
-    if String.length(text) > 0 &&
-         (role == "streamer" ||
-            time_elapsed >= slow_mode_delay) do
-      send_message(body, socket.assigns.author)
-      {:noreply, assign(socket, msg_body: nil, last_msg_timestamp: now)}
-    else
-      if socket.assigns.highlight_slow_mode == true do
+    message_length = body |> GlitchWeb.Utils.to_text() |> String.length()
+
+    cond do
+      message_length > 0 && (role == "streamer" || time_elapsed >= slow_mode_delay) ->
+        send_message(body, socket.assigns.author)
+
+        {:noreply, assign(socket, msg_body: nil, last_msg_timestamp: now)}
+
+      is_highlight_slow_mode ->
         {:noreply, socket}
-      end
 
-      Process.send_after(
-        self(),
-        :reset_slow_mode_highlight,
-        slow_mode_delay - time_elapsed
-      )
+      time_elapsed >= slow_mode_delay ->
+        {:noreply, socket}
 
-      {:noreply, assign(socket, highlight_slow_mode: true)}
+      true ->
+        Process.send_after(
+          self(),
+          :reset_slow_mode_highlight,
+          slow_mode_delay - time_elapsed
+        )
+
+        {:noreply, assign(socket, highlight_slow_mode: true)}
     end
   end
 
