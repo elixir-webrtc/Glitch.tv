@@ -114,12 +114,19 @@ if config_env() == :prod do
         nil
 
       servers ->
-        String.split(servers, ",", trim: true)
+        servers
+        |> String.split(":", trim: true)
+        |> Enum.map(fn str ->
+          str
+          |> String.split(";", trim: true)
+          |> Enum.reduce(%{}, fn
+            "urls=" <> urls, acc -> Map.put(acc, :urls, String.split(urls, ",", trim: true))
+            "username=" <> username, acc -> Map.put(acc, :username, username)
+            "credential=" <> credential, acc -> Map.put(acc, :credential, credential)
+            _, acc -> acc
+          end)
+        end)
     end
-
-  IO.inspect("turn servers")
-  IO.inspect(turn_servers)
-  IO.inspect("all")
 
   config :glitch,
     streamer_username: streamer_username,

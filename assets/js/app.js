@@ -46,6 +46,7 @@ const iceServers = [
     username: "testusername",
     credential: "testpassword"
   }];
+console.log("ice servers: ", config.turnServers)
 Hooks.Publisher = createPublisherHook(iceServers);
 Hooks.Player = createPlayerHook(iceServers);
 
