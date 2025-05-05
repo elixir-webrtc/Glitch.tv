@@ -69,6 +69,8 @@ defmodule GlitchWeb.ChatLive do
         @role == "user" && "h-full rounded-lg border border-indigo-200 dark:border-zinc-800"
       ]}
       id="glitch_chat"
+      phx-hook="ChatHook"
+      data-slow-mode={to_string(@highlight_slow_mode)}
     >
       <div
         :if={@role == "user"}
@@ -83,7 +85,7 @@ defmodule GlitchWeb.ChatLive do
       ]}>
         This is not an official ElixirConf EU chat, so if you have any questions for the speakers, please ask them under the SwapCard stream.
       </div>
-      <ul class="overflow-y-auto flex-grow flex flex-col" phx-hook="ScrollDownHook" id="message_box">
+      <ul class="overflow-y-auto flex-grow flex flex-col" id="message_box">
         <li
           :for={msg <- @messages}
           id={"#{msg.id}-msg"}
@@ -183,8 +185,6 @@ defmodule GlitchWeb.ChatLive do
               name="body"
               disabled={not @joined}
               id="message_body"
-              phx-hook="MessageBodyHook"
-              data-slow-mode={to_string(@highlight_slow_mode)}
             >{@msg_body}</textarea>
           </div>
           <div class="relative">
@@ -203,7 +203,7 @@ defmodule GlitchWeb.ChatLive do
                 !@show_emoji_overlay && "hidden"
               ]}
               id="emoji-picker-container"
-              phx-hook="EmojiPickerContainerHook"
+              phx-click-away="hide-emoji-overlay"
             >
               <emoji-picker class="light dark:hidden"></emoji-picker>
               <emoji-picker class="hidden dark:block dark"></emoji-picker>
@@ -456,29 +456,35 @@ defmodule GlitchWeb.ChatLive do
   end
 
   def handle_event("submit-form", %{"body" => body}, socket) do
-    now = System.monotonic_time(:millisecond)
-    text = GlitchWeb.Utils.to_text(body)
     role = socket.assigns.role
+    is_highlight_slow_mode = socket.assigns.highlight_slow_mode
+
+    now = System.monotonic_time(:millisecond)
     time_elapsed = now - socket.assigns.last_msg_timestamp
     slow_mode_delay = socket.assigns.slow_mode_delay_s * 1000
 
-    if String.length(text) > 0 &&
-         (role == "streamer" ||
-            time_elapsed >= slow_mode_delay) do
-      send_message(body, socket.assigns.author)
-      {:noreply, assign(socket, msg_body: nil, last_msg_timestamp: now)}
-    else
-      if socket.assigns.highlight_slow_mode == true do
+    message_length = body |> GlitchWeb.Utils.to_text() |> String.length()
+
+    cond do
+      message_length > 0 && (role == "streamer" || time_elapsed >= slow_mode_delay) ->
+        send_message(body, socket.assigns.author)
+
+        {:noreply, assign(socket, msg_body: nil, last_msg_timestamp: now)}
+
+      is_highlight_slow_mode ->
         {:noreply, socket}
-      end
 
-      Process.send_after(
-        self(),
-        :reset_slow_mode_highlight,
-        slow_mode_delay - time_elapsed
-      )
+      time_elapsed >= slow_mode_delay ->
+        {:noreply, socket}
 
-      {:noreply, assign(socket, highlight_slow_mode: true)}
+      true ->
+        Process.send_after(
+          self(),
+          :reset_slow_mode_highlight,
+          slow_mode_delay - time_elapsed
+        )
+
+        {:noreply, assign(socket, highlight_slow_mode: true)}
     end
   end
 
