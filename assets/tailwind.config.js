@@ -17,9 +17,12 @@ module.exports = {
     extend: {
       colors: {
         brand: "#FD4F00",
+        primary: "var(--color-primary)",
+        "primary-light": "var(--color-primary-light)",
+        "primary-lighter": "var(--color-primary-lighter)",
       },
       fontFamily: {
-        DMSans: ["DM Sans", "sans-serif"],
+        primary: ["var(--font)", "sans-serif"],
       },
     },
   },

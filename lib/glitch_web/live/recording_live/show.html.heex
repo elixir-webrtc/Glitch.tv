@@ -40,7 +40,7 @@
       <ul class="flex flex-col gap-4">
         <li
           :for={recording <- @recordings}
-          class="lg:w-[317px] pb-4 border-b border-indigo-200 last:border-0 dark:border-zinc-800"
+          class="lg:w-[317px] pb-4 border-b border-primary-lighter last:border-0 dark:border-zinc-800"
         >
           <.link href={"/recordings/#{recording.id}"} class="flex gap-4">
             <img

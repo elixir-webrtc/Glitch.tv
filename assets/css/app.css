@@ -6,6 +6,15 @@
 
 /* This file is for your main application CSS */
 
+@layer base {
+    :root {
+        --color-primary: oklch(0.398 0.195 277.366);
+        --color-primary-light: oklch(0.398 0.195 277.366);
+        --color-primary-lighter: oklch(0.87 0.065 274.039);
+        --font: "DM Sans"
+    }
+}
+
 /* https://stackoverflow.com/questions/77936984/scrollbar-with-white-background */
 
 *::-webkit-scrollbar {
@@ -33,7 +42,7 @@ emoji-picker {
 }
 
 .glitch-container-primary {
-    @apply flex flex-col border border-indigo-200 rounded-lg dark:border-zinc-800;
+    @apply flex flex-col border border-primary-lighter rounded-lg dark:border-zinc-800;
 }
 
 .glitch-recordings-container {
@@ -45,19 +54,19 @@ emoji-picker {
 }
 
 .glitch-dropping-featured-text {
-    @apply text-indigo-800 font-medium dark:text-neutral-200;
+    @apply text-primary font-medium dark:text-neutral-200;
 }
 
 .glitch-input-primary {
-    @apply rounded-lg border border-indigo-200 disabled:bg-neutral-100 disabled:placeholder-neutral-300 text-sm flex-1 dark:bg-zinc-800 dark:disabled:bg-zinc-800 dark:disabled:placeholder-zinc-700 dark:border-zinc-800 dark:text-neutral-400;
+    @apply rounded-lg border border-primary-lighter disabled:bg-neutral-100 disabled:placeholder-neutral-300 text-sm flex-1 dark:bg-zinc-800 dark:disabled:bg-zinc-800 dark:disabled:placeholder-zinc-700 dark:border-zinc-800 dark:text-neutral-400;
 }
 
 .glitch-button-primary {
-    @apply bg-indigo-800 disabled:bg-indigo-500 disabled:text-indigo-300 text-white px-12 py-2 rounded-lg text-sm font-medium;
+    @apply bg-primary disabled:bg-primary-light disabled:text-primary-lighter text-white px-12 py-2 rounded-lg text-sm font-medium;
 }
 
 .glitch-button-browser-all {
-    @apply flex items-center justify-center gap-2 border border-indigo-200 rounded-lg w-full h-[44px] text-indigo-800 text-sm font-medium hover:bg-indigo-50 dark:border-indigo-400 dark:text-indigo-400 dark:hover:bg-stone-800;
+    @apply flex items-center justify-center gap-2 border border-primary-lighter rounded-lg w-full h-[44px] text-primary text-sm font-medium hover:bg-primary-lighter dark:border-primary-light dark:text-primary-light dark:hover:bg-stone-800;
 }
 
 .glitch-swm-video-watermark {
