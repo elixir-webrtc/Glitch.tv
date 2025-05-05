@@ -36,11 +36,11 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col justify-start flex-none pb-4 px-4 lg:px-0 border-t border-zinc-200 pt-4 lg:pt-0 lg:border-0">
+    <div class="flex flex-col justify-start flex-none pb-4 px-4 lg:px-0 border-t border-dark-primary-lighter pt-4 lg:pt-0 lg:border-0">
       <ul class="flex flex-col gap-4">
         <li
           :for={recording <- @recordings}
-          class="lg:w-[317px] pb-4 border-b border-primary-lighter last:border-0 dark:border-zinc-800"
+          class="lg:w-[317px] pb-4 border-b border-primary-lighter last:border-0 dark:border-dark-primary"
         >
           <.link href={"/recordings/#{recording.id}"} class="flex gap-4">
             <img

@@ -20,6 +20,10 @@ module.exports = {
         primary: "var(--color-primary)",
         "primary-light": "var(--color-primary-light)",
         "primary-lighter": "var(--color-primary-lighter)",
+
+        "dark-primary": "var(--color-dark-primary)",
+        "dark-primary-light": "var(--color-dark-primary-light)",
+        "dark-primary-lighter": "var(--color-dark-primary-lighter)",
       },
       fontFamily: {
         primary: ["var(--font)", "sans-serif"],

@@ -30,7 +30,7 @@ defmodule GlitchWeb.StreamerLive do
     <div class="grid gap-4 grid-cols-[1fr_440px] grid-rows-1 h-full pb-4">
       <div class="flex flex-col justify-between gap-4 flex-1">
         <div class="glitch-container-primary flex-1">
-          <div class="border-b border-primary-lighter px-8 py-2 flex justify-between items-center gap-4 dark:border-zinc-800">
+          <div class="border-b border-primary-lighter px-8 py-2 flex justify-between items-center gap-4 dark:border-dark-primary">
             <h1 class="font-medium dark:text-neutral-200">Stream details</h1>
             <.dropping class="py-1">
               <div class="flex items-center gap-2 text-xs">

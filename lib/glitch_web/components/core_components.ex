@@ -675,7 +675,7 @@ defmodule GlitchWeb.CoreComponents do
   def dropping(assigns) do
     ~H"""
     <div class={[
-      "bg-violet-50 px-4 py-3 rounded-lg flex items-center dark:bg-zinc-800 dark:text-neutral-400",
+      "bg-violet-50 px-4 py-3 rounded-lg flex items-center dark:bg-dark-primary dark:text-neutral-400",
       @class
     ]}>
       {render_slot(@inner_block)}
