@@ -126,7 +126,6 @@ defmodule GlitchWeb.StreamViewerLive do
         publisher_id: "publisher",
         pubsub: Glitch.PubSub,
         ice_servers: [%{urls: "stun:stun.l.google.com:19302"}]
-        # ice_ip_filter: Application.get_env(:live_broadcaster, :ice_ip_filter)
       )
       |> assign(:page_title, "Stream")
       |> assign(:stream_metadata, metadata_to_html(metadata))

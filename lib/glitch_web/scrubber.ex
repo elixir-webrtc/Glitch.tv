@@ -1,4 +1,7 @@
 defmodule GlitchWeb.Scrubber do
+  @moduledoc """
+  Configuration of html scrubber.
+  """
   require HtmlSanitizeEx.Scrubber.Meta
   alias HtmlSanitizeEx.Scrubber.Meta
 

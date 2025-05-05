@@ -1,4 +1,7 @@
 defmodule Glitch.FeatureFlags do
+  @moduledoc """
+  Module managing all feature flags used by the application.
+  """
   @spec recordings_enabled() :: boolean()
   def recordings_enabled() do
     Application.fetch_env!(:glitch, :enable_recordings)

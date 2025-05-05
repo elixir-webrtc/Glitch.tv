@@ -1,4 +1,7 @@
 defmodule GlitchWeb.HtmlSanitizer do
+  @moduledoc """
+  Module for sanitizing HTML used in chat.
+  """
   alias GlitchWeb.Scrubber, as: GlitchScrubber
   alias HtmlSanitizeEx.Scrubber
 
