@@ -38,7 +38,14 @@ Hooks.EmojiPickerContainerHook = EmojiPickerContainerHook;
 Hooks.MessageBodyHook = MessageBodyHook;
 Hooks.TooltipHook = TooltipHook;
 
-const iceServers = [{ urls: "stun:stun.l.google.com:19302" }];
+config = document.getElementById("config").dataset
+const iceServers = [
+  //{ urls: "stun:stun.l.google.com:19302" },
+  {
+    urls: ['turn:65.109.153.64:3478?transport=tcp', 'turn:65.109.153.64:3478?transport=udp'],
+    username: "testusername",
+    credential: "testpassword"
+  }];
 Hooks.Publisher = createPublisherHook(iceServers);
 Hooks.Player = createPlayerHook(iceServers);
 
@@ -77,3 +84,4 @@ if (
 } else {
   document.documentElement.classList.remove("dark");
 }
+

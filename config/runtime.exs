@@ -108,6 +108,19 @@ if config_env() == :prod do
         end
     end
 
+  turn_servers =
+    case System.get_env("GLITCH_TURN_SERVERS") do
+      nil ->
+        nil
+
+      servers ->
+        String.split(servers, ",", trim: true)
+    end
+
+  IO.inspect("turn servers")
+  IO.inspect(turn_servers)
+  IO.inspect("all")
+
   config :glitch,
     streamer_username: streamer_username,
     streamer_password: streamer_password,
@@ -115,7 +128,8 @@ if config_env() == :prod do
     enable_share_button: enable_share_button,
     enable_elixirconf_links: enable_elixirconf_links,
     elixirconf_day: elixirconf_day,
-    slow_mode_delay_s: slow_mode_delay_s
+    slow_mode_delay_s: slow_mode_delay_s,
+    turn_servers: turn_servers
 
   # ## SSL Support
   #
