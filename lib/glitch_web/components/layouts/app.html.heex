@@ -35,7 +35,7 @@
         <li :if={not Glitch.FeatureFlags.elixirconf_links_enabled()}>
           <.link
             patch={~p"/"}
-            class="block w-full text-center hover:bg-primary-lighter dark:hover:bg-stone-700 p-4"
+            class="block w-full text-center hover:bg-primary-lighter dark:hover:bg-dark-primary-light p-4"
           >
             Stream
           </.link>
@@ -45,7 +45,7 @@
             href={
             "https://#{Application.fetch_env!(:glitch, :elixirconf_day)}-track1.elixir-webrtc.org/"
             }
-            class="block w-full text-center hover:bg-primary-lighter dark:hover:bg-stone-700 p-4"
+            class="block w-full text-center hover:bg-primary-lighter dark:hover:bg-dark-primary-light p-4"
           >
             Track 1
           </.link>
@@ -55,7 +55,7 @@
             href={
             "https://#{Application.fetch_env!(:glitch, :elixirconf_day)}-track2.elixir-webrtc.org/"
             }
-            class="block w-full text-center hover:bg-primary-lighter dark:hover:bg-stone-700 p-4"
+            class="block w-full text-center hover:bg-primary-lighter dark:hover:bg-dark-primary-light p-4"
           >
             Track 2
           </.link>
@@ -63,7 +63,7 @@
         <li :if={Glitch.FeatureFlags.recordings_enabled()}>
           <.link
             patch={~p"/recordings"}
-            class="block w-full text-center hover:bg-primary-lighter dark:hover:bg-stone-700 p-4"
+            class="block w-full text-center hover:bg-primary-lighter dark:hover:bg-dark-primary-light p-4"
           >
             Recordings
           </.link>
@@ -72,7 +72,7 @@
           <.link
             href="https://hexdocs.pm/ex_webrtc"
             target="_blank"
-            class="block w-full text-center hover:bg-primary-lighter dark:hover:bg-stone-700 p-4"
+            class="block w-full text-center hover:bg-primary-lighter dark:hover:bg-dark-primary-light p-4"
           >
             Docs
           </.link>
@@ -81,7 +81,7 @@
           <.link
             href="https://github.com/elixir-webrtc"
             target="_blank"
-            class="block w-full text-center *:mx-auto hover:bg-primary-lighter dark:hover:bg-stone-700 p-4"
+            class="block w-full text-center *:mx-auto hover:bg-primary-lighter dark:hover:bg-dark-primary-light p-4"
           >
             <img src="/images/github-logo.svg" class="dark:hidden" alt="Github logo" />
             <img
