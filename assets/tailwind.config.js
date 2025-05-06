@@ -25,6 +25,7 @@ module.exports = {
         "dark-primary-light": "var(--color-dark-primary-light)",
         "dark-primary-lighter": "var(--color-dark-primary-lighter)",
 
+        accent: "var(--color-accent)",
         "dark-accent": "var(--color-dark-accent)",
       },
       fontFamily: {
