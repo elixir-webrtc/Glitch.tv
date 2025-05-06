@@ -30,8 +30,8 @@
     </label>
 
     <%!-- Mobile navbar --%>
-    <div class="absolute top-full left-0 gap-16 hidden peer-has-[:checked]:flex flex-col bg-primary-lighter z-10 w-full lg:hidden dark:bg-stone-800">
-      <ul class="flex flex-col items-center text-lg text-primary dark:text-neutral-200 *:w-full">
+    <div class="absolute top-full left-0 gap-16 hidden peer-has-[:checked]:flex flex-col bg-primary z-10 w-full lg:hidden dark:bg-dark-primary">
+      <ul class="flex flex-col items-center text-lg text-white dark:text-rp *:w-full">
         <li :if={not Glitch.FeatureFlags.elixirconf_links_enabled()}>
           <.link
             patch={~p"/"}
@@ -83,7 +83,7 @@
             target="_blank"
             class="block w-full text-center *:mx-auto hover:bg-primary-lighter dark:hover:bg-dark-primary-light p-4"
           >
-            <img src="/images/github-logo.svg" class="dark:hidden" alt="Github logo" />
+            <img src="/images/github-dark-mode-logo.svg" class="dark:hidden" alt="Github logo" />
             <img
               src="/images/github-dark-mode-logo.svg"
               class="hidden dark:block"
@@ -93,9 +93,13 @@
         </li>
       </ul>
       <div class="flex flex-col gap-4 items-center justify-center pb-8">
-        <span class="text-sm">by</span>
+        <span class="text-sm text-white">by</span>
         <.link href="https://swmansion.com/" target="_blank">
-          <img src="/images/swm-logo.svg" class="dark:hidden" alt="Software Mansion logo" />
+          <img
+            src="/images/swm-dark-mode-logo.svg"
+            class="dark:hidden"
+            alt="Software Mansion logo"
+          />
           <img
             src="/images/swm-dark-mode-logo.svg"
             class="hidden dark:block"
