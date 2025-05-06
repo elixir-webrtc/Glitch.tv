@@ -675,7 +675,7 @@ defmodule GlitchWeb.CoreComponents do
   def dropping(assigns) do
     ~H"""
     <div class={[
-      "bg-accent px-4 py-3 rounded-lg flex items-center dark:bg-dark-primary dark:text-neutral-400",
+      "bg-primary-lighter px-4 py-3 rounded-lg flex items-center dark:bg-dark-primary dark:text-neutral-400",
       @class
     ]}>
       {render_slot(@inner_block)}
@@ -686,7 +686,7 @@ defmodule GlitchWeb.CoreComponents do
   def share_button(assigns) do
     ~H"""
     <button
-      class="border border-primary-lighter text-primary text-sm font-medium rounded-lg px-6 py-3 flex gap-2 items-center hover:bg-primary-lighter dark:border-dark-primary-light dark:hover:bg-dark-primary dark:text-dark-primary-lighter"
+      class="border border-primary-lighter text-primary text-sm font-medium rounded-lg px-6 py-3 flex gap-2 items-center hover:bg-primary-accent dark:border-dark-accent dark:hover:bg-dark-primary dark:text-dark-accent"
       phx-hook="ShareButton"
       id="ShareButton"
     >
@@ -708,13 +708,13 @@ defmodule GlitchWeb.CoreComponents do
       />
       <label
         for={@id}
-        class="border border-primary dark:border-dark-primary p-1 border-r-0 bg-primary text-white peer-checked:bg-transparent cursor-pointer rounded-l-lg"
+        class="border border-primary dark:border-dark-accent p-1 border-r-0 bg-primary text-white peer-checked:bg-transparent cursor-pointer rounded-l-lg"
       >
         <.icon name="hero-sun" class="w-6 h-6 lg:w-5 lg:h-5 block" />
       </label>
       <label
         for={@id}
-        class="border border-dark-primary p-1 bg-transparent text-primary peer-checked:bg-primary dark:peer-checked:bg-dark-primary peer-checked:text-white cursor-pointer rounded-r-lg"
+        class="border border-primary p-1 bg-transparent text-primary dark:peer-checked:bg-dark-accent dark:border-dark-accent peer-checked:text-white cursor-pointer rounded-r-lg"
       >
         <.icon name="hero-moon" class="w-6 h-6 lg:w-5 lg:h-5 block" />
       </label>
