@@ -17,6 +17,8 @@
         --color-dark-primary: oklch(0.274 0.006 286.033);
         --color-dark-primary-light: oklch(0.442 0.017 285.786);
         --color-dark-primary-lighter: oklch(0.92 0.004 286.32);
+
+        --color-accent: oklch(0.969 0.016 293.756);
     }
 }
 
@@ -67,11 +69,11 @@ emoji-picker {
 }
 
 .glitch-button-primary {
-    @apply bg-primary disabled:bg-primary-light disabled:text-primary-lighter text-white px-12 py-2 rounded-lg text-sm font-medium;
+    @apply bg-primary disabled:bg-primary-light disabled:text-primary-lighter text-white px-12 py-2 rounded-lg text-sm font-medium dark:bg-dark-primary dark:text-dark-primary-lighter;
 }
 
 .glitch-button-browser-all {
-    @apply flex items-center justify-center gap-2 border border-primary-lighter rounded-lg w-full h-[44px] text-primary text-sm font-medium hover:bg-primary-lighter dark:border-primary-light dark:text-primary-light dark:hover:bg-stone-800;
+    @apply flex items-center justify-center gap-2 border border-primary-lighter rounded-lg w-full h-[44px] text-primary text-sm font-medium hover:bg-primary-lighter dark:border-dark-primary-light dark:text-dark-primary-light dark:hover:bg-stone-800;
 }
 
 .glitch-swm-video-watermark {

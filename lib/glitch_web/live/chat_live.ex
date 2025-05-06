@@ -98,7 +98,7 @@ defmodule GlitchWeb.ChatLive do
         >
           <div class="flex gap-4 justify-between items-center">
             <div class="flex gap-4 items-center">
-              <p class="text-primary text-sm text-medium dark:text-primary-light">
+              <p class="text-primary text-sm text-medium dark:text-dark-primary-lighter">
                 {msg.author}
               </p>
               <.tooltip
