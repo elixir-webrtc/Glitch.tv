@@ -6,6 +6,23 @@
 
 /* This file is for your main application CSS */
 
+@layer base {
+    :root {
+        --font: "DM Sans";
+
+        --color-primary: oklch(0.398 0.195 277.366);
+        --color-primary-light: oklch(0.511 0.262 276.966);
+        --color-primary-lighter: oklch(0.87 0.065 274.039);
+
+        --color-dark-primary: oklch(0.274 0.006 286.033);
+        --color-dark-primary-light: oklch(0.442 0.017 285.786);
+        --color-dark-primary-lighter: oklch(0.92 0.004 286.32);
+
+        --color-accent: oklch(0.398 0.195 277.366);
+        --color-dark-accent: oklch(0.398 0.195 277.366);
+    }
+}
+
 /* https://stackoverflow.com/questions/77936984/scrollbar-with-white-background */
 
 *::-webkit-scrollbar {
@@ -33,7 +50,7 @@ emoji-picker {
 }
 
 .glitch-container-primary {
-    @apply flex flex-col border border-indigo-200 rounded-lg dark:border-zinc-800;
+    @apply flex flex-col border border-primary-lighter rounded-lg dark:border-dark-primary;
 }
 
 .glitch-recordings-container {
@@ -45,19 +62,19 @@ emoji-picker {
 }
 
 .glitch-dropping-featured-text {
-    @apply text-indigo-800 font-medium dark:text-neutral-200;
+    @apply text-primary-lighter font-medium dark:text-dark-primary-lighter;
 }
 
 .glitch-input-primary {
-    @apply rounded-lg border border-indigo-200 disabled:bg-neutral-100 disabled:placeholder-neutral-300 text-sm flex-1 dark:bg-zinc-800 dark:disabled:bg-zinc-800 dark:disabled:placeholder-zinc-700 dark:border-zinc-800 dark:text-neutral-400;
+    @apply rounded-lg border border-primary-lighter text-sm flex-1 disabled:bg-neutral-100 disabled:placeholder-neutral-200 dark:bg-dark-primary dark:disabled:bg-dark-primary dark:placeholder:text-dark-primary-light dark:border-dark-primary dark:text-neutral-400;
 }
 
 .glitch-button-primary {
-    @apply bg-indigo-800 disabled:bg-indigo-500 disabled:text-indigo-300 text-white px-12 py-2 rounded-lg text-sm font-medium;
+    @apply bg-accent disabled:bg-primary-light disabled:text-primary-lighter text-white px-12 py-2 rounded-lg text-sm font-medium dark:bg-dark-accent dark:text-dark-primary;
 }
 
 .glitch-button-browser-all {
-    @apply flex items-center justify-center gap-2 border border-indigo-200 rounded-lg w-full h-[44px] text-indigo-800 text-sm font-medium hover:bg-indigo-50 dark:border-indigo-400 dark:text-indigo-400 dark:hover:bg-stone-800;
+    @apply flex items-center justify-center gap-2 border border-primary-lighter rounded-lg w-full h-[44px] text-primary text-sm font-medium hover:bg-primary-lighter dark:border-dark-primary-light dark:text-dark-primary-light dark:hover:bg-stone-800;
 }
 
 .glitch-swm-video-watermark {
@@ -78,18 +95,18 @@ emoji-picker {
 }
 
 .glitch-markdown blockquote {
-    @apply border-l-4 border-zinc-300 pl-2 dark:border-zinc-700;
+    @apply border-l-4 border-dark-primary-lighter pl-2 dark:border-dark-primary;
 }
 
 /* not sure about that dark background color in code blocks */
 .glitch-markdown code,
 #stream-viewer-title code {
-    @apply border-[1px] rounded-md px-[2px] bg-zinc-50 border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900;
+    @apply border-[1px] rounded-md px-[2px] bg-zinc-50 border-dark-primary-lighter dark:border-dark-primary-light dark:bg-dark-primary;
 }
 
 .glitch-markdown pre,
 #stream-viewer-title code {
-    @apply border-[1px] rounded-md px-[2px] bg-zinc-50 border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900;
+    @apply border-[1px] rounded-md px-[2px] bg-zinc-50 border-dark-primary-lighter dark:border-dark-primary-light dark:bg-dark-primary;
 }
 
 .glitch-markdown pre code {

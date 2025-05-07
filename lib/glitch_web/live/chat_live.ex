@@ -23,16 +23,16 @@ defmodule GlitchWeb.ChatLive do
 
   def render(%{role: "streamer"} = assigns) do
     ~H"""
-    <div class="rounded-lg border border-indigo-200 flex flex-col h-full dark:border-zinc-800">
-      <ul class="flex *:flex-1 items-center border-b border-indigo-200 dark:border-zinc-800">
+    <div class="rounded-lg border border-primary-lighter flex flex-col h-full dark:border-dark-primary">
+      <ul class="flex *:flex-1 items-center border-b border-primary-lighter dark:border-dark-primary">
         <li>
           <button
             phx-click="select-tab"
             phx-value-tab="chat"
             class={[
-              "w-full h-full px-4 py-3 rounded-tl-[7px] text-center text-indigo-700 text-indigo-800 text-sm hover:text-white hover:bg-indigo-900 dark:text-white",
+              "w-full h-full px-4 py-3 rounded-tl-[7px] text-center text-primary text-primary text-sm hover:text-white hover:bg-primary-lighter dark:hover:bg-dark-primary-lighter dark:text-white",
               @current_tab == "chat" &&
-                "text-white bg-indigo-800 dark:hover:bg-indigo-700"
+                "text-white bg-primary dark:bg-dark-primary dark:hover:bg-dark-primary-lighter"
             ]}
           >
             Chat
@@ -43,9 +43,9 @@ defmodule GlitchWeb.ChatLive do
             phx-click="select-tab"
             phx-value-tab="reported"
             class={[
-              "w-full h-full px-4 py-3 rounded-tr-[7px] text-center text-indigo-700 text-indigo-800 text-sm hover:text-white hover:bg-indigo-900 dark:text-white",
+              "w-full h-full px-4 py-3 rounded-tr-[7px] text-center text-primary text-primary text-sm hover:text-white hover:bg-primary-lighter dark:hover:bg-dark-primary-lighter dark:text-white",
               @current_tab == "reported" &&
-                "text-white bg-indigo-800 dark:hover:bg-indigo-700"
+                "text-white bg-primary dark:bg-dark-primary dark:hover:bg-dark-primary-lighter"
             ]}
           >
             Reported ({Enum.count(@messages, fn x -> x.flagged end)})
@@ -66,7 +66,7 @@ defmodule GlitchWeb.ChatLive do
         @current_tab == "chat" && "flex",
         @current_tab != "chat" && "hidden",
         @role == "streamer" && "h-[0px] flex-grow",
-        @role == "user" && "h-full rounded-lg border border-indigo-200 dark:border-zinc-800"
+        @role == "user" && "h-full rounded-lg border border-primary-lighter dark:border-dark-primary"
       ]}
       id="glitch_chat"
       phx-hook="ChatHook"
@@ -74,13 +74,13 @@ defmodule GlitchWeb.ChatLive do
     >
       <div
         :if={@role == "user"}
-        class="py-4 px-8 border-b border-indigo-200 text-center dark:border-zinc-800 dark:text-neutral-400 hidden lg:block"
+        class="py-4 px-8 border-b border-primary-lighter text-center dark:border-dark-primary dark:text-neutral-400 hidden lg:block"
       >
         Chat
       </div>
       <div class={[
         @role == "user" &&
-          "p-2 text-center text-xs border-b-[1px] border-indigo-200 dark:border-zinc-800 dark:text-neutral-400",
+          "p-2 text-center text-xs border-b-[1px] border-primary-lighter dark:border-dark-primary dark:text-neutral-400",
         @role != "user" && "hidden"
       ]}>
         This is not an official ElixirConf EU chat, so if you have any questions for the speakers, please ask them under the SwapCard stream.
@@ -98,7 +98,7 @@ defmodule GlitchWeb.ChatLive do
         >
           <div class="flex gap-4 justify-between items-center">
             <div class="flex gap-4 items-center">
-              <p class="text-indigo-800 text-sm text-medium dark:text-indigo-400">
+              <p class="text-accent text-sm text-medium dark:text-dark-accent">
                 {msg.author}
               </p>
               <.tooltip
@@ -153,7 +153,7 @@ defmodule GlitchWeb.ChatLive do
       <form
         phx-change="validate-form"
         phx-submit="submit-form"
-        class="border-t border-indigo-200 p-6 dark:border-zinc-800"
+        class="border-t border-primary-lighter p-6 dark:border-dark-primary"
       >
         <div class="flex items-end gap-2 relative mb-2">
           <div class="flex flex-col relative w-full">
@@ -179,7 +179,7 @@ defmodule GlitchWeb.ChatLive do
               </div>
             </div>
             <textarea
-              class="glitch-input-primary resize-none h-[96px] w-full dark:text-neutral-400"
+              class="glitch-input-primary resize-none h-[96px] w-full"
               placeholder="Your message"
               maxlength={@max_msg_length}
               name="body"
@@ -190,7 +190,7 @@ defmodule GlitchWeb.ChatLive do
           <div class="relative">
             <button
               type="button"
-              class="border border-indigo-200 rounded-lg px-2 py-1 disabled:opacity-50 dark:text-neutral-400 dark:border-zinc-800 dark:bg-zinc-800"
+              class="border border-primary-lighter rounded-lg px-2 py-1 disabled:opacity-50 dark:text-neutral-400 dark:border-dark-primary dark:bg-dark-primary"
               phx-click="toggle-emoji-overlay"
               disabled={not @joined}
             >
@@ -268,7 +268,7 @@ defmodule GlitchWeb.ChatLive do
           ]}
         >
           <div class="flex gap-4 justify-between items-center">
-            <p class="text-indigo-800 text-sm text-medium dark:text-indigo-400">
+            <p class="text-primary text-sm text-medium dark:text-primary-light">
               {msg.author}
             </p>
             <p class="text-xs text-neutral-500">

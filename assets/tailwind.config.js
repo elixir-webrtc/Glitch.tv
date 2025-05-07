@@ -17,9 +17,19 @@ module.exports = {
     extend: {
       colors: {
         brand: "#FD4F00",
+        primary: "var(--color-primary)",
+        "primary-light": "var(--color-primary-light)",
+        "primary-lighter": "var(--color-primary-lighter)",
+
+        "dark-primary": "var(--color-dark-primary)",
+        "dark-primary-light": "var(--color-dark-primary-light)",
+        "dark-primary-lighter": "var(--color-dark-primary-lighter)",
+
+        accent: "var(--color-accent)",
+        "dark-accent": "var(--color-dark-accent)",
       },
       fontFamily: {
-        DMSans: ["DM Sans", "sans-serif"],
+        primary: ["var(--font)", "sans-serif"],
       },
     },
   },

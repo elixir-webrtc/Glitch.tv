@@ -675,7 +675,7 @@ defmodule GlitchWeb.CoreComponents do
   def dropping(assigns) do
     ~H"""
     <div class={[
-      "bg-violet-50 px-4 py-3 rounded-lg flex items-center dark:bg-zinc-800 dark:text-neutral-400",
+      "bg-primary text-white px-4 py-3 rounded-lg flex items-center dark:bg-dark-primary dark:text-neutral-400",
       @class
     ]}>
       {render_slot(@inner_block)}
@@ -686,11 +686,11 @@ defmodule GlitchWeb.CoreComponents do
   def share_button(assigns) do
     ~H"""
     <button
-      class="border border-indigo-200 text-indigo-800 text-sm font-medium rounded-lg px-6 py-3 flex gap-2 items-center hover:bg-indigo-50 dark:text-indigo-400 dark:border-indigo-400 dark:hover:bg-stone-800"
+      class="border border-accent text-accent text-sm font-medium rounded-lg px-6 py-3 flex gap-2 items-center hover:bg-primary-lighter dark:border-dark-accent dark:hover:bg-dark-primary dark:text-dark-accent"
       phx-hook="ShareButton"
       id="ShareButton"
     >
-      Share <.icon name="hero-share" class="fill-indigo-800 w-5 h-5" />
+      Share <.icon name="hero-share" class="fill-accent dark:fill-dark-accent w-5 h-5" />
     </button>
     """
   end
@@ -708,13 +708,13 @@ defmodule GlitchWeb.CoreComponents do
       />
       <label
         for={@id}
-        class="border border-indigo-800 p-1 border-r-0 bg-indigo-800 text-white peer-checked:bg-transparent cursor-pointer rounded-l-lg"
+        class="border border-accent dark:border-dark-accent p-1 border-r-0 bg-primary text-white peer-checked:bg-transparent cursor-pointer rounded-l-lg"
       >
         <.icon name="hero-sun" class="w-6 h-6 lg:w-5 lg:h-5 block" />
       </label>
       <label
         for={@id}
-        class="border border-indigo-800 p-1 bg-transparent text-indigo-800 peer-checked:bg-indigo-800 peer-checked:text-white cursor-pointer rounded-r-lg"
+        class="border border-accent p-1 bg-transparent text-accent dark:peer-checked:bg-dark-accent dark:border-dark-accent peer-checked:text-white cursor-pointer rounded-r-lg"
       >
         <.icon name="hero-moon" class="w-6 h-6 lg:w-5 lg:h-5 block" />
       </label>
