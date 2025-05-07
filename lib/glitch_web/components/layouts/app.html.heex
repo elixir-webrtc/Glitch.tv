@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <label class="p-4 rounded-lg lg:hidden cursor-pointer hover:bg-primary-lighter dark:hover:bg-stone-800 peer">
+    <label class="p-4 rounded-lg lg:hidden cursor-pointer hover:bg-primary-lighter dark:hover:bg-primary-lighter peer">
       <input type="checkbox" class="hidden peer" />
       <.icon name="hero-bars-3" class="block peer-checked:hidden" />
       <.icon name="hero-x-mark" class="hidden peer-checked:block" />
@@ -55,7 +55,7 @@
             href={
             "https://#{Application.fetch_env!(:glitch, :elixirconf_day)}-track2.elixir-webrtc.org/"
             }
-            class="block w-full text-center hover:bg-primary-lighter dark:hover:bg-dark-primary-light p-4"
+            class="block w-full text-center hover:bg-primary-lighter dark:hover:bg-dark-primary-lighter p-4"
           >
             Track 2
           </.link>
@@ -63,7 +63,7 @@
         <li :if={Glitch.FeatureFlags.recordings_enabled()}>
           <.link
             patch={~p"/recordings"}
-            class="block w-full text-center hover:bg-primary-lighter dark:hover:bg-dark-primary-light p-4"
+            class="block w-full text-center hover:bg-primary-lighter dark:hover:bg-dark-primary-lighter p-4"
           >
             Recordings
           </.link>
@@ -72,7 +72,7 @@
           <.link
             href="https://hexdocs.pm/ex_webrtc"
             target="_blank"
-            class="block w-full text-center hover:bg-primary-lighter dark:hover:bg-dark-primary-light p-4"
+            class="block w-full text-center hover:bg-primary-lighter dark:hover:bg-dark-primary-lighter p-4"
           >
             Docs
           </.link>
@@ -81,7 +81,7 @@
           <.link
             href="https://github.com/elixir-webrtc"
             target="_blank"
-            class="block w-full text-center *:mx-auto hover:bg-primary-lighter dark:hover:bg-dark-primary-light p-4"
+            class="block w-full text-center *:mx-auto hover:bg-primary-lighter dark:hover:bg-dark-primary-lighter p-4"
           >
             Github
           </.link>
