@@ -30,9 +30,9 @@ defmodule GlitchWeb.ChatLive do
             phx-click="select-tab"
             phx-value-tab="chat"
             class={[
-              "w-full h-full px-4 py-3 rounded-tl-[7px] text-center text-indigo-700 text-primary text-sm hover:text-white hover:bg-indigo-900 dark:text-white",
+              "w-full h-full px-4 py-3 rounded-tl-[7px] text-center text-primary text-primary text-sm hover:text-white hover:bg-primary-lighter dark:hover:bg-dark-primary-lighter dark:text-white",
               @current_tab == "chat" &&
-                "text-white bg-primary dark:hover:bg-indigo-700"
+                "text-white bg-primary dark:bg-dark-primary dark:hover:bg-dark-primary-lighter"
             ]}
           >
             Chat
@@ -43,9 +43,9 @@ defmodule GlitchWeb.ChatLive do
             phx-click="select-tab"
             phx-value-tab="reported"
             class={[
-              "w-full h-full px-4 py-3 rounded-tr-[7px] text-center text-indigo-700 text-primary text-sm hover:text-white hover:bg-indigo-900 dark:text-white",
+              "w-full h-full px-4 py-3 rounded-tr-[7px] text-center text-primary text-primary text-sm hover:text-white hover:bg-primary-lighter dark:hover:bg-dark-primary-lighter dark:text-white",
               @current_tab == "reported" &&
-                "text-white bg-primary dark:hover:bg-indigo-700"
+                "text-white bg-primary dark:bg-dark-primary dark:hover:bg-dark-primary-lighter"
             ]}
           >
             Reported ({Enum.count(@messages, fn x -> x.flagged end)})
