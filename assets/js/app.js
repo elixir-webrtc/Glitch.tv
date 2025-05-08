@@ -39,14 +39,7 @@ Hooks.MessageBodyHook = MessageBodyHook;
 Hooks.TooltipHook = TooltipHook;
 
 config = document.getElementById("config").dataset
-const iceServers = [
-  //{ urls: "stun:stun.l.google.com:19302" },
-  {
-    urls: ['turn:65.109.153.64:3478?transport=tcp', 'turn:65.109.153.64:3478?transport=udp'],
-    username: "testusername",
-    credential: "testpassword"
-  }];
-console.log("ice servers: ", config.turnServers)
+const iceServers = JSON.parse(config.turnServers);
 Hooks.Publisher = createPublisherHook(iceServers);
 Hooks.Player = createPlayerHook(iceServers);
 

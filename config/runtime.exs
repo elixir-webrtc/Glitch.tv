@@ -108,25 +108,7 @@ if config_env() == :prod do
         end
     end
 
-  turn_servers =
-    case System.get_env("GLITCH_TURN_SERVERS") do
-      nil ->
-        nil
-
-      servers ->
-        servers
-        |> String.split(":", trim: true)
-        |> Enum.map(fn str ->
-          str
-          |> String.split(";", trim: true)
-          |> Enum.reduce(%{}, fn
-            "urls=" <> urls, acc -> Map.put(acc, :urls, String.split(urls, ",", trim: true))
-            "username=" <> username, acc -> Map.put(acc, :username, username)
-            "credential=" <> credential, acc -> Map.put(acc, :credential, credential)
-            _, acc -> acc
-          end)
-        end)
-    end
+  turn_servers = System.get_env("GLITCH_TURN_SERVERS")
 
   config :glitch,
     streamer_username: streamer_username,

@@ -1,5 +1,5 @@
 <div class="h-screen max-h-screen flex flex-col font-DMSans">
-  <div id="config" data-turn-servers={JSON.encode!(Application.fetch_env!(:glitch, :turn_servers))}></div>
+  <div id="config" data-turn-servers={Application.fetch_env!(:glitch, :turn_servers)}></div>
   <header class="px-4 sm:px-6 lg:px-8 py-6 bg-violet-50 flex justify-between dark:bg-stone-900 dark:text-neutral-400 sticky top-0 z-10 gap-4">
     <div class="flex items-center gap-4 flex-1">
       <.link patch={~p"/"}>
