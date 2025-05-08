@@ -108,7 +108,16 @@ if config_env() == :prod do
         end
     end
 
-  turn_servers = System.get_env("GLITCH_TURN_SERVERS")
+  turn_servers =
+    case System.get_env("GLITCH_TURN_SERVERS") do
+      nil ->
+        nil
+
+      servers ->
+        # check JSON validity
+        JSON.decode!(servers)
+        servers
+    end
 
   config :glitch,
     streamer_username: streamer_username,

@@ -39,7 +39,8 @@ Hooks.MessageBodyHook = MessageBodyHook;
 Hooks.TooltipHook = TooltipHook;
 
 config = document.getElementById("config").dataset
-const iceServers = JSON.parse(config.turnServers);
+const defaultIceServers = [{ urls: "stun:stun.l.google.com:19302" }]
+const iceServers = config.turnServers != undefined ? defaultIceServers.concat(JSON.parse(config.turnServers)) : defaultIceServers;
 Hooks.Publisher = createPublisherHook(iceServers);
 Hooks.Player = createPlayerHook(iceServers);
 
