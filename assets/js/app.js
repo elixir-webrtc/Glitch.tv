@@ -40,7 +40,7 @@ Hooks.TooltipHook = TooltipHook;
 
 config = document.getElementById("config").dataset
 const defaultIceServers = [{ urls: "stun:stun.l.google.com:19302" }]
-const iceServers = config.turnServers != undefined ? defaultIceServers.concat(JSON.parse(config.turnServers)) : defaultIceServers;
+const iceServers = config.iceServers != undefined ? defaultIceServers.concat(JSON.parse(config.iceServers)) : defaultIceServers;
 Hooks.Publisher = createPublisherHook(iceServers);
 Hooks.Player = createPlayerHook(iceServers);
 

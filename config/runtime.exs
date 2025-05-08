@@ -108,8 +108,8 @@ if config_env() == :prod do
         end
     end
 
-  turn_servers =
-    case System.get_env("GLITCH_TURN_SERVERS") do
+  ice_servers =
+    case System.get_env("GLITCH_ICE_SERVERS") do
       nil ->
         nil
 
@@ -127,7 +127,7 @@ if config_env() == :prod do
     enable_elixirconf_links: enable_elixirconf_links,
     elixirconf_day: elixirconf_day,
     slow_mode_delay_s: slow_mode_delay_s,
-    turn_servers: turn_servers
+    ice_servers: ice_servers
 
   # ## SSL Support
   #

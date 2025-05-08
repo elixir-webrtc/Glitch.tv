@@ -85,4 +85,4 @@ config :glitch,
   enable_elixirconf_links: true,
   elixirconf_day: "day1",
   slow_mode_delay_s: 1,
-  turn_servers: nil
+  ice_servers: nil
