@@ -40,9 +40,12 @@ Hooks.TooltipHook = TooltipHook;
 Hooks.ChatHook = ChatHook;
 Hooks.ChatHook2 = ChatHook2;
 
-config = document.getElementById("config").dataset
-const defaultIceServers = [{ urls: "stun:stun.l.google.com:19302" }]
-const iceServers = config.iceServers != undefined ? defaultIceServers.concat(JSON.parse(config.iceServers)) : defaultIceServers;
+const config = document.getElementById("config").dataset;
+const defaultIceServers = [{ urls: "stun:stun.l.google.com:19302" }];
+const iceServers =
+  config.iceServers != undefined
+    ? defaultIceServers.concat(JSON.parse(config.iceServers))
+    : defaultIceServers;
 Hooks.Publisher = createPublisherHook(iceServers);
 Hooks.Player = createPlayerHook(iceServers);
 
@@ -81,4 +84,3 @@ if (
 } else {
   document.documentElement.classList.remove("dark");
 }
-

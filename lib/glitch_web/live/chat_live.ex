@@ -17,7 +17,9 @@ defmodule GlitchWeb.ChatLive do
   @impl true
   def render(%{role: "user"} = assigns) do
     ~H"""
-    {render_chat2(assigns)}
+    <div class="h-full *:h-full">
+      {render_chat2(assigns)}
+    </div>
     """
   end
 
@@ -250,7 +252,13 @@ defmodule GlitchWeb.ChatLive do
 
   def render_chat2(assigns) do
     ~H"""
-    <div id="glitch_chat2" phx-hook="ChatHook2"></div>
+    <div
+      id="glitch_chat2"
+      phx-hook="ChatHook2"
+      data-messages={Jason.encode!(@messages)}
+      phx-update="ignore"
+    >
+    </div>
     """
   end
 
@@ -338,16 +346,20 @@ defmodule GlitchWeb.ChatLive do
   def handle_info({:new_msg, msg}, socket) do
     messages = socket.assigns.messages ++ [msg]
 
-    socket = push_event(socket, "new-message", %{})
+    socket =
+      socket
+      |> push_event("new-message", msg)
+      |> assign(:messages, messages)
 
-    {:noreply, assign(socket, :messages, messages)}
+    {:noreply, socket}
   end
 
+  @impl true
   def handle_info({:msg_flagged, flagged_message_id}, socket) do
     messages =
       socket.assigns.messages
       |> Enum.map(fn message ->
-        if to_string(message.id) == flagged_message_id do
+        if message.id == flagged_message_id do
           Map.put(message, :flagged, true)
         else
           message
@@ -356,6 +368,7 @@ defmodule GlitchWeb.ChatLive do
 
     socket =
       socket
+      |> push_event("flagged-message", %{"id" => flagged_message_id})
       |> assign(:messages, messages)
 
     {:noreply, socket}
@@ -461,7 +474,7 @@ defmodule GlitchWeb.ChatLive do
     {:noreply, assign(socket, msg_body: body)}
   end
 
-  def handle_event("submit-form", %{"body" => body}, socket) do
+  def handle_event("submit-form", %{"body" => body, "author" => author}, socket) do
     role = socket.assigns.role
     is_highlight_slow_mode = socket.assigns.highlight_slow_mode
 
@@ -473,15 +486,19 @@ defmodule GlitchWeb.ChatLive do
 
     cond do
       message_length > 0 && (role == "streamer" || time_elapsed >= slow_mode_delay) ->
-        send_message(body, socket.assigns.author)
+        msg = send_message(body, author)
 
-        {:noreply, assign(socket, msg_body: nil, last_msg_timestamp: now)}
+        {
+          :reply,
+          %{"action" => "done", "message" => msg},
+          assign(socket, msg_body: nil, last_msg_timestamp: now)
+        }
 
       is_highlight_slow_mode ->
-        {:noreply, socket}
+        {:reply, %{"action" => "delayed", "delay" => slow_mode_delay - time_elapsed}, socket}
 
       time_elapsed >= slow_mode_delay ->
-        {:noreply, socket}
+        {:reply, %{"action" => "delayed", "delay" => slow_mode_delay - time_elapsed}, socket}
 
       true ->
         Process.send_after(
@@ -490,7 +507,11 @@ defmodule GlitchWeb.ChatLive do
           slow_mode_delay - time_elapsed
         )
 
-        {:noreply, assign(socket, highlight_slow_mode: true)}
+        {
+          :reply,
+          %{"action" => "delayed", "delay" => slow_mode_delay - time_elapsed},
+          assign(socket, highlight_slow_mode: true)
+        }
     end
   end
 
@@ -502,7 +523,7 @@ defmodule GlitchWeb.ChatLive do
     messages =
       socket.assigns.messages
       |> Enum.map(fn message ->
-        if to_string(message.id) == flagged_message_id do
+        if message.id == flagged_message_id do
           {:ok, _} = Messages.update_message(message, %{flagged: true})
 
           Map.put(message, :flagged, true)
@@ -537,5 +558,7 @@ defmodule GlitchWeb.ChatLive do
     {:ok, msg} = Messages.create_message(message_attr)
 
     Phoenix.PubSub.broadcast(Glitch.PubSub, "chatroom", {:new_msg, msg})
+
+    msg
   end
 end

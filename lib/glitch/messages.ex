@@ -24,7 +24,7 @@ defmodule Glitch.Messages do
   def list_last_50_messages do
     inner_query =
       from m in Message,
-        where: m.inserted_at >= ^DateTime.add(DateTime.utc_now(), -15, :minute),
+        where: m.inserted_at >= ^DateTime.add(DateTime.utc_now(), -15, :hour),
         order_by: [desc: m.inserted_at],
         limit: 50
 

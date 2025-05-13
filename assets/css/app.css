@@ -2,7 +2,7 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 
 /* This file is for your main application CSS */
 
@@ -46,7 +46,7 @@ emoji-picker {
 }
 
 .glitch-input-primary {
-    @apply rounded-lg border border-indigo-200 disabled:bg-neutral-100 disabled:placeholder-neutral-300 text-sm flex-1 dark:bg-zinc-800 dark:disabled:bg-zinc-800 dark:disabled:placeholder-zinc-700 dark:border-zinc-800 dark:text-neutral-400;
+    @apply rounded-lg border border-indigo-200 disabled:bg-neutral-100 disabled:placeholder-neutral-300 read-only:bg-neutral-100 read-only:placeholder-neutral-300 read-only:pointer-events-none read-only:border-indigo-200 read-only:focus:ring-0 text-sm flex-1 dark:bg-zinc-800 dark:disabled:bg-zinc-800 dark:disabled:placeholder-zinc-700 dark:border-zinc-800 dark:text-neutral-400;
 }
 
 .glitch-button-primary {
