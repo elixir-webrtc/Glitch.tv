@@ -17,7 +17,7 @@ defmodule GlitchWeb.StreamViewerLive do
       @chat_visible && "lg:grid-cols-[1fr_400px]",
       !@chat_visible && "lg:grid-cols-1"
     ]}>
-      <div class="flex flex-col gap-4 justify-stretch w-full h-full overflow-y-auto">
+      <div class="flex flex-col gap-4 justify-stretch w-full h-full overflow-y-auto pb-8">
         <div class={[
           "relative grid grid-cols-1 grid-rows-1",
           @chat_visible && "lg:grid-rows-[70vh]",
