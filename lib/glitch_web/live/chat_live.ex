@@ -134,7 +134,7 @@ defmodule GlitchWeb.ChatLive do
             </div>
           </div>
           <div class="dark:text-neutral-400 break-all glitch-markdown">
-            {raw(GlitchWeb.Utils.to_html(msg.body))}
+            {raw(GlitchWeb.Utils.to_html_chat(msg.body))}
           </div>
           <div class={[
             "hidden gap-4 items-center *:flex-1 mt-4",
@@ -279,7 +279,7 @@ defmodule GlitchWeb.ChatLive do
             </p>
           </div>
           <div class="dark:text-neutral-400 break-all glitch-markdown">
-            {raw(GlitchWeb.Utils.to_html(msg.body))}
+            {raw(GlitchWeb.Utils.to_html_chat(msg.body))}
           </div>
           <div class="flex gap-4 items-center *:flex-1 mt-4">
             <button

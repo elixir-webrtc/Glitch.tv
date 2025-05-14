@@ -4,11 +4,19 @@ defmodule GlitchWeb.Utils do
   """
   alias GlitchWeb.HtmlSanitizer
 
-  def to_html(markdown) do
+  def to_html_chat(markdown) do
     (markdown || "")
     |> String.trim()
     |> Earmark.as_html!(breaks: true)
-    |> HtmlSanitizer.sanitize_html()
+    |> HtmlSanitizer.sanitize_html_chat()
+  end
+
+  def to_html_description(markdown) do
+    (markdown || "")
+    |> String.trim()
+    |> Earmark.as_html!(breaks: true)
+    |> HtmlSanitizer.sanitize_html_description()
+    |> transform_html()
   end
 
   def to_text(markdown) do
@@ -16,5 +24,20 @@ defmodule GlitchWeb.Utils do
     |> Earmark.as_html!(breaks: true)
     |> HtmlSanitizeEx.strip_tags()
     |> String.trim()
+  end
+
+  defp transform_html(raw_html) do
+    case Floki.parse_document(raw_html) do
+      {:ok, document} ->
+        document
+        |> Floki.traverse_and_update(fn
+          {"a", attrs, children} -> {"a", attrs ++ [{"target", "_blank"}], children}
+          other -> other
+        end)
+        |> Floki.raw_html()
+
+      {:error, _message} ->
+        raw_html
+    end
   end
 end
