@@ -115,7 +115,7 @@ if config_env() == :prod do
 
       servers ->
         # check JSON validity
-        JSON.decode!(servers)
+        Jason.decode(servers)
         servers
     end
 
