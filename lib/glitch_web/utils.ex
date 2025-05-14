@@ -4,11 +4,18 @@ defmodule GlitchWeb.Utils do
   """
   alias GlitchWeb.HtmlSanitizer
 
-  def to_html(markdown) do
+  def to_html_chat(markdown) do
     (markdown || "")
     |> String.trim()
     |> Earmark.as_html!(breaks: true)
-    |> HtmlSanitizer.sanitize_html()
+    |> HtmlSanitizer.sanitize_html_chat()
+  end
+
+  def to_html_description(markdown) do
+    (markdown || "")
+    |> String.trim()
+    |> Earmark.as_html!(breaks: true)
+    |> HtmlSanitizer.sanitize_html_description()
   end
 
   def to_text(markdown) do

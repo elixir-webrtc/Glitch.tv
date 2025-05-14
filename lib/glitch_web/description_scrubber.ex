@@ -1,4 +1,4 @@
-defmodule GlitchWeb.Scrubber do
+defmodule GlitchWeb.DescriptionScrubber do
   @moduledoc """
   Configuration of html scrubber.
   """
@@ -9,6 +9,7 @@ defmodule GlitchWeb.Scrubber do
 
   Meta.strip_comments()
 
+  Meta.allow_tag_with_these_attributes("a", ["href"])
   Meta.allow_tag_with_these_attributes("b", [])
   Meta.allow_tag_with_these_attributes("blockquote", [])
   Meta.allow_tag_with_these_attributes("br", [])

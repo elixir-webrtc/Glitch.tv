@@ -146,8 +146,8 @@ defmodule GlitchWeb.StreamViewerLive do
   def handle_info({:changed, {title, description}}, socket) do
     metadata = %{
       socket.assigns.stream_metadata
-      | title: Utils.to_html(title),
-        description: Utils.to_html(description)
+      | title: Utils.to_html_description(title),
+        description: Utils.to_html_description(description)
     }
 
     {:noreply, assign(socket, :stream_metadata, metadata)}
@@ -203,8 +203,8 @@ defmodule GlitchWeb.StreamViewerLive do
   defp metadata_to_html(metadata) do
     %{
       metadata
-      | title: Utils.to_html(metadata.title),
-        description: Utils.to_html(metadata.description)
+      | title: Utils.to_html_description(metadata.title),
+        description: Utils.to_html_description(metadata.description)
     }
   end
 end
