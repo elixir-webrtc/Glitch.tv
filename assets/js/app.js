@@ -34,7 +34,9 @@ Hooks.DarkModeToggleHook = DarkModeToggleHook;
 Hooks.TooltipHook = TooltipHook;
 Hooks.ChatHook = ChatHook;
 
-const iceServers = [{ urls: "stun:stun.l.google.com:19302" }];
+config = document.getElementById("config").dataset
+const defaultIceServers = [{ urls: "stun:stun.l.google.com:19302" }]
+const iceServers = config.iceServers != undefined ? defaultIceServers.concat(JSON.parse(config.iceServers)) : defaultIceServers;
 Hooks.Publisher = createPublisherHook(iceServers);
 Hooks.Player = createPlayerHook(iceServers);
 
@@ -73,3 +75,4 @@ if (
 } else {
   document.documentElement.classList.remove("dark");
 }
+

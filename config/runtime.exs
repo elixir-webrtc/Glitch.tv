@@ -108,6 +108,17 @@ if config_env() == :prod do
         end
     end
 
+  ice_servers =
+    case System.get_env("GLITCH_ICE_SERVERS") do
+      nil ->
+        nil
+
+      servers ->
+        # check JSON validity
+        JSON.decode!(servers)
+        servers
+    end
+
   config :glitch,
     streamer_username: streamer_username,
     streamer_password: streamer_password,
@@ -115,7 +126,8 @@ if config_env() == :prod do
     enable_share_button: enable_share_button,
     enable_elixirconf_links: enable_elixirconf_links,
     elixirconf_day: elixirconf_day,
-    slow_mode_delay_s: slow_mode_delay_s
+    slow_mode_delay_s: slow_mode_delay_s,
+    ice_servers: ice_servers
 
   # ## SSL Support
   #

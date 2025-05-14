@@ -49,6 +49,7 @@ In development mode the environment variables are specified in `config/dev.exs`,
 - `GLITCH_STREAMER_PASSWORD` - password for streamer panel in prod mode,
 - `GLITCH_ENABLE_RECORDINGS` - flag for enabling recordings, defaults to false
 - `GLITCH_SLOW_MODE_DELAY_S` - chat slow mode's delay in seconds, defaults to 1
+- `GLITCH_ICE_SERVERS` - ice servers used by JS clients. Stringified JSON array as in [`RTCPeerConnection()`](https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/RTCPeerConnection#iceservers) `iceServers` argument eg. `"[{\"urls\": [\"stun:0.0.0.0:1234\"]}, {\"urls\": [\"turn:0.0.0.0:3478?transport=tcp\", \"turn:0.0.0.0:3478?transport=udp\"], username: \"username\", credential: \"password\"}]"`
 
 ---
 
