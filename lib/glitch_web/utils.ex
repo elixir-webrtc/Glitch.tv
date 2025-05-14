@@ -1,4 +1,7 @@
 defmodule GlitchWeb.Utils do
+  @moduledoc """
+  Module for utilities used across whole project.
+  """
   alias GlitchWeb.HtmlSanitizer
 
   def to_html(markdown) do

@@ -1,4 +1,6 @@
 defmodule Glitch.Recordings.Recording do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 

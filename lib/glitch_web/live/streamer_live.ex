@@ -94,7 +94,6 @@ defmodule GlitchWeb.StreamerLive do
         on_recording_finished: &on_recording_finished/2,
         recordings?: Glitch.FeatureFlags.recordings_enabled(),
         ice_servers: [%{urls: "stun:stun.l.google.com:19302"}],
-        # ice_ip_filter: Application.get_env(:live_broadcaster, :ice_ip_filter),
         video_codecs: @video_codecs,
         audio_codecs: @audio_codecs
       )
@@ -149,9 +148,7 @@ defmodule GlitchWeb.StreamerLive do
     Glitch.StreamService.stream_ended()
   end
 
-  # Gets called before on_disconnected, so everything is OK
   defp on_recording_finished("publisher", {:ok, manifest, nil}) do
-    # XXX terrible name
     metadata = Glitch.StreamService.get_stream_metadata()
     Glitch.RecordingsService.recording_complete(manifest, metadata)
   end

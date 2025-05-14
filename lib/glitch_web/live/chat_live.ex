@@ -355,10 +355,10 @@ defmodule GlitchWeb.ChatLive do
     {:noreply, socket}
   end
 
-  def handle_info({:delete_msg, messageId}, socket) do
+  def handle_info({:delete_msg, message_id}, socket) do
     messages =
       socket.assigns.messages
-      |> Enum.filter(fn message -> message.id != String.to_integer(messageId) end)
+      |> Enum.filter(fn message -> message.id != String.to_integer(message_id) end)
 
     socket =
       socket
@@ -367,11 +367,11 @@ defmodule GlitchWeb.ChatLive do
     {:noreply, socket}
   end
 
-  def handle_info({:ignore_flag, messageId}, socket) do
+  def handle_info({:ignore_flag, message_id}, socket) do
     messages =
       socket.assigns.messages
       |> Enum.map(fn message ->
-        if message.id == String.to_integer(messageId) do
+        if message.id == String.to_integer(message_id) do
           Map.put(message, :flagged, false)
         else
           message

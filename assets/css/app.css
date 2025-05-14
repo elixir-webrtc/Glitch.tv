@@ -7,7 +7,6 @@
 /* This file is for your main application CSS */
 
 /* https://stackoverflow.com/questions/77936984/scrollbar-with-white-background */
-
 *::-webkit-scrollbar {
     width: 4px;
 }
@@ -25,8 +24,6 @@
     background-color: rgb(255, 255, 255, 0.5);
     border-radius: 4px;
 }
-
-/*  */
 
 emoji-picker {
     --border-radius: 8px;
@@ -81,7 +78,6 @@ emoji-picker {
     @apply border-l-4 border-zinc-300 pl-2 dark:border-zinc-700;
 }
 
-/* not sure about that dark background color in code blocks */
 .glitch-markdown code,
 #stream-viewer-title code {
     @apply border-[1px] rounded-md px-[2px] bg-zinc-50 border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900;
