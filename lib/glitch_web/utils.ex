@@ -16,6 +16,7 @@ defmodule GlitchWeb.Utils do
     |> String.trim()
     |> Earmark.as_html!(breaks: true)
     |> HtmlSanitizer.sanitize_html_description()
+    |> transform_html()
   end
 
   def to_text(markdown) do
@@ -23,5 +24,16 @@ defmodule GlitchWeb.Utils do
     |> Earmark.as_html!(breaks: true)
     |> HtmlSanitizeEx.strip_tags()
     |> String.trim()
+  end
+
+  defp transform_html(raw_html) do
+    {:ok, document} = Floki.parse_document(raw_html)
+
+    document
+    |> Floki.traverse_and_update(fn
+      {"a", attrs, children} -> {"a", attrs ++ [{"target", "_blank"}], children}
+      other -> other
+    end)
+    |> Floki.raw_html()
   end
 end
