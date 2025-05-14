@@ -27,13 +27,17 @@ defmodule GlitchWeb.Utils do
   end
 
   defp transform_html(raw_html) do
-    {:ok, document} = Floki.parse_document(raw_html)
+    case Floki.parse_document(raw_html) do
+      {:ok, document} ->
+        document
+        |> Floki.traverse_and_update(fn
+          {"a", attrs, children} -> {"a", attrs ++ [{"target", "_blank"}], children}
+          other -> other
+        end)
+        |> Floki.raw_html()
 
-    document
-    |> Floki.traverse_and_update(fn
-      {"a", attrs, children} -> {"a", attrs ++ [{"target", "_blank"}], children}
-      other -> other
-    end)
-    |> Floki.raw_html()
+      {:error, _message} ->
+        raw_html
+    end
   end
 end
