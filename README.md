@@ -14,11 +14,11 @@
 
 1. Clone the repository
    ```sh
-   git clone https://github.com/elixir-webrtc/elixir-conf-platform.git
+   git clone https://github.com/elixir-webrtc/Glitch.tv.git
    ```
 2. Install dependencies
    ```sh
-   cd elixir-conf-platform
+   cd Glitch.tv
    mix deps.get
    ```
 ### Development mode
