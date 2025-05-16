@@ -323,7 +323,11 @@ defmodule GlitchWeb.ChatLive do
       subscribe()
     end
 
-    messages = Messages.list_last_50_messages()
+    messages =
+      Messages.list_last_50_messages()
+      |> Enum.map(fn msg ->
+        Map.put(msg, :body, GlitchWeb.Utils.to_html_chat(msg.body))
+      end)
 
     socket =
       socket
@@ -556,6 +560,8 @@ defmodule GlitchWeb.ChatLive do
     }
 
     {:ok, msg} = Messages.create_message(message_attr)
+
+    msg = Map.put(msg, :body, GlitchWeb.Utils.to_html_chat(msg.body))
 
     Phoenix.PubSub.broadcast(Glitch.PubSub, "chatroom", {:new_msg, msg})
 

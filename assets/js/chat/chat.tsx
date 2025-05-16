@@ -209,9 +209,10 @@ export function Chat({
                 </button>
               </Tooltip>
             </div>
-            <div class="dark:text-neutral-400 break-all glitch-markdown">
-              {message.body}
-            </div>
+            <div
+              class="dark:text-neutral-400 break-all glitch-markdown"
+              dangerouslySetInnerHTML={{ __html: message.body }}
+            ></div>
           </li>
         ))}
       </ul>
