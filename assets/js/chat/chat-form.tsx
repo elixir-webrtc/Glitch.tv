@@ -24,7 +24,9 @@ export default function ChatForm({
   const [isSlowModeHighlighted, setIsSlowModeHighlighted] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [textAreaMessage, setTextAreaMessage] = useState("");
-  const emojiPickerRef = useRef<HTMLFormElement>(null);
+  const lightEmojiPickerRef = useRef<HTMLFormElement>(null);
+  const emojiPickerContainerRef = useRef<HTMLDivElement>(null);
+  const darkEmojiPickerRef = useRef<HTMLButtonElement>(null);
   const emojiButtonRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const [joined, setIsJoined] = useState(false);
@@ -32,17 +34,23 @@ export default function ChatForm({
   const delayRef = useRef(0);
 
   useEffect(() => {
-    emojiPickerRef.current?.addEventListener("emoji-click", (e) => {
-      // @ts-ignore
-      setTextAreaMessage((prev) => prev + e.detail.unicode);
-      setShowEmojiPicker(false);
-    });
+    for (const emojiPickerContainerRef of [
+      lightEmojiPickerRef,
+      darkEmojiPickerRef,
+    ]) {
+      emojiPickerContainerRef.current?.addEventListener("emoji-click", (e) => {
+        // @ts-ignore
+        setTextAreaMessage((prev) => prev + e.detail.unicode);
+        setShowEmojiPicker(false);
+      });
+    }
 
     const documentClickCallback = (event: PointerEvent) => {
       if (
-        emojiPickerRef.current &&
+        lightEmojiPickerRef.current &&
         emojiButtonRef.current &&
-        !emojiPickerRef.current.contains(event.target as Element) &&
+        emojiPickerContainerRef.current &&
+        !emojiPickerContainerRef.current.contains(event.target as Element) &&
         !emojiButtonRef.current.contains(event.target as Element)
       ) {
         setShowEmojiPicker((prev) => {
@@ -175,8 +183,16 @@ export default function ChatForm({
               class={classNames("absolute bottom-[calc(100%+4px)] right-0", {
                 hidden: !showEmojiPicker,
               })}
+              ref={emojiPickerContainerRef}
             >
-              {h("emoji-picker", { ref: emojiPickerRef })}
+              {h("emoji-picker", {
+                ref: lightEmojiPickerRef,
+                class: "dark:hidden",
+              })}
+              {h("emoji-picker", {
+                ref: darkEmojiPickerRef,
+                class: "dark hidden dark:block",
+              })}
             </div>
           </div>
         </div>
