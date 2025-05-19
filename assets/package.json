@@ -1,0 +1,19 @@
+{
+  "name": "glitch.tv",
+  "version": "1.0.0",
+  "main": "",
+  "scripts": {
+    "test": ""
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "classnames": "^2.5.1",
+    "emoji-picker-element": "^1.26.3",
+    "preact": "^10.26.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

@@ -7,7 +7,8 @@ const path = require("path");
 
 module.exports = {
   content: [
-    "./js/**/*.js",
+    "./js/**/*.ts",
+    "./js/**/*.tsx",
     "../lib/glitch_web.ex",
     "../lib/glitch_web/**/*.*ex",
     "../deps/live_ex_webrtc/**/*.*ex",
@@ -53,7 +54,7 @@ module.exports = {
     // Embeds Heroicons (https://heroicons.com) into your app.css bundle
     // See your `CoreComponents.icon/1` for more information.
     //
-    plugin(function({ matchComponents, theme }) {
+    plugin(function ({ matchComponents, theme }) {
       let iconsDir = path.join(__dirname, "../deps/heroicons/optimized");
       let values = {};
       let icons = [

@@ -1,52 +1,55 @@
+import { render, h } from "preact";
+import { Chat } from "./chat/chat";
+
 /**
  * @type {import("phoenix_live_view").ViewHookInterface}
  */
 export default {
   mounted() {
-    const emojiPickers = this.el.querySelectorAll("emoji-picker");
-    const messageBodyTextBox = this.el.querySelector("#message_body");
-    const messageBoxList = this.el.querySelector("#message_box");
+    const sendMessage = (message, callback) => {
+      this.pushEvent(
+        "submit-form",
+        {
+          author: message.author,
+          body: message.body,
+        },
+        callback
+      );
+    };
 
-    messageBoxList.scrollTo(0, messageBoxList.scrollHeight);
+    const flagMessage = (messageId) => {
+      this.pushEvent("flag-message", { "message-id": messageId });
+    };
 
-    this.handleEvent("new-message", () => {
-      if (
-        messageBoxList.scrollTop + messageBoxList.clientHeight ===
-          messageBoxList.scrollHeight -
-            messageBoxList.lastElementChild.clientHeight ||
-        messageBoxList.clientHeight >
-          messageBoxList.scrollHeight -
-            messageBoxList.lastElementChild.clientHeight
-      ) {
-        messageBoxList.scrollTo(0, messageBoxList.scrollHeight);
-      }
-    });
+    const deleteMessage = (messageId) => {
+      this.pushEvent("delete_message", { "message-id": messageId });
+    };
 
-    for (const emojiPicker of emojiPickers) {
-      emojiPicker.addEventListener("emoji-click", (event) => {
-        this.pushEvent("append_emoji", { emoji: event.detail.unicode });
-      });
-    }
+    const data = JSON.parse(this.el.dataset.settings);
 
-    messageBodyTextBox.addEventListener("keydown", (e) => {
-      if (e.key !== "Enter" || e.shiftKey) {
-        return;
-      }
+    const props = {
+      messages: data.messages,
+      slowModeSec: data.slowModeSec,
+      maxBodyLength: data.maxBodyLength,
+      maxAuthorLength: data.maxAuthorLength,
+      role: data.role,
+      sendMessage,
+      messageSentListener: (listener) => {
+        this.handleEvent("new-message", listener);
+      },
+      messageFlaggedListener: (listener) => {
+        this.handleEvent("flagged-message", listener);
+      },
+      messageUnflaggedListener: (listener) => {
+        this.handleEvent("unflagged-message", listener);
+      },
+      messageDeletedListener: (listener) => {
+        this.handleEvent("deleted-message", listener);
+      },
+      flagMessage,
+      deleteMessage,
+    };
 
-      this.pushEvent("submit-form", { body: e.target.value });
-      if (this.el.dataset.slowMode === "false") {
-        e.target.value = "";
-      }
-
-      e.preventDefault();
-    });
-
-    messageBoxList.addEventListener("scroll", () => {
-      const tooltips = this.el.querySelectorAll(".tooltip-content");
-
-      for (const tooltip of tooltips) {
-        tooltip.style.display = "none";
-      }
-    });
+    render(h(Chat, props), this.el);
   },
 };

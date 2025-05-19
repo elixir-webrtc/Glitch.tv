@@ -26,6 +26,10 @@ import ShareButtonHook from "./ShareButtonHook";
 import DarkModeToggleHook from "./DarkModeToggleHook";
 import TooltipHook from "./TooltipHook";
 import ChatHook from "./ChatHook";
+import * as preact from "preact";
+
+window.React = preact;
+window.ReactDOM = preact;
 
 let Hooks = {};
 
@@ -34,9 +38,12 @@ Hooks.DarkModeToggleHook = DarkModeToggleHook;
 Hooks.TooltipHook = TooltipHook;
 Hooks.ChatHook = ChatHook;
 
-config = document.getElementById("config").dataset
-const defaultIceServers = [{ urls: "stun:stun.l.google.com:19302" }]
-const iceServers = config.iceServers != undefined ? defaultIceServers.concat(JSON.parse(config.iceServers)) : defaultIceServers;
+const config = document.getElementById("config").dataset;
+const defaultIceServers = [{ urls: "stun:stun.l.google.com:19302" }];
+const iceServers =
+  config.iceServers != undefined
+    ? defaultIceServers.concat(JSON.parse(config.iceServers))
+    : defaultIceServers;
 Hooks.Publisher = createPublisherHook(iceServers);
 Hooks.Player = createPlayerHook(iceServers);
 
@@ -75,4 +82,3 @@ if (
 } else {
   document.documentElement.classList.remove("dark");
 }
-
