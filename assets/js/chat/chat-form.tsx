@@ -187,7 +187,7 @@ export default function ChatForm({
             >
               {h("emoji-picker", {
                 ref: lightEmojiPickerRef,
-                class: "dark:hidden",
+                class: "light dark:hidden",
               })}
               {h("emoji-picker", {
                 ref: darkEmojiPickerRef,
