@@ -191,6 +191,12 @@ defmodule GlitchWeb.ChatLive do
   end
 
   def handle_info({:delete_msg, message_id}, socket) do
+    message_id =
+      cond do
+        is_integer(message_id) -> message_id
+        true -> String.to_integer(message_id)
+      end
+
     messages =
       socket.assigns.messages
       |> Enum.filter(fn message -> message.id != message_id end)
@@ -244,10 +250,16 @@ defmodule GlitchWeb.ChatLive do
     {:noreply, socket}
   end
 
-  def handle_event("delete_message", %{"message-id" => messageId}, socket) do
-    {:ok, _} = Messages.delete_message(%Message{id: messageId})
+  def handle_event("delete_message", %{"message-id" => message_id}, socket) do
+    message_id =
+      cond do
+        is_integer(message_id) -> message_id
+        true -> String.to_integer(message_id)
+      end
 
-    Phoenix.PubSub.broadcast(Glitch.PubSub, "chatroom", {:delete_msg, messageId})
+    {:ok, _} = Messages.delete_message(%Message{id: message_id})
+
+    Phoenix.PubSub.broadcast(Glitch.PubSub, "chatroom", {:delete_msg, message_id})
 
     {:noreply, socket}
   end
