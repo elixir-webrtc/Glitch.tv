@@ -57,7 +57,6 @@ export default function ChatList({
             return message;
           }
 
-          console.log("UNFLAG");
           return { ...message, flagged: false };
         })
       );
