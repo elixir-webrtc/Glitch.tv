@@ -50,7 +50,7 @@ emoji-picker {
 }
 
 .glitch-button-primary {
-    @apply bg-indigo-800 disabled:bg-indigo-500 disabled:text-indigo-300 text-white px-12 py-2 rounded-lg text-sm font-medium;
+    @apply bg-indigo-800 disabled:bg-indigo-500 disabled:text-indigo-300 text-white px-12 py-2 rounded-lg text-sm font-medium cursor-pointer;
 }
 
 .glitch-button-browser-all {

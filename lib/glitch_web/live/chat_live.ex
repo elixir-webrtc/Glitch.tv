@@ -18,7 +18,7 @@ defmodule GlitchWeb.ChatLive do
   def render(%{role: "user"} = assigns) do
     ~H"""
     <div class="h-full *:h-full">
-      {render_chat2(assigns)}
+      {render_chat(assigns)}
     </div>
     """
   end
@@ -54,208 +54,24 @@ defmodule GlitchWeb.ChatLive do
           </button>
         </li>
       </ul>
-      {render_chat(assigns)}
+      <div class={["flex-grow h-[0px] *:h-full", @current_tab != "chat" && "hidden"]}>
+        {render_chat(assigns)}
+      </div>
       {render_reported(assigns)}
     </div>
     """
   end
 
   def render_chat(assigns) do
+    assigns =
+      assigns
+      |> assign(:settings, build_settings(assigns))
+
     ~H"""
     <div
-      class={[
-        "justify-between flex-col",
-        @current_tab == "chat" && "flex",
-        @current_tab != "chat" && "hidden",
-        @role == "streamer" && "h-[0px] flex-grow",
-        @role == "user" && "h-full rounded-lg border border-indigo-200 dark:border-zinc-800"
-      ]}
       id="glitch_chat"
-      phx-hook="ChatHook2"
-      data-slow-mode={to_string(@highlight_slow_mode)}
-    >
-      <div
-        :if={@role == "user"}
-        class="py-4 px-8 border-b border-indigo-200 text-center dark:border-zinc-800 dark:text-neutral-400 hidden lg:block"
-      >
-        Chat
-      </div>
-      <div class={[
-        @role == "user" &&
-          "p-2 text-center text-xs border-b-[1px] border-indigo-200 dark:border-zinc-800 dark:text-neutral-400",
-        @role != "user" && "hidden"
-      ]}>
-        This is not an official ElixirConf EU chat, so if you have any questions for the speakers, please ask them under the SwapCard stream.
-      </div>
-      <ul class="overflow-y-auto flex-grow flex flex-col" id="message_box">
-        <li
-          :for={msg <- @messages}
-          id={"#{msg.id}-msg"}
-          class={[
-            "group flex flex-col gap-1 px-6 py-4 relative message_box__element",
-            msg.flagged && @role == "user" &&
-              "bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800",
-            !msg.flagged && "hover:bg-stone-100 dark:hover:bg-stone-800"
-          ]}
-        >
-          <div class="flex gap-4 justify-between items-center">
-            <div class="flex gap-4 items-center">
-              <p class="text-indigo-800 text-sm text-medium dark:text-indigo-400">
-                {msg.author}
-              </p>
-              <.tooltip
-                tooltip={
-                  Calendar.strftime(
-                    DateTime.shift_zone!(msg.inserted_at, @timezone),
-                    "%d %b %Y %H:%M:%S"
-                  )
-                }
-                id={"#{msg.id}-time"}
-              >
-                <p class="text-xs text-neutral-500 m-0">
-                  {Calendar.strftime(DateTime.shift_zone!(msg.inserted_at, @timezone), "%H:%M")}
-                </p>
-              </.tooltip>
-            </div>
-            <div class={[msg.flagged && "opacity-0"]}>
-              <.tooltip tooltip="Report" id={"#{msg.id}-report"}>
-                <button
-                  class={[
-                    "rounded-full flex items-center justify-center p-2",
-                    msg.flagged && "hover:bg-red-300",
-                    !msg.flagged && "hover:bg-stone-200 dark:hover:bg-stone-700",
-                    @role == "streamer" && "hidden"
-                  ]}
-                  phx-click="flag-message"
-                  phx-value-message-id={msg.id}
-                  disabled={msg.flagged}
-                >
-                  <.icon name="hero-flag" class="w-4 h-4 text-red-400" />
-                </button>
-              </.tooltip>
-            </div>
-          </div>
-          <div class="dark:text-neutral-400 break-all glitch-markdown">
-            {raw(GlitchWeb.Utils.to_html_chat(msg.body))}
-          </div>
-          <div class={[
-            "hidden gap-4 items-center *:flex-1 mt-4",
-            @role == "streamer" && "group-hover:flex"
-          ]}>
-            <button
-              class="bg-red-600 text-white rounded-lg py-1"
-              phx-click="delete_message"
-              phx-value-message-id={msg.id}
-            >
-              Delete
-            </button>
-          </div>
-        </li>
-      </ul>
-      <form
-        phx-change="validate-form"
-        phx-submit="submit-form"
-        class="border-t border-indigo-200 p-6 dark:border-zinc-800"
-      >
-        <div class="flex items-end gap-2 relative mb-2">
-          <div class="flex flex-col relative w-full">
-            <div class="flex justify-between min-h-[16px] mt-[-14px] mb-[2px]">
-              <div class={[
-                @role == "streamer" && "hidden",
-                "text-xs",
-                @highlight_slow_mode && "text-rose-600",
-                !@highlight_slow_mode &&
-                  "text-neutral-400 dark:text-neutral-700"
-              ]}>
-                Slow Mode {@slow_mode_delay_s}s
-              </div>
-              <%!-- spacer to preserve layout with streamer role --%>
-              <div></div>
-              <div class={[
-                "text-xs text-neutral-400 dark:text-neutral-700",
-                String.length(@msg_body || "") < @max_msg_length - 50 && "hidden",
-                String.length(@msg_body || "") == @max_msg_length &&
-                  "text-rose-600 dark:text-rose-600"
-              ]}>
-                {String.length(@msg_body || "")}/{@max_msg_length}
-              </div>
-            </div>
-            <textarea
-              class="glitch-input-primary resize-none h-[96px] w-full dark:text-neutral-400"
-              placeholder="Your message"
-              maxlength={@max_msg_length}
-              name="body"
-              disabled={not @joined}
-              id="message_body"
-            >{@msg_body}</textarea>
-          </div>
-          <div class="relative">
-            <button
-              type="button"
-              class="border border-indigo-200 rounded-lg px-2 py-1 disabled:opacity-50 dark:text-neutral-400 dark:border-zinc-800 dark:bg-zinc-800"
-              phx-click="toggle-emoji-overlay"
-              disabled={not @joined}
-            >
-              <.icon name="hero-face-smile" />
-            </button>
-
-            <div
-              class={[
-                "absolute bottom-[calc(100%+4px)] right-0",
-                !@show_emoji_overlay && "hidden"
-              ]}
-              id="emoji-picker-container"
-              phx-click-away="hide-emoji-overlay"
-            >
-              <emoji-picker class="light dark:hidden"></emoji-picker>
-              <emoji-picker class="hidden dark:block dark"></emoji-picker>
-            </div>
-          </div>
-        </div>
-        <div class="flex flex-col sm:flex-row gap-2 mt-2">
-          <div class="flex flex-1 relative">
-            <input
-              class="glitch-input-primary px-4 py-2"
-              placeholder="Your nickname"
-              maxlength={@max_nickname_length}
-              name="author"
-              value={@author}
-              disabled={@joined}
-            />
-            <%= if not @joined do %>
-              <div class={[
-                "absolute bottom-[-18px] right-0 text-xs w-full text-neutral-400 dark:text-neutral-700",
-                String.length(@author || "") < @max_nickname_length - 5 && "hidden",
-                String.length(@author || "") == @max_nickname_length &&
-                  "text-rose-600 dark:text-rose-600"
-              ]}>
-                {String.length(@author || "")}/{@max_nickname_length}
-              </div>
-            <% end %>
-          </div>
-          <button
-            type="submit"
-            class="glitch-button-primary"
-            disabled={String.length(@author || "") == 0}
-          >
-            <%= if not @joined do %>
-              Join
-            <% else %>
-              Send
-            <% end %>
-          </button>
-        </div>
-      </form>
-    </div>
-    """
-  end
-
-  def render_chat2(assigns) do
-    ~H"""
-    <div
-      id="glitch_chat2"
-      phx-hook="ChatHook2"
-      data-messages={Jason.encode!(@messages)}
+      phx-hook="ChatHook"
+      data-settings={@settings}
       phx-update="ignore"
     >
     </div>
@@ -333,14 +149,10 @@ defmodule GlitchWeb.ChatLive do
       socket
       |> assign(:last_msg_timestamp, System.monotonic_time(:millisecond))
       |> assign(messages: messages)
-      |> assign(msg_body: nil, author: nil)
       |> assign(role: session["role"])
       |> assign(current_tab: "chat")
       |> assign(max_msg_length: 500, max_nickname_length: 25)
       |> assign(slow_mode_delay_s: Application.fetch_env!(:glitch, :slow_mode_delay_s))
-      |> assign(highlight_slow_mode: false)
-      |> assign(joined: false)
-      |> assign(show_emoji_overlay: false)
       |> assign(timezone: session["timezone"])
 
     {:ok, socket}
@@ -381,10 +193,11 @@ defmodule GlitchWeb.ChatLive do
   def handle_info({:delete_msg, message_id}, socket) do
     messages =
       socket.assigns.messages
-      |> Enum.filter(fn message -> message.id != String.to_integer(message_id) end)
+      |> Enum.filter(fn message -> message.id != message_id end)
 
     socket =
       socket
+      |> push_event("deleted-message", %{"id" => message_id})
       |> assign(:messages, messages)
 
     {:noreply, socket}
@@ -394,7 +207,7 @@ defmodule GlitchWeb.ChatLive do
     messages =
       socket.assigns.messages
       |> Enum.map(fn message ->
-        if message.id == String.to_integer(message_id) do
+        if message.id == message_id do
           Map.put(message, :flagged, false)
         else
           message
@@ -403,13 +216,10 @@ defmodule GlitchWeb.ChatLive do
 
     socket =
       socket
+      |> push_event("unflagged-message", %{"id" => message_id})
       |> assign(:messages, messages)
 
     {:noreply, socket}
-  end
-
-  def handle_info(:reset_slow_mode_highlight, socket) do
-    {:noreply, assign(socket, highlight_slow_mode: false)}
   end
 
   @impl true
@@ -424,19 +234,6 @@ defmodule GlitchWeb.ChatLive do
     socket =
       socket
       |> assign(msg_body: msg_body)
-      |> assign(show_emoji_overlay: false)
-
-    {:noreply, socket}
-  end
-
-  def handle_event("toggle-emoji-overlay", _, socket) do
-    socket = assign(socket, :show_emoji_overlay, !socket.assigns.show_emoji_overlay)
-
-    {:noreply, socket}
-  end
-
-  def handle_event("hide-emoji-overlay", _, socket) do
-    socket = assign(socket, :show_emoji_overlay, false)
 
     {:noreply, socket}
   end
@@ -448,7 +245,7 @@ defmodule GlitchWeb.ChatLive do
   end
 
   def handle_event("delete_message", %{"message-id" => messageId}, socket) do
-    {:ok, _} = Messages.delete_message(%Message{id: String.to_integer(messageId)})
+    {:ok, _} = Messages.delete_message(%Message{id: messageId})
 
     Phoenix.PubSub.broadcast(Glitch.PubSub, "chatroom", {:delete_msg, messageId})
 
@@ -456,10 +253,12 @@ defmodule GlitchWeb.ChatLive do
   end
 
   def handle_event("ignore_flag", %{"message-id" => messageId}, socket) do
+    messageId = String.to_integer(messageId)
+
     message =
       socket.assigns.messages
       |> Enum.find(fn message ->
-        message.id == String.to_integer(messageId)
+        message.id == messageId
       end)
 
     {:ok, _} =
@@ -470,17 +269,8 @@ defmodule GlitchWeb.ChatLive do
     {:noreply, socket}
   end
 
-  def handle_event("validate-form", %{"author" => author}, socket) do
-    {:noreply, assign(socket, author: author)}
-  end
-
-  def handle_event("validate-form", %{"body" => body}, socket) do
-    {:noreply, assign(socket, msg_body: body)}
-  end
-
   def handle_event("submit-form", %{"body" => body, "author" => author}, socket) do
     role = socket.assigns.role
-    is_highlight_slow_mode = socket.assigns.highlight_slow_mode
 
     now = System.monotonic_time(:millisecond)
     time_elapsed = now - socket.assigns.last_msg_timestamp
@@ -498,29 +288,16 @@ defmodule GlitchWeb.ChatLive do
           assign(socket, msg_body: nil, last_msg_timestamp: now)
         }
 
-      is_highlight_slow_mode ->
-        {:reply, %{"action" => "delayed", "delay" => slow_mode_delay - time_elapsed}, socket}
-
       time_elapsed >= slow_mode_delay ->
         {:reply, %{"action" => "delayed", "delay" => slow_mode_delay - time_elapsed}, socket}
 
       true ->
-        Process.send_after(
-          self(),
-          :reset_slow_mode_highlight,
-          slow_mode_delay - time_elapsed
-        )
-
         {
           :reply,
           %{"action" => "delayed", "delay" => slow_mode_delay - time_elapsed},
-          assign(socket, highlight_slow_mode: true)
+          socket
         }
     end
-  end
-
-  def handle_event("submit-form", %{"author" => _}, socket) do
-    {:noreply, assign(socket, joined: true)}
   end
 
   def handle_event("flag-message", %{"message-id" => flagged_message_id}, socket) do
@@ -566,5 +343,15 @@ defmodule GlitchWeb.ChatLive do
     Phoenix.PubSub.broadcast(Glitch.PubSub, "chatroom", {:new_msg, msg})
 
     msg
+  end
+
+  defp build_settings(assigns) do
+    Jason.encode!(%{
+      messages: assigns.messages,
+      slowModeSec: assigns.slow_mode_delay_s,
+      maxBodyLength: assigns.max_msg_length,
+      maxAuthorLength: assigns.max_nickname_length,
+      role: assigns.role
+    })
   end
 end
