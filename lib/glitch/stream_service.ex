@@ -30,27 +30,32 @@ defmodule Glitch.StreamService do
       title: nil,
       description: nil,
       started: nil,
-      timer_ref: nil
+      timer_ref: nil,
+      streamer_pid: nil
     }
 
     {:ok, state}
   end
 
   @impl true
-  def handle_call(:stream_started, _from, state) do
+  def handle_call(:stream_started, {pid, _}, state) do
     started = DateTime.utc_now()
     Phoenix.PubSub.broadcast(Glitch.PubSub, "stream_info:status", {:started, started})
     {:ok, timer_ref} = :timer.send_interval(60_000, self(), :tick)
 
-    state = %{state | streaming?: true, started: started, timer_ref: timer_ref}
+    state = %{state | streaming?: true, started: started, timer_ref: timer_ref, streamer_pid: pid}
     {:reply, :ok, state}
   end
 
-  def handle_call(:stream_ended, _from, state) do
-    state = %{state | streaming?: false, started: nil}
-    Phoenix.PubSub.broadcast(Glitch.PubSub, "stream_info:status", :finished)
-    :timer.cancel(state.timer_ref)
-    {:reply, :ok, state}
+  def handle_call(:stream_ended, {pid, _}, state) do
+    if pid != state.streamer_pid do
+      {:reply, :not_streaming, state}
+    else
+      state = %{state | streaming?: false, started: nil, streamer_pid: nil}
+      Phoenix.PubSub.broadcast(Glitch.PubSub, "stream_info:status", :finished)
+      :timer.cancel(state.timer_ref)
+      {:reply, :ok, state}
+    end
   end
 
   def handle_call(:get_stream_metadata, _from, state) do
