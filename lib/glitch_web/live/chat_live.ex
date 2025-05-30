@@ -78,13 +78,6 @@ defmodule GlitchWeb.ChatLive do
       >
         Chat
       </div>
-      <div class={[
-        @role == "user" &&
-          "p-2 text-center text-xs border-b-[1px] border-indigo-200 dark:border-zinc-800 dark:text-neutral-400",
-        @role != "user" && "hidden"
-      ]}>
-        This is not an official ElixirConf EU chat, so if you have any questions for the speakers, please ask them under the SwapCard stream.
-      </div>
       <ul class="overflow-y-auto flex-grow flex flex-col" id="message_box">
         <li
           :for={msg <- @messages}

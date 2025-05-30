@@ -82,7 +82,5 @@ config :glitch,
   streamer_password: "password",
   enable_recordings: true,
   enable_share_button: true,
-  enable_elixirconf_links: true,
-  elixirconf_day: "day1",
   slow_mode_delay_s: 1,
   ice_servers: nil

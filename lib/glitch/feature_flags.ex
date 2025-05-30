@@ -11,9 +11,4 @@ defmodule Glitch.FeatureFlags do
   def share_button_enabled() do
     Application.fetch_env!(:glitch, :enable_share_button)
   end
-
-  @spec elixirconf_links_enabled() :: boolean()
-  def elixirconf_links_enabled() do
-    Application.fetch_env!(:glitch, :enable_elixirconf_links)
-  end
 end

@@ -81,21 +81,6 @@ if config_env() == :prod do
       _ -> false
     end
 
-  enable_elixirconf_links =
-    case(System.get_env("GLITCH_ENABLE_ELIXIRCONF_LINKS")) do
-      "true" -> true
-      _ -> false
-    end
-
-  elixirconf_day =
-    case(System.get_env("GLITCH_ELIXIRCONF_DAY")) do
-      nil ->
-        "day1"
-
-      day ->
-        day
-    end
-
   slow_mode_delay_s =
     case System.get_env("GLITCH_SLOW_MODE_DELAY_S") do
       nil ->
@@ -124,8 +109,6 @@ if config_env() == :prod do
     streamer_password: streamer_password,
     enable_recordings: enable_recordings,
     enable_share_button: enable_share_button,
-    enable_elixirconf_links: enable_elixirconf_links,
-    elixirconf_day: elixirconf_day,
     slow_mode_delay_s: slow_mode_delay_s,
     ice_servers: ice_servers
 
